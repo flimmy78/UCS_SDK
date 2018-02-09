@@ -1,0 +1,5 @@
+﻿#ifndef UCSTCPVERSION_H
+#define UCSTCPVERSION_H
+
+#define TCP_SDK_VERSION "t_v1.0.0"
+#endif // UCSTCPVERSION_H

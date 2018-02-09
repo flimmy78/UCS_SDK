@@ -1,0 +1,10 @@
+*.user*
+YzxConfComm.pro.user
+depoly
+Debug
+Release
+Makefile*
+.qmake*
+*.rc
+mocinclude.opt
+Bin/config.ini

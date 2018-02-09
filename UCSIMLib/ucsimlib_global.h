@@ -1,0 +1,12 @@
+#ifndef UCSIMLIB_GLOBAL_H
+#define UCSIMLIB_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(UCSIMLIB_LIBRARY)
+#  define UCSIMLIBSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define UCSIMLIBSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // UCSIMLIB_GLOBAL_H

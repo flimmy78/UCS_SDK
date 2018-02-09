@@ -1,0 +1,5 @@
+﻿#ifndef UCSIMVERSION_H
+#define UCSIMVERSION_H
+
+#define UCS_IM_CLIENT_VERSION   "I_v1.0.0"
+#endif // UCSIMVERSION_H

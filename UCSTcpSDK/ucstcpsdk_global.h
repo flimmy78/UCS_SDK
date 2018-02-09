@@ -1,0 +1,12 @@
+#ifndef UCSTCPSDK_GLOBAL_H
+#define UCSTCPSDK_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(UCSTCPSDK_LIBRARY)
+#  define UCSTCPSDKSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define UCSTCPSDKSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // UCSTCPSDK_GLOBAL_H

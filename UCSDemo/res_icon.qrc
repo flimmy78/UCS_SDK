@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/yzx_logo.ico</file>
+        <file>images/btn_search_hover.png</file>
+        <file>images/btn_search_normal.png</file>
+        <file>images/btn_del.png</file>
+        <file>images/u73.png</file>
+        <file>images/u57.png</file>
+        <file>images/u29.png</file>
+        <file>images/arrowBottom.png</file>
+        <file>images/arrowRight.png</file>
+        <file>images/u3743.png</file>
+        <file>images/u1183.png</file>
+        <file>images/u1185.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/top/btn_search_hover.png</file>
+        <file>images/top/btn_search_normal.png</file>
+        <file>images/top/CloseFocus.png</file>
+        <file>images/top/CloseNormal.png</file>
+        <file>images/top/MaxFocus.png</file>
+        <file>images/top/MaxNormal.png</file>
+        <file>images/top/MinFocus.png</file>
+        <file>images/top/MinNormal.png</file>
+        <file>images/top/StoreFouce.png</file>
+        <file>images/top/StoreNormal.png</file>
+    </qresource>
+</RCC>

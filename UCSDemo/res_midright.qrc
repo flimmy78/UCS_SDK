@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/midright/btn_mask.png</file>
+        <file>images/midright/u139.png</file>
+        <file>images/midright/u165.png</file>
+        <file>images/midright/u398.png</file>
+        <file>images/midright/u426.png</file>
+        <file>images/midright/u3901.png</file>
+        <file>images/midright/u3903.png</file>
+        <file>images/midright/u3921.png</file>
+        <file>images/midright/u3923.png</file>
+        <file>images/midright/u3931.png</file>
+        <file>images/midright/u3941.png</file>
+        <file>images/midright/u4379.png</file>
+        <file>images/midright/u4381.png</file>
+        <file>images/midright/u4383.png</file>
+        <file>images/midright/radiobutton_checked.png</file>
+        <file>images/midright/radiobutton_unchecked.png</file>
+    </qresource>
+</RCC>
