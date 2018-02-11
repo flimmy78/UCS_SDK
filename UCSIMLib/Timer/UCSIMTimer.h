@@ -13,7 +13,7 @@ public:
     static UCSIMTimer *getInstance();
     static void release();
 
-    enum ImTimerId
+    typedef enum ImTimerId
     {
         kMsgSendTimer = 0,      ///< 消息发送超时定时器 >
         kCreateGroupTimer,      ///< 创建讨论组超时定时器 >
@@ -23,7 +23,7 @@ public:
         kSetGroupTopicTimer,    ///< 修改讨论组主题超时定时器 >
         kTimerNum,
         kAllTimers
-    };
+    } ImTimerId;
 
     typedef struct
     {
@@ -31,7 +31,6 @@ public:
         quint32     timeout;
         QString     name;
     } ImTimer_t;
-
 
     /*!
      * \brief start 启动指定定时器
@@ -107,7 +106,7 @@ private:
     qint32 timeoutValue(ImTimerId id);
 
 signals:
-    void sig_timeout(ImTimerId);
+    void sig_timeout(UCSIMTimer::ImTimerId);
 
 public slots:
 

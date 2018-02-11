@@ -14,7 +14,6 @@ public:
     explicit UCSDiscussionNotification();
     explicit UCSDiscussionNotification(QString operatorId,
                                        QString extension);
-    ~UCSDiscussionNotification(){}
 
 public:
     ///< 讨论组Id >

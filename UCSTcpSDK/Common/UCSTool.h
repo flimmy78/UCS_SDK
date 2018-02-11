@@ -4,7 +4,12 @@
 
 QString charToQString(char *ptr)
 {
-    return QString(ptr);
+    if (ptr != NULL)
+    {
+        return QString(ptr);
+    }
+
+    return QString("");
 }
 
 void QStringToChar(char *dest, QString src, size_t size)

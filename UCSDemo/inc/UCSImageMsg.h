@@ -12,7 +12,6 @@ class UCSImageMsg : public UCSMsgContent
 {
 public:
     UCSImageMsg();
-    ~UCSImageMsg() {}
 
 public:
     /*!

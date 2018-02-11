@@ -441,9 +441,10 @@ bool ConversationDBManager::updateConversation(const DiscussionEntity discussion
         values.insert("localTime", timeNow);
 
         updateConversation(values, conditions);
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool ConversationDBManager::setTop(const UCS_IM_ConversationType type,

@@ -6,14 +6,12 @@
 #include "Common/UCSLogger.h"
 #include "UCSEvent.h"
 
-#define NOOP_NO_RESP_MAX_NUM    1
 #define LOGIN_RETRY_TIMES   6
 
 UCSLoginManager::UCSLoginManager(QObject *parent)
     : QObject(parent)
     , m_lastState(LoginFailed)
     , m_state(LoginFailed)
-    , m_noopTimes(0)
     , m_loginTimes(0)
     , m_bTcpConnected(true)
 {
@@ -97,9 +95,11 @@ void UCSLoginManager::doNoop()
     UCS_LOG(UCSLogger::kTraceDebug, UCSLogger::kLoginManager,
             QString("doNoop size: %1").arg(dataArray.size()));
 
-//    emit sig_sendData(dataArray);
     UCSEvent::sendData(new UCSSendDataEvent(ProxyProtocol::REQ_NOOP,
                                          dataArray));
+
+    ///< 启动心跳超时定时器 >
+    timerStart(kNoopTimerT1);
 }
 
 UcsLoginState UCSLoginManager::state() const
@@ -115,17 +115,15 @@ void UCSLoginManager::timerEvent(QTimerEvent *event)
         UCS_LOG(UCSLogger::kTraceTimer, UCSLogger::kLoginManager,
                 QString("Fired ").append(m_timers[kNoopTimer].name));
 
-        if ((++m_noopTimes) < NOOP_NO_RESP_MAX_NUM)
-        {
-            /* 发送心跳 */
-            doNoop();
-        }
-        else
-        {
-            /* 如果超过{NOOP_NO_RESP_MAX_NUM}次心跳无响应，发送失败信号, 需重新连接服务器 */
-            setState(NoopNoResponse);
-            timerStop(kNoopTimer);
-        }
+        /* 发送心跳 */
+        doNoop();
+    }
+    else if (event->timerId() == m_timers[kNoopTimerT1].timerId)
+    {
+        timerStop(kNoopTimerT1);
+
+        setState(NoopNoResponse);
+        timerStop(kNoopTimer);
     }
     else if (event->timerId() == m_timers[kLoginTimer].timerId)
     {
@@ -194,10 +192,10 @@ void UCSLoginManager::processRecvData(int cmd, const QByteArray dataArray)
 
     case ProxyProtocol::RESP_NOOP:
     {
-        m_noopTimes = 0;
-
         UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kLoginManager,
                 QStringLiteral("收到心跳响应..."));
+
+        timerStop(kNoopTimerT1);
     }
         break;
 
@@ -289,8 +287,12 @@ void UCSLoginManager::parseReAuthResp(const QByteArray dataArray)
 void UCSLoginManager::initTimer()
 {
     m_timers[kNoopTimer].timerId = 0;
-    m_timers[kNoopTimer].timeout = 20 * 1000; // 20s
+    m_timers[kNoopTimer].timeout = 30 * 1000; // 30s
     m_timers[kNoopTimer].name = "NoopTimer";
+
+    m_timers[kNoopTimerT1].timerId = 0;
+    m_timers[kNoopTimerT1].timeout = 5 * 1000; // 5s
+    m_timers[kNoopTimerT1].name = "NoopTimerT1";
 
     m_timers[kLoginTimer].timerId = 0;
     m_timers[kLoginTimer].timeout = 3 * 1000; // 10s

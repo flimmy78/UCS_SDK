@@ -156,6 +156,14 @@ QSqlDatabase UCSConnectionPool::createConnection(const QString &connectionName)
     db.setUserName(userId);
     db.setPassword(userId);
 
+    if (!db.open())
+    {
+        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                QString(QStringLiteral("错误: 打开数据库失败(%1)"))
+                .arg(db.lastError().text()));
+        return QSqlDatabase();
+    }
+
     return db;
 }
 

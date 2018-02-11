@@ -32,8 +32,9 @@ protected:
 private:
     enum LoginTimerId
     {
-        kNoopTimer,   /* 心跳定时器 */
-        kLoginTimer,  /* 登录超时定时器 */
+        kNoopTimer,   ///< 心跳发送间隔定时器 >
+        kNoopTimerT1, ///< 心跳发送超时定时器 >
+        kLoginTimer,  ///< 登录超时定时器 >
         kTimerMaxNum,
         kAllTimer
     };
@@ -67,7 +68,6 @@ private:
     UcsLoginState m_lastState;
     UcsLoginState m_state;
 
-    quint32 m_noopTimes;   /* 心跳无响应次数 */
     quint32 m_loginTimes;  /* 登录尝试次数 */
     bool m_bTcpConnected;
 

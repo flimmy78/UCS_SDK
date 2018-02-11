@@ -94,6 +94,9 @@ void UCSPackage::UnPackAuthResponse(const QByteArray dataArray, UCSAuthResponse_
     ByteBuffer data;
     data.clear();
 
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
+    memset(&authResp, 0x00, sizeof(authResp));
+
     const char *unpackBuf = dataArray.constData();
     qint32 unpackSize = dataArray.size();
     unpack(ProxyProtocol::RESP_AUTH, &bodyHeader, &authResp, (char*)unpackBuf, unpackSize);
@@ -179,6 +182,9 @@ void UCSPackage::UnPackReAuthResponse(const QByteArray dataArray, UCSReAuthRespo
     ByteBuffer data;
     data.clear();
 
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
+    memset(&reAuthResp, 0x00, sizeof(reAuthResp));
+
     const char *unpackBuf = dataArray.constData();
     qint32 unpackSize = dataArray.size();
     unpack(ProxyProtocol::RESP_REAUTH, &bodyHeader, &reAuthResp, (char*)unpackBuf, unpackSize);
@@ -240,6 +246,9 @@ void UCSPackage::UnpackSendMsgResponse(const QByteArray dataArray, UCSSendMsgRes
 
     ByteBuffer data;
     data.clear();
+
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
+    memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char *unpackBuf = dataArray.constData();
     qint32 unpackSize = dataArray.size();
@@ -335,6 +344,7 @@ void UCSPackage::UnpackInitNewSyncResponse(const QByteArray dataArray, UCSInitNe
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -534,6 +544,7 @@ void UCSPackage::UnpackNewSyncResponse(const QByteArray dataArray, UCSNewSyncRes
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -769,6 +780,7 @@ void UCSPackage::UnpackUploadMsgImgResponse(const QByteArray dataArray, UCSUploa
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -831,6 +843,7 @@ void UCSPackage::UnpackDownloadMsgImgResponse(const QByteArray dataArray, UCSDow
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -891,6 +904,7 @@ void UCSPackage::UnpackDownloadVoiceReponse(const QByteArray dataArray, UCSDownl
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -957,6 +971,7 @@ void UCSPackage::UnpackCreateGroupResponse(const QByteArray dataArray, UCSCreate
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -1031,6 +1046,7 @@ void UCSPackage::UnpackAddGroupMemberResponse(const QByteArray dataArray, UCSAdd
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -1102,6 +1118,7 @@ void UCSPackage::UnpackDelGroupMemberResponse(const QByteArray dataArray, UCSDel
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -1162,6 +1179,7 @@ void UCSPackage::UnpackQuitGroupResponse(const QByteArray dataArray, UCSQuitGrou
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();
@@ -1286,6 +1304,7 @@ void UCSPackage::UnpackCustomMsgResponse(const QByteArray dataArray, UCSCustomMs
     ByteBuffer data;
 
     data.clear();
+    memset(&bodyHeader, 0x00, sizeof(bodyHeader));
     memset(&bodyData, 0x00, sizeof(bodyData));
 
     const char* unpackBuf = dataArray.constData();

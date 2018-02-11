@@ -13,8 +13,6 @@ class UCSCustomMsg : public UCSMsgContent
 public:
     explicit UCSCustomMsg();
     explicit UCSCustomMsg(QByteArray data);
-    ~UCSCustomMsg(){}
-
     QByteArray data() const;
 
     void setData(const QByteArray &data);

@@ -796,51 +796,42 @@ void UCSIMManager::handleInitSyncResponse(QByteArray recvData)
     }
 
     ///< 讨论组变化处理 >
-    if (response.tContactList.size() > 0)
+    foreach (UCSIMModContact_t modContact, response.tContactList)
     {
-        for (int i = 0; i < response.tContactList.size(); ++i)
-        {
-            UCSIMModContact_t modContact = response.tContactList.at(i);
-            DiscussionEntity discussion;
-            UCSDBEntity::convertEntityFromContact(modContact, discussion);
+        DiscussionEntity discussion;
+        UCSDBEntity::convertEntityFromContact(modContact, discussion);
 
-            ///< 保存讨论组信息 >
-            UCSDBCenter::discussionMgr()->addDiscussioin(&discussion);
+        ///< 保存讨论组信息 >
+        UCSDBCenter::discussionMgr()->addDiscussioin(&discussion);
 
-            ///< 更新会话 >
-            UCSDBCenter::conversationMgr()->updateConversation(discussion);
-        }
+        ///< 更新会话 >
+        UCSDBCenter::conversationMgr()->updateConversation(discussion);
     }
 
     ///< 处理被踢出讨论组 >
-    if (response.tDeleteList.size() > 0)
+    foreach (UCSIMDelContact_t contact, response.tDeleteList)
     {
-        for (int i = 0; i < response.tDeleteList.size(); ++i)
+        ///< 先判断是主动退出还是被踢出，如果主动退出，本地数据库已经删除了对应讨论组 >
+        /// < 如果是被踢出，需要删除本地数据库对应讨论组记录，同时通知用户 >
+        if (contact.tUserName.isEmpty())
         {
-            ///< 先判断是主动退出还是被踢出，如果主动退出，本地数据库已经删除了对应讨论组 >
-            /// < 如果是被踢出，需要删除本地数据库对应讨论组记录，同时通知用户 >
-            UCSIMDelContact_t contact = response.tDeleteList.at(i);
-            if (contact.tUserName.isEmpty())
-            {
-                continue;
-            }
-
-            DiscussionEntity entity;
-            bool result = UCSDBCenter::discussionMgr()->getDiscussion(contact.tUserName, entity);
-            if (!result ||
-                entity.discussionId.isEmpty() ||
-                entity.discussionId.isNull())
-            {
-                ///< 查不到记录说明应该是主动退出 >
-                continue;
-            }
-
-            ///< 从数据库中删除当前用户被踢出的讨论组 >
-            UCSDBCenter::discussionMgr()->delDiscussion(contact.tUserName);
-
-            ///< 通知用户 >
-
+            continue;
         }
+
+        DiscussionEntity entity;
+        bool result = UCSDBCenter::discussionMgr()->getDiscussion(contact.tUserName, entity);
+        if (!result ||
+            entity.discussionId.isEmpty() ||
+            entity.discussionId.isNull())
+        {
+            ///< 查不到记录说明应该是主动退出 >
+            continue;
+        }
+
+        ///< 从数据库中删除当前用户被踢出的讨论组 >
+        UCSDBCenter::discussionMgr()->delDiscussion(contact.tUserName);
+
+        ///< 通知用户 >
     }
 
     ///< 处理消息记录 >
@@ -883,6 +874,56 @@ void UCSIMManager::handleNewSyncResponse(QByteArray recvData)
         {
             UCSIMHelper::writeSettings(UCS_IM_CONTACT_KEY, keyVal.iVal);
         }
+    }
+
+    ///< 讨论组变化处理 >
+    foreach (UCSIMModContact_t modContact, response.tContactList)
+    {
+        DiscussionEntity discussion;
+        UCSDBEntity::convertEntityFromContact(modContact, discussion);
+
+        ///< 保存讨论组信息 >
+        UCSDBCenter::discussionMgr()->addDiscussioin(&discussion);
+
+        ///< 更新会话 >
+        bool result = UCSDBCenter::conversationMgr()->updateConversation(discussion);
+        ///< 不存在会话，则新增 >
+        if (!result)
+        {
+            UCSDBCenter::conversationMgr()->addConversation(discussion);
+        }
+    }
+
+    ///< 处理被踢出讨论组 >
+    foreach (UCSIMDelContact_t contact, response.tDeleteList)
+    {
+        ///< 先判断是主动退出还是被踢出，如果主动退出，本地数据库已经删除了对应讨论组 >
+        /// < 如果是被踢出，需要删除本地数据库对应讨论组记录，同时通知用户 >
+        if (contact.tUserName.isEmpty())
+        {
+            continue;
+        }
+
+        DiscussionEntity entity;
+        bool result = UCSDBCenter::discussionMgr()->getDiscussion(contact.tUserName, entity);
+        if (!result ||
+            entity.discussionId.isEmpty() ||
+            entity.discussionId.isNull())
+        {
+            ///< 查不到记录说明应该是主动退出 >
+            continue;
+        }
+
+        ///< 从数据库中删除当前用户被踢出的讨论组 >
+        UCSDBCenter::discussionMgr()->delDiscussion(contact.tUserName);
+
+        ///< 通知用户 >
+    }
+
+    ///< 处理消息记录 >
+    if (response.tMsgList.size() > 0)
+    {
+        handleRecivedMsgList(response.tMsgList);
     }
 
     if (response.iContinueFlag != 0)
@@ -1192,7 +1233,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
         return;
     }
 
-    QList<UCSMessage> messageList;
+    QList<UCSMessage*> messageList;
     QMap<QString, QList<ChatEntity>> soloList;
     QMap<QString, QList<ChatEntity>> groupList;
     QMap<QString, QList<ChatEntity>> discussionList;
@@ -1233,7 +1274,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
         }
 
         UCS_IM_ConversationType type = UCSIMHelper::getConvTypeByFromUserName(msg.tFromUserName);
-        UCSMessage recvMsg;
+        UCSMessage *recvMsg = new UCSMessage;
         ChatEntity chatEntity;
         chatEntity.categoryId = QString::number(type);
         chatEntity.imsgId = QString::number(msg.iMsgId);
@@ -1244,24 +1285,28 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
         chatEntity.sendTime = QString::number(msg.iCreateTime);
         chatEntity.receivedTime = QString::number(UCSClock::TimeInMicroseconds());
         chatEntity.readStatus = QString::number(ReceivedStatus_UNREAD);
+        chatEntity.msgLength = "0";
 
-        recvMsg.messageId = msgId.toLongLong();
-        recvMsg.senderUserId = senderId;
-        recvMsg.senderNickName = senderNickName;
-        recvMsg.messageDirection = MessageDirection_RECEIVE;
-        recvMsg.conversationType = type;
-        recvMsg.time = msg.iCreateTime;
+        recvMsg->messageId = msgId.toLongLong();
+        recvMsg->senderUserId = senderId;
+        recvMsg->senderNickName = senderNickName;
+        recvMsg->messageDirection = MessageDirection_RECEIVE;
+        recvMsg->sendStatus = SendStatus_success;
+        recvMsg->conversationType = type;
+        recvMsg->time = msg.iCreateTime;
+        recvMsg->messageType = (UCS_IM_MsgType)(msg.iMsgType);
 
         switch (msg.iMsgType)
         {
         case UCS_IM_TEXT:
         {
             chatEntity.content = msg.tContent;
+            chatEntity.msgLength = QString::number(msg.tContent.size());
 
             UCSTextMsg *txtMsg = new UCSTextMsg;
             txtMsg->content() = msg.tContent;
             txtMsg->pushContent = msg.pcPushContent;
-            recvMsg.content = txtMsg;
+            recvMsg->content = txtMsg;
         }
             break;
 
@@ -1284,7 +1329,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
             imgMsg->imageRemoteUrl = remoteUrl;
             imgMsg->thumbnailLocalPath = thumbnaiPath;
             imgMsg->pushContent = msg.pcPushContent;
-            recvMsg.content = imgMsg;
+            recvMsg->content = imgMsg;
         }
             break;
 
@@ -1307,20 +1352,20 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
                 continue;
             }
 
-            chatEntity.msgLength = lenInBytes;
+            chatEntity.msgLength = QString::number(lenInBytes);
             chatEntity.pcClientMsgId = pcMsgId;
             chatEntity.readStatus = QString::number(ReceivedStatus_DOWNLOADING);
 
             UCSVoiceMsg *voiceMsg = new UCSVoiceMsg;
             voiceMsg->pushContent = msg.pcPushContent;
             voiceMsg->duration = duration;
-            recvMsg.content = voiceMsg;
-            recvMsg.receivedStatus = ReceivedStatus_DOWNLOADING;
+            recvMsg->content = voiceMsg;
+            recvMsg->receivedStatus = ReceivedStatus_DOWNLOADING;
 
             ///< 保存语音信息，用于下载失败后的主动下载 >
             VoiceInfoEntity entity;
             entity.iLength = QString::number(lenInBytes);
-            entity.iMsgId = msg.iMsgId;
+            entity.iMsgId = QString::number(msg.iMsgId);
             entity.messageId = msgId;
             entity.pcClientMsgId = pcMsgId;
             UCSDBCenter::voiceInfoMgr()->addVoiceInfo(&entity);
@@ -1356,7 +1401,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
             UCSCustomMsg *customMsg = new UCSCustomMsg;
             customMsg->setData(customData);
             customMsg->pushContent = msg.pcPushContent;
-            recvMsg.content = customMsg;
+            recvMsg->content = customMsg;
         }
             break;
 
@@ -1366,8 +1411,8 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
 
             UCSDiscussionNotification *notify = new UCSDiscussionNotification;
             notify->m_extension = msg.tContent;
-            notify->m_operatorId = recvMsg.receivedId;
-            recvMsg.content = notify;
+            notify->m_operatorId = recvMsg->receivedId;
+            recvMsg->content = notify;
         }
             break;
 
@@ -1383,7 +1428,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
         switch (type) {
         case UCS_IM_SOLOCHAT:
         {
-            recvMsg.receivedId = msg.tToUserName; ///< 单聊时接收者是自己 >
+            recvMsg->receivedId = msg.tToUserName; ///< 单聊时接收者是自己 >
 
             soloList[fromId].append(chatEntity);
         }
@@ -1391,7 +1436,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
 
         case UCS_IM_GROUPCHAT:
         {
-            recvMsg.receivedId = fromId; ///< 群组消息的接收者是群组Id。类似于123@chatroom >
+            recvMsg->receivedId = fromId; ///< 群组消息的接收者是群组Id。类似于123@chatroom >
 
             groupList[fromId].append(chatEntity);
         }
@@ -1399,7 +1444,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
 
         case UCS_IM_DISCUSSIONCHAT:
         {
-            recvMsg.receivedId = fromId;  ///< 讨论组消息的接收者是讨论组Id。类似于123@group >
+            recvMsg->receivedId = fromId;  ///< 讨论组消息的接收者是讨论组Id。类似于123@group >
 
             discussionList[fromId].append(chatEntity);
         }
@@ -1408,7 +1453,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
         case UCS_IM_Broadcast:
         {
             ///< 广播消息的接收者是自己 >
-            recvMsg.receivedId = UCSIMHelper::readSettings(UCS_LOGIN_USERID_KEY).toString();
+            recvMsg->receivedId = UCSIMHelper::readSettings(UCS_LOGIN_USERID_KEY).toString();
 
             broadcastList[fromId].append(chatEntity);
         }
@@ -1416,7 +1461,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
 
         case UCS_IM_UnknownConversationType:
         {
-            recvMsg.receivedId = fromId;    ///< 未知会话一样是 @xx >
+            recvMsg->receivedId = fromId;    ///< 未知会话一样是 @xx >
 
             unknownList[fromId].append(chatEntity);
         }
@@ -1438,6 +1483,9 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
     saveConversationAndChat(unknownList, UCS_IM_UnknownConversationType);
 
     ///< 消息回调 >
+    /// ToDo
+    qDeleteAll(messageList.begin(), messageList.end());
+    messageList.clear();
 }
 
 void UCSIMManager::saveConversationAndChat(QMap<QString, QList<ChatEntity> > chatListMap, UCS_IM_ConversationType type)

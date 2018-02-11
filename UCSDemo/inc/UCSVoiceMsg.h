@@ -8,7 +8,6 @@ class UCSVoiceMsg : public UCSMsgContent
 {
 public:
     UCSVoiceMsg();
-    ~UCSVoiceMsg(){}
 
 public:
     /*!

@@ -9,7 +9,6 @@ class UCSTextMsg : public UCSMsgContent
 public:
     explicit UCSTextMsg();
     explicit UCSTextMsg(QString content);
-    ~UCSTextMsg(){}
 
 public:
     /*!
