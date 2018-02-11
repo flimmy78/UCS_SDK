@@ -116,14 +116,7 @@ void LeftWidget::slot_changeButtonSelected(int index)
 
 void LeftWidget::slot_personInfoButtonClick()
 {
-//    QMessageBox::information(NULL, QStringLiteral("信息提示"), "user info", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-//    QString token = "eyJBbGciOiJIUzI1NiIsIkFjY2lkIjoiY2U4OGQ4OWM0ZmU1ODhkODE1MTc3NDA1OGE0ZTA3ZGMiLCJBcHBpZCI6ImJhMjAyYzhlMWM5MzQ1MmI4YzAyNzY3MzJjYmM3ZDE1IiwiVXNlcmlkIjoiNjg0OTEwMDAwNTE5MjIifQ==.XJl/AePNwQg0jzeDamX2oMiMntD7KQGbOF2FXlBd0Yk=";
 
-    UCSTcpClient::Instance()->init();
-    UCSIMClient::Instance()->init();
-
-    QString token = "eyJBbGciOiJIUzI1NiIsIkFjY2lkIjoiZDU1ODA5MDJjYWI0ZDg4NTNiMDY2NDRhNTVlZjcyMGEiLCJBcHBpZCI6ImFhMmUyYmM2ZTIyZTRmYmZhZjkyNGZhNzVjMDJkYzA5IiwiVXNlcmlkIjoiMTM2MzI3ODA4NzIifQ==.OvXyq1GWSRykxlkWuF27RgllaPufxb99srh07LcsJEk=";
-    UCSTcpClient::Instance()->doLogin(token);
 }
 
 void LeftWidget::slot_settingButtonClick()

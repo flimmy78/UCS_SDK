@@ -3,6 +3,7 @@
 #include <QDesktopWidget>
 #include <QTranslator>
 #include "singleApplication/qSingleApplication.h"
+#include <login/UCSLogin.h>
 
 int main(int argc, char *argv[])
 {
@@ -40,13 +41,22 @@ int main(int argc, char *argv[])
 
     if (!app.isRunning())
     {
+        UCSLogin *pLogin = new UCSLogin;
+        if (pLogin->exec() != QDialog::Accepted)
+        {
+            return 0;
+        }
+
+#if 1
         MainWindow *pMain = MainWindow::InitInstance();
-        app._wid = pMain;
+        app._wid = pMain;        
+
         pMain->show();
         pMain->setGeometry((QApplication::desktop()->width() - pMain->width()) / 2,
                             (QApplication::desktop()->height() - pMain->height()) / 2,
                            pMain->width(),
                            pMain->height());
+#endif
         return app.exec();
     }
 

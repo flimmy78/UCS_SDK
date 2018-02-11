@@ -47,9 +47,12 @@ include(confWidgets/confWidgets.pri)
 INCLUDEPATH += $$PWD rest
 include(rest/rest.pri)
 
+INCLUDEPATH += $$PWD login
+include(login/Login.pri)
+
 INCLUDEPATH += $$PWD inc
 
-TARGET = YzxConfComm
+TARGET = UCSDemo
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -83,7 +86,8 @@ RESOURCES += \
     res_icon.qrc \
     res_top.qrc \
     qm.qrc \
-    res_midright.qrc
+    res_midright.qrc \
+    res_login.qrc
 
 VERSION = 1.0.0.0
 RC_ICONS = images/yzx_logo.ico

@@ -1,0 +1,12 @@
+#ifndef UCSVOIPSDK_GLOBAL_H
+#define UCSVOIPSDK_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(UCSVOIPSDK_LIBRARY)
+#  define UCSVOIPSDKSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define UCSVOIPSDKSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // UCSVOIPSDK_GLOBAL_H

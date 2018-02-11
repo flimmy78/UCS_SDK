@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/login/closeHover.png</file>
+        <file>images/login/closePressed.png</file>
+        <file>images/login/u6.png</file>
+        <file>images/login/close.png</file>
+    </qresource>
+</RCC>

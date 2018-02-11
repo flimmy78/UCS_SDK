@@ -7,6 +7,7 @@
 #include <QString>
 #include <QRegExpValidator>
 #include <QTextEdit>
+#include <inc/UCSIMClient.h>
 
 MainWindow *MainWindow::s_pMainWnd = NULL;
 
@@ -126,7 +127,7 @@ void MainWindow::initConnection()
 
 void MainWindow::initMisc()
 {
-
+    UCSIMClient::Instance()->init();
 }
 
 void MainWindow::initNetwork()

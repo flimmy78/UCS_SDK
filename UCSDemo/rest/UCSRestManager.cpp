@@ -55,6 +55,8 @@ void UCSRestManager::login(QString phone, QString code)
     /* 构造请求 */
     QNetworkRequest request;
     request.setUrl(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/text");
+    request.setHeader(QNetworkRequest::ContentLengthHeader, dataArray.length());
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
@@ -164,7 +166,7 @@ void UCSRestManager::slot_onAuthReply(QNetworkReply *reply)
     if (jsonError.error == QJsonParseError::NoError)
     {
         int result;
-        int expired;
+        QString expired;
         QString phone;
 
         if (document.isObject())
@@ -182,12 +184,13 @@ void UCSRestManager::slot_onAuthReply(QNetworkReply *reply)
 
             if (jsonObj.contains("expired"))
             {
-                expired = jsonObj["expired"].toInt();
+                expired = jsonObj["expired"].toString();
+//                qDebug() << "expired: " << jsonObj["expired"].toString();
             }
 
             if (result == 0)
             {
-                emit sig_onAuthSuccessed(expired);
+                emit sig_onAuthSuccessed(expired.toInt());
             }
             else
             {
