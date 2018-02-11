@@ -11,7 +11,7 @@ ChatDBManager::ChatDBManager()
     m_createSql = "CREATE TABLE IF NOT EXISTS %1 ("
                             "chatId         INTEGER PRIMARY KEY AUTOINCREMENT,"
                             "msgId          TEXT,"
-                            "imsgId         TEXT,"
+                            "imsgId         TEXT UNIQUE,"
                             "targetId       TEXT,"
                             "senderId       TEXT,"
                             "senderNickName TEXT,"
@@ -415,6 +415,45 @@ QList<ChatEntity> ChatDBManager::getHistoryChats(const QString targetId,
     }
 
     return chatList;
+}
+
+quint32 ChatDBManager::getUnReadCount(const QString targetId, const UCS_IM_ConversationType type)
+{
+    if (!checkAndCreateTable(targetId, type))
+    {
+        return 0;
+    }
+
+    QString strIn = QString("(%1, %2, %3, %4)")
+                        .arg(ReceivedStatus_UNREAD)
+                        .arg(ReceivedStatus_DOWNLOADED)
+                        .arg(ReceivedStatus_DOWNLOADING)
+                        .arg(ReceivedStatus_DOWNLOADFail);
+
+    UCSDBScoped scoped;
+    QSqlDatabase db = scoped.db();
+    QSqlQuery sqlQuery(db);
+
+    QString sql = QString("SELECT COUNT(*) FROM %1 WHERE readStatus IN ")
+                        .arg(tableName(targetId, type))
+                        .append(strIn);
+
+    sqlQuery.prepare(sql);
+    if (!sqlQuery.exec())
+    {
+        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                QString("failed get target chat %1 with error(%2)")
+                        .arg(tableName(targetId, type))
+                        .arg(sqlQuery.lastError().text()));
+        return 0;
+    }
+
+    if (sqlQuery.next())
+    {
+        return sqlQuery.value(0).toInt();
+    }
+
+    return 0;
 }
 
 QList<ChatEntity> ChatDBManager::searchChats(const QString targetId,

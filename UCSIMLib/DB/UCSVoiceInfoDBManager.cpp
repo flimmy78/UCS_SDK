@@ -8,7 +8,7 @@ VoiceInfoDBManager::VoiceInfoDBManager()
     m_createSql = "CREATE TABLE IF NOT EXISTS UCS_IM_VOICEINFO ("
                           "messageId     INTEGER PRIMARY KEY"
                           "                      NOT NULL,"
-                          "iMsgId        INTEGER,"
+                          "iMsgId        INTEGER UNIQUE,"
                           "iLength       INTEGER,"
                           "pcClientMsgId TEXT)";
 }

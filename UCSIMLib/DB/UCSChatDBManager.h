@@ -118,6 +118,15 @@ public:
                                const QString oldestMessageId);
 
     /*!
+     * \brief getUnReadCount 获取指定会话未读消息数，用于更新会话
+     * \param targetId
+     * \param type
+     * \return
+     */
+    quint32 getUnReadCount(const QString targetId,
+                           const UCS_IM_ConversationType type);
+
+    /*!
      * \brief searchChats 返回聊天会话中含有@keyWord的聊天消息
      * \param targetId
      * \param type

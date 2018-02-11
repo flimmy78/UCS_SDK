@@ -1276,6 +1276,8 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
         UCS_IM_ConversationType type = UCSIMHelper::getConvTypeByFromUserName(msg.tFromUserName);
         UCSMessage *recvMsg = new UCSMessage;
         ChatEntity chatEntity;
+        chatEntity.msgId = msgId;
+        chatEntity.msgType = QString::number(msg.iMsgType);
         chatEntity.categoryId = QString::number(type);
         chatEntity.imsgId = QString::number(msg.iMsgId);
         chatEntity.targetId = fromId;
@@ -1285,6 +1287,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
         chatEntity.sendTime = QString::number(msg.iCreateTime);
         chatEntity.receivedTime = QString::number(UCSClock::TimeInMicroseconds());
         chatEntity.readStatus = QString::number(ReceivedStatus_UNREAD);
+        chatEntity.sendStatus = QString::number(SendStatus_fail);
         chatEntity.msgLength = "0";
 
         recvMsg->messageId = msgId.toLongLong();
@@ -1354,6 +1357,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
 
             chatEntity.msgLength = QString::number(lenInBytes);
             chatEntity.pcClientMsgId = pcMsgId;
+            chatEntity.content = msg.pcPushContent;
             chatEntity.readStatus = QString::number(ReceivedStatus_DOWNLOADING);
 
             UCSVoiceMsg *voiceMsg = new UCSVoiceMsg;
@@ -1396,6 +1400,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
                 continue;
             }
 
+            chatEntity.content = msg.pcPushContent;
             chatEntity.customData = customData;
 
             UCSCustomMsg *customMsg = new UCSCustomMsg;

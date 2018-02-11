@@ -120,7 +120,7 @@ bool ConversationDBManager::addConversation(const DiscussionEntity discussion)
     conversation.lastTime = timeNow;
     conversation.localTime = timeNow;
 
-    UCSDBCenter::conversationMgr()->addConversation(&conversation);
+    addConversation(&conversation);
 
     return true;
 }
@@ -144,7 +144,9 @@ bool ConversationDBManager::addConversation(const ChatEntity *chatEntity, const 
     newConversation.topTime = oldConversation.topTime;
 
     newConversation.localTime = isSender ? chatEntity->sendTime : chatEntity->receivedTime;
-    quint32 unReadCount = oldConversation.unReadMsgCount.toInt() + count;
+//    quint32 unReadCount = oldConversation.unReadMsgCount.toInt() + count;
+    quint32 unReadCount = UCSDBCenter::chatMgr()->getUnReadCount(targetId,
+                                                                 (UCS_IM_ConversationType)chatEntity->categoryId.toInt());
     newConversation.unReadMsgCount = QString::number(unReadCount);
     newConversation.lastestMessageId = chatEntity->msgId;
 
