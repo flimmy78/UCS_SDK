@@ -18,8 +18,6 @@ UCSIMManager::UCSIMManager(QObject *parent)
     m_mapImgUpReq.clear();
 
     initConnections();
-
-    UCSIMTimer::start(UCSIMTimer::kMsgSendTimer);
 }
 
 UCSIMManager::~UCSIMManager()
@@ -32,6 +30,11 @@ UCSIMManager::~UCSIMManager()
 
     UCSIMTimer::release();
     UCSDBCenter::release();
+}
+
+void UCSIMManager::init()
+{
+    UCSIMTimer::start(UCSIMTimer::kMsgSendTimer);
 }
 
 void UCSIMManager::updateTcpState(UcsTcpState state)
@@ -645,7 +648,7 @@ bool UCSIMManager::doUpdateDraft(UCS_IM_ConversationType type,
 
 void UCSIMManager::initConnections()
 {
-    connect(UCSIMTimer::getInstance(), SIGNAL(sig_timeout(ImTimerId)), this, SLOT(slot_timeOut(UCSIMTimer::ImTimerId)));
+    connect(UCSIMTimer::getInstance(), SIGNAL(sig_timeout(UCSIMTimer::ImTimerId)), this, SLOT(slot_timeOut(UCSIMTimer::ImTimerId)));
 }
 
 void UCSIMManager::doInitSyncRequest()

@@ -332,7 +332,7 @@ QByteArray UCSPackage::PackInitNewSyncRequest(const UCSInitNewSyncRequest_t *pRe
     pack(ProxyProtocol::REQ_INIT, &bodyHeader, (void*)&bodyData,
          (char*)&packBuf, packSize);
 
-    qDebug() << "bufSize = " << packSize;
+//    qDebug() << "bufSize = " << packSize;
 
     return QByteArray(packBuf, packSize);
 }

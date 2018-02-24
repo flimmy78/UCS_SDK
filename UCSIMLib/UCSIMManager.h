@@ -21,6 +21,8 @@ public:
     explicit UCSIMManager(QObject *parent = 0);
     ~UCSIMManager();
 
+    void init();
+
     /*!
      * \brief updateTcpState 更新tcp连接状态
      * \param state 更新的Tcp状态

@@ -37,6 +37,8 @@ void UCSIMClient::init()
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
 
     UCSTcpClient::Instance()->setIMClient(this);
+
+    m_pIManager->init();
 }
 
 UCSIMClient::~UCSIMClient()
@@ -603,9 +605,9 @@ void UCSIMClient::customEvent(QEvent *event)
         UCS_LOG(UCSLogger::kTraceDebug, UCSLogger::kIMClient,
                 QString("customEvent kLoginStateEvent state = %1 userid = %2")
                 .arg(evt->state())
-                .arg(evt->userid()));
+                .arg(evt->userId()));
 
-        m_pIManager->updateLoginState(evt->state(), evt->userid());
+        m_pIManager->updateLoginState(evt->state(), evt->userId());
     }
 }
 

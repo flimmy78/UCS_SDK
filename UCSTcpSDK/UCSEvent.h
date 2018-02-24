@@ -1,4 +1,10 @@
-﻿#ifndef RECEIVEDDATAEVENT_H
+﻿/**
+ * @brief 内部自定义事件定义，可用事件范围为(QEvent::User + 20000) ~ (QEvent::User + 20600)
+ * @author Vinton.Liu
+ * @date
+*/
+
+#ifndef RECEIVEDDATAEVENT_H
 #define RECEIVEDDATAEVENT_H
 
 #include <QObject>
@@ -7,7 +13,7 @@
 #include "ucstcpsdk_global.h"
 #include "UCSTcpDefine.h"
 
-enum UCSCustomEventType
+enum UCSEventType
 {
     UCSEventBase = QEvent::User + 20000,
     /*
@@ -77,7 +83,7 @@ private:
 class UCSTCPSDKSHARED_EXPORT UCSRecvDataEvent : public QEvent
 {
 public:
-    explicit UCSRecvDataEvent(quint32 cmd, QByteArray dataArray, UCSCustomEventType type);
+    explicit UCSRecvDataEvent(quint32 cmd, QByteArray dataArray, UCSEventType type);
 
     ~UCSRecvDataEvent();
 
@@ -132,16 +138,16 @@ private:
 class UCSTCPSDKSHARED_EXPORT UCSLoginStateEvent : public QEvent
 {
 public:
-    explicit UCSLoginStateEvent(UcsLoginState state, QString userid);
+    explicit UCSLoginStateEvent(UcsLoginState state, QString userId);
     ~UCSLoginStateEvent() {}
 
     UcsLoginState state() const;
 
-    QString userid() const;
+    QString userId() const;
 
 private:
     UcsLoginState m_state;
-    QString m_userid;
+    QString m_userId;
 };
 
 #endif // RECEIVEDDATAEVENT_H

@@ -230,7 +230,7 @@ void UCSRestManager::slot_onLoginReply(QNetworkReply *reply)
             QJsonObject jsonObj = document.object();
             if (jsonObj.contains("result"))
             {
-                result = jsonObj["result"].toInt();
+                result = jsonObj["result"].toString().toInt();
             }
 
             if (jsonObj.contains("token"))

@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QMutex>
+#include <UCSCommonTypes.h>
 
 class UCSTcpManager;
 
@@ -45,6 +46,22 @@ public:
      * \brief 获取TCP SDK版本号
     */
     QString getVersion();
+
+    /*!
+     * \brief registerEventListener 注册eventType的指定接收对象，上层需重载 customEvent()函数
+     * \param eventType 自定义事件类型
+     * \param receiver 事件接收对象
+     */
+    void registerEventListener(UCSCustomEventType eventType,
+                               QObject *receiver);
+
+    /*!
+     * \brief unRegisterEventListener 注销并删除eventType的指定接收对象
+     * \param eventType 自定义事件类型
+     * \param receiver 需注销的事件接收对象
+     */
+    void unRegisterEventListener(UCSCustomEventType eventType,
+                                 QObject *receiver);
 
 signals:
     void sig_onLoginSuccessed();

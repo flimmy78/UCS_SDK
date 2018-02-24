@@ -41,7 +41,8 @@ SOURCES += \
     UCSEvent.cpp \
     UCSTcpSocket.cpp \
     UCSTcpClient.cpp \
-    UCSTcpManager.cpp
+    UCSTcpManager.cpp \
+    UCSCommonTypes.cpp
 
 HEADERS +=\
     ucstcpsdk_global.h \
@@ -55,7 +56,8 @@ HEADERS +=\
     UCSTcpSocket.h \
     UCSTcpClient.h \
     UCSTcpManager.h \
-    UCSTcpPublicDef.h
+    UCSTcpPublicDef.h \
+    UCSCommonTypes.h
 
 CONFIG(debug, debug|release) {
     unix:TARGET=$$join(TARGET,,,_debug)
@@ -66,3 +68,7 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+# QMAKE_CXXFLAGS_DEBUG += /NODEFAULTLIB:"LIBCMTD.lib" /NODEFAULTLIB:"LIBCMT.lib"
+QMAKE_LFLAGS_DEBUG += /NODEFAULTLIB:"LIBCMT.lib"
+QMAKE_LFLAGS_RELEASE +=  /NODEFAULTLIB:"LIBCMT.lib"

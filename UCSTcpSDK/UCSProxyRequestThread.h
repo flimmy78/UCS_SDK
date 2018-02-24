@@ -10,9 +10,9 @@
 
 typedef struct
 {
-    QString accid;
-    QString appid;
-    QString userid;
+    QString accId;
+    QString appId;
+    QString userId;
 } TokenData;
 
 class UCSProxyRequestThread : public QThread

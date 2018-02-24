@@ -22,8 +22,12 @@ private:
     void initLayout();
     void initConnections();
 
+    void onLoginFailed();
+
 protected:
     void timerEvent(QTimerEvent *event) override;
+    void customEvent(QEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 signals:
 
@@ -33,8 +37,8 @@ public slots:
     void slot_onLoginClicked();
 
     void slot_onAuthSuccess(int expired);
-
     void slot_onLoginSuccess(QString token, QString nickname);
+    void slot_onRestFailed(UCSRestError error);
 
 private:
     MyPushButton *m_pBtnClosed;

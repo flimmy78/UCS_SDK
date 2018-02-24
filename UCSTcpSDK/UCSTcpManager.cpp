@@ -28,11 +28,6 @@ UCSTcpManager::UCSTcpManager(QObject* parent)
     initConnections();
 
     m_pDispatchThread->start();
-
-    m_tokenData.accid.clear();
-    m_tokenData.appid.clear();
-    m_tokenData.userid.clear();
-    m_imToken.clear();
 }
 
 UCSTcpManager::~UCSTcpManager()
@@ -40,6 +35,7 @@ UCSTcpManager::~UCSTcpManager()
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
             "UCSConnectionManager ~dtor");
 
+    m_cusListenMap.clear();
     m_listenMap.clear();
 
     if (m_pProxyThread != Q_NULLPTR)
@@ -108,6 +104,16 @@ void UCSTcpManager::setIMClient(QObject *obj)
     {
         m_listenMap.remove(UCSIMModule);
     }
+
+    if (m_pLoginManager != Q_NULLPTR)
+    {
+        if ((m_pLoginManager->state() == LoginSuccessed) ||
+            (m_pLoginManager->state() == ReLoginSuccessed))
+        {
+            UCSEvent::postEvent(m_listenMap[UCSIMModule],
+                                new UCSLoginStateEvent(m_pLoginManager->state(), m_tokenData.userId));
+        }
+    }
 }
 
 void UCSTcpManager::setVoIPClient(QObject *obj)
@@ -121,11 +127,46 @@ void UCSTcpManager::setVoIPClient(QObject *obj)
     {
         m_listenMap.remove(UCSVoIPModule);
     }
+
+    if (m_pLoginManager != Q_NULLPTR)
+    {
+        if ((m_pLoginManager->state() == LoginSuccessed) ||
+            (m_pLoginManager->state() == ReLoginSuccessed))
+        {
+            UCSEvent::postEvent(m_listenMap[UCSVoIPModule],
+                                new UCSLoginStateEvent(m_pLoginManager->state(), m_tokenData.userId));
+        }
+    }
+}
+
+void UCSTcpManager::registerEventListener(UCSCustomEventType eventType, QObject *receiver)
+{
+    QMutexLocker locker(&m_Mutex);
+    if (receiver != Q_NULLPTR)
+    {
+        m_cusListenMap.insert(eventType, receiver);
+    }
+}
+
+void UCSTcpManager::unRegisterEventListener(UCSCustomEventType eventType, QObject *receiver)
+{
+    QMutexLocker locker(&m_Mutex);
+    if (receiver != Q_NULLPTR)
+    {
+        m_cusListenMap.remove(eventType, receiver);
+    }
 }
 
 void UCSTcpManager::init()
 {
     UCSEvent::setSockObj(m_pTcpSocket);
+
+    m_tokenData.accId.clear();
+    m_tokenData.appId.clear();
+    m_tokenData.userId.clear();
+    m_imToken.clear();
+
+    m_cusListenMap.clear();
 
     m_listenMap.clear();
     m_listenMap.insert(UCSLoginModule, m_pLoginManager);
@@ -184,10 +225,21 @@ void UCSTcpManager::slot_onTcpStateChanged(UcsTcpState state)
             }
         }
 
+        QMutexLocker locker(&m_Mutex);
         if (m_listenMap[UCSIMModule])
         {
             UCSEvent::postEvent(m_listenMap[UCSIMModule],
                                 new UCSTcpStateEvent(state));
+        }
+
+        if (state == TcpReConnected)
+        {
+            QList<QObject*> receivers = m_cusListenMap.values(kUCSConnectStatusEvent);
+            foreach (QObject *receiver, receivers)
+            {
+                UCSEvent::postEvent(receiver,
+                                    new UCSConnectStatusEvent(UCSConnectionStatus_ReConnectSuccess));
+            }
         }
     }
         break;
@@ -199,10 +251,18 @@ void UCSTcpManager::slot_onTcpStateChanged(UcsTcpState state)
             m_pLoginManager->setTcpConnected(false);
         }
 
+        QMutexLocker locker(&m_Mutex);
         if (m_listenMap[UCSIMModule])
         {
             UCSEvent::postEvent(m_listenMap[UCSIMModule],
                                 new UCSTcpStateEvent(state));
+        }
+
+        QList<QObject*> receivers = m_cusListenMap.values(kUCSConnectStatusEvent);
+        foreach (QObject *receiver, receivers)
+        {
+            UCSEvent::postEvent(receiver,
+                                new UCSConnectStatusEvent(UCSConnectionStatus_ConnectFail));
         }
     }
         break;
@@ -236,10 +296,29 @@ void UCSTcpManager::slot_onLoginStateChanged(UcsLoginState state)
         UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kTcpManager,
                 QStringLiteral("登录成功"));
 
+        QMutexLocker locker(&m_Mutex);
         if (m_listenMap.contains(UCSIMModule))
         {
             UCSEvent::postEvent(m_listenMap[UCSIMModule],
-                                new UCSLoginStateEvent(state, m_tokenData.userid));
+                                new UCSLoginStateEvent(state, m_tokenData.userId));
+        }
+
+        {
+            QList<QObject*> receivers = m_cusListenMap.values(kUCSConnectStatusEvent);
+            foreach (QObject *receiver, receivers)
+            {
+                UCSEvent::postEvent(receiver,
+                                    new UCSConnectStatusEvent(UCSConnectionStatus_LoginSuccess));
+            }
+        }
+
+        {
+            QList<QObject*> receivers = m_cusListenMap.values(kUCSLoginEvent);
+            foreach (QObject *receiver, receivers)
+            {
+                UCSEvent::postEvent(receiver,
+                                    new UCSLoginEvent(ErrorCode_NoError, m_tokenData.userId));
+            }
         }
     }
         break;
@@ -250,10 +329,20 @@ void UCSTcpManager::slot_onLoginStateChanged(UcsLoginState state)
         UCS_LOG(UCSLogger::kTraceWarning, UCSLogger::kTcpManager,
                 QStringLiteral("登录失败"));
 
-        if (m_listenMap.contains(UCSIMModule))
         {
-            UCSEvent::postEvent(m_listenMap[UCSIMModule],
-                                new UCSLoginStateEvent(state, m_tokenData.userid));
+            QMutexLocker locker(&m_Mutex);
+            if (m_listenMap.contains(UCSIMModule))
+            {
+                UCSEvent::postEvent(m_listenMap[UCSIMModule],
+                                    new UCSLoginStateEvent(state, m_tokenData.userId));
+            }
+
+            QList<QObject*> receivers = m_cusListenMap.values(kUCSLoginEvent);
+            foreach (QObject *receiver, receivers)
+            {
+                UCSEvent::postEvent(receiver,
+                                    new UCSLoginEvent(ErrorCode_InvalidToken, ""));
+            }
         }
 
         if (m_pTcpSocket)
@@ -298,6 +387,7 @@ void UCSTcpManager::slot_onPostMessage(quint32 cmd, QByteArray dataArray)
         module = UCSVoIPModule;
     }
 
+    QMutexLocker locker(&m_Mutex);
     if (m_listenMap.contains(module))
     {
         if (module == UCSLoginModule)

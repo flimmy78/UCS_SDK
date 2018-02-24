@@ -135,24 +135,24 @@ int UCSProxyRequestThread::parseToken(const QString &imToken)
             }
 
             QMutexLocker locker(&m_Mutex);
-            m_tokenData.userid = userid;
+            m_tokenData.userId = userid;
             if (jsonObj.contains("Accid"))
             {
-                m_tokenData.accid = jsonObj["Accid"].toString();
+                m_tokenData.accId = jsonObj["Accid"].toString();
             }
 
             if (jsonObj.contains("Appid"))
             {
-                m_tokenData.appid = jsonObj["Appid"].toString();
+                m_tokenData.appId = jsonObj["Appid"].toString();
             }
 
             {
                 UCS_LOG(UCSLogger::kTraceDebug, UCSLogger::kProxyUpdate,
-                        QString("Accid: ").append(m_tokenData.accid));
+                        QString("Accid: ").append(m_tokenData.accId));
                 UCS_LOG(UCSLogger::kTraceDebug, UCSLogger::kProxyUpdate,
-                        QString("Appid: ").append(m_tokenData.appid));
+                        QString("Appid: ").append(m_tokenData.appId));
                 UCS_LOG(UCSLogger::kTraceDebug, UCSLogger::kProxyUpdate,
-                        QString("Userid: ").append(m_tokenData.userid));
+                        QString("Userid: ").append(m_tokenData.userId));
             }
 
             return NoError;
@@ -169,8 +169,8 @@ UcsTcpError UCSProxyRequestThread::doRequest(QString baseUrl)
     QUrlQuery query;
     {
         QMutexLocker locker(&m_Mutex);
-        query.addQueryItem("appid", m_tokenData.appid);
-        query.addQueryItem("userid", m_tokenData.userid);
+        query.addQueryItem("appid", m_tokenData.appId);
+        query.addQueryItem("userid", m_tokenData.userId);
     }
     query.addQueryItem("ver", "PC");
     url.setQuery(query);

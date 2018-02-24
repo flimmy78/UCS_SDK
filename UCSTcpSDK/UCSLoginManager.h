@@ -27,7 +27,7 @@ public:
 
 protected:
     void timerEvent(QTimerEvent *event) override;
-    void customEvent(QEvent *event);
+    void customEvent(QEvent *event) override;
 
 private:
     enum LoginTimerId

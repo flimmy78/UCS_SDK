@@ -8,6 +8,7 @@
 #include <QRegExpValidator>
 #include <QTextEdit>
 #include <inc/UCSIMClient.h>
+#include <inc/UCSTcpClient.h>
 
 MainWindow *MainWindow::s_pMainWnd = NULL;
 
@@ -23,7 +24,10 @@ MainWindow *MainWindow::InitInstance()
 
 MainWindow::~MainWindow()
 {
+    qDebug() << "mainWindow ~dtor";
 
+    UCSTcpClient::Instance()->unRegisterEventListener(kUCSConnectStatusEvent, this);
+    UCSTcpClient::Instance()->unRegisterEventListener(kUCSLoginEvent, this);
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -78,8 +82,33 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    Q_UNUSED(event);
 //    qDebug() << "closed event " << event->type();
-//    event->accept();
+    //    event->accept();
+}
+
+void MainWindow::customEvent(QEvent *event)
+{
+    if (event->type() == kUCSLoginEvent)
+    {
+        UCSLoginEvent *loginEvt = (UCSLoginEvent*)event;
+        if (loginEvt->error() == ErrorCode_NoError)
+        {
+            qDebug() << "login success. userId = " << loginEvt->userId();
+        }
+        else
+        {
+            qDebug() << "login failed. error = " << loginEvt->error();
+        }
+    }
+    else if (event->type() == kUCSConnectStatusEvent)
+    {
+        UCSConnectStatusEvent *connEvt = (UCSConnectStatusEvent*)event;
+        if (connEvt->status() == UCSConnectionStatus_ConnectFail)
+        {
+            qDebug() << "connect status changed, status = " << connEvt->status();
+        }
+    }
 }
 
 void MainWindow::initLayout()
@@ -128,6 +157,8 @@ void MainWindow::initConnection()
 void MainWindow::initMisc()
 {
     UCSIMClient::Instance()->init();
+    UCSTcpClient::Instance()->registerEventListener(kUCSConnectStatusEvent, this);
+    UCSTcpClient::Instance()->registerEventListener(kUCSLoginEvent, this);
 }
 
 void MainWindow::initNetwork()

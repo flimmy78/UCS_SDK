@@ -36,7 +36,7 @@ void UCSEvent::setSockObj(QObject *pSockObj)
     m_pSockObj = pSockObj;
 }
 
-UCSRecvDataEvent::UCSRecvDataEvent(quint32 cmd, QByteArray dataArray, UCSCustomEventType type)
+UCSRecvDataEvent::UCSRecvDataEvent(quint32 cmd, QByteArray dataArray, UCSEventType type)
     : QEvent((QEvent::Type)type)
     , m_cmd(cmd)
     , m_data(dataArray)
@@ -97,7 +97,7 @@ UcsTcpState UCSTcpStateEvent::state() const
 UCSLoginStateEvent::UCSLoginStateEvent(UcsLoginState state, QString userid)
     : QEvent((QEvent::Type)kLoginStateEvent)
     , m_state(state)
-    , m_userid(userid)
+    , m_userId(userid)
 {
 
 }
@@ -107,7 +107,7 @@ UcsLoginState UCSLoginStateEvent::state() const
     return m_state;
 }
 
-QString UCSLoginStateEvent::userid() const
+QString UCSLoginStateEvent::userId() const
 {
-    return m_userid;
+    return m_userId;
 }

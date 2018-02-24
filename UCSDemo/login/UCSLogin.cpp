@@ -22,15 +22,21 @@ UCSLogin::UCSLogin(QWidget *parent) : QDialog(parent)
 
     m_timerId = 0;
     m_count = 60;
+
+    UCSTcpClient::Instance()->registerEventListener(kUCSLoginEvent, this);
 }
 
 UCSLogin::~UCSLogin()
 {
+    qDebug() << "UCSLogin ~dtor()";
+
     if (m_timerId > 0)
     {
         killTimer(m_timerId);
         m_timerId = 0;
     }
+
+    UCSTcpClient::Instance()->unRegisterEventListener(kUCSLoginEvent, this);
 }
 
 void UCSLogin::initLayout()
@@ -138,6 +144,16 @@ void UCSLogin::initConnections()
 
     connect(&m_restManager, SIGNAL(sig_onAuthSuccessed(int)), SLOT(slot_onAuthSuccess(int)));
     connect(&m_restManager, SIGNAL(sig_onLoginSuccessed(QString,QString)), SLOT(slot_onLoginSuccess(QString,QString)));
+    connect(&m_restManager, SIGNAL(sig_onFailed(UCSRestError)), SLOT(slot_onRestFailed(UCSRestError)));
+}
+
+void UCSLogin::onLoginFailed()
+{
+    m_pBtnLoginOn->setEnabled(true);
+    m_pBtnLoginOn->setText(QStringLiteral("登录"));
+
+    m_pBtnCodeReq->setEnabled(true);
+    m_pBtnCodeReq->setText(QStringLiteral("获取验证码"));
 }
 
 void UCSLogin::timerEvent(QTimerEvent *event)
@@ -149,9 +165,49 @@ void UCSLogin::timerEvent(QTimerEvent *event)
         if (m_count <= 0)
         {
             killTimer(m_timerId);
-            m_pBtnCodeReq->setEnabled(true);
-            m_pBtnCodeReq->setText(QStringLiteral("获取验证码"));
+            onLoginFailed();
         }
+    }
+}
+
+void UCSLogin::customEvent(QEvent *event)
+{
+    if (event->type() == kUCSLoginEvent)
+    {
+        UCSLoginEvent *loginEvt = (UCSLoginEvent*)event;
+        if (loginEvt->error() == ErrorCode_NoError)
+        {
+            qDebug() << "login success. userId = " << loginEvt->userId();
+
+            UCSTcpClient::Instance()->unRegisterEventListener(kUCSLoginEvent, this);
+
+            this->accept();
+        }
+        else
+        {
+            onLoginFailed();
+            qDebug() << "login failed. error = " << loginEvt->error();
+        }
+    }
+    else if (event->type() == kUCSConnectStatusEvent)
+    {
+        UCSConnectStatusEvent *connEvt = (UCSConnectStatusEvent*)event;
+        if (connEvt->status() == UCSConnectionStatus_ConnectFail)
+        {
+            qDebug() << "connect status changed, status = " << connEvt->status();
+        }
+    }
+}
+
+void UCSLogin::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        slot_onLoginClicked();
+        break;
+    default:
+        break;
     }
 }
 
@@ -162,21 +218,27 @@ void UCSLogin::slot_onClosed()
 
 void UCSLogin::slot_onCodeReqClicked()
 {
-    m_count = 60;
-
-    QString text = QString("%1 s").arg(m_count);
-    m_pBtnCodeReq->setEnabled(false);
-    m_pBtnCodeReq->setText(text);
-    m_timerId = startTimer(1 * 1000);
-
     QString username = m_pLineUserName->text();
+    if (username.isEmpty())
+    {
+        return;
+    }
+
     m_restManager.getAuthCode(username);
 }
 
 void UCSLogin::slot_onLoginClicked()
 {
-    qDebug() << "username: " << m_pLineUserName->text();
-    qDebug() << "code: " << m_pLineVerifyCode->text();
+    QString username = m_pLineUserName->text();
+    QString code = m_pLineVerifyCode->text();
+
+    qDebug() << "username: " << username;
+    qDebug() << "code: " << code;
+    if (username.isEmpty() || code.isEmpty() || m_count <= 0)
+    {
+        return;
+    }
+
     m_pBtnLoginOn->setEnabled(false);
     m_pBtnLoginOn->setText(QStringLiteral("登录中..."));
 
@@ -187,12 +249,18 @@ void UCSLogin::slot_onLoginClicked()
 void UCSLogin::slot_onAuthSuccess(int expired)
 {
     qDebug() << "expired : " << expired;
-//    if (m_timerId)
-//    {
-//        killTimer(m_timerId);
-//        m_pBtnCodeReq->setEnabled(true);
-//        m_pBtnCodeReq->setText(QStringLiteral("获取验证码"));
-//    }
+    if (m_timerId)
+    {
+        killTimer(m_timerId);
+    }
+
+    m_count = 60;
+
+    QString text = QString("%1 s").arg(m_count);
+    m_pBtnCodeReq->setEnabled(false);
+    m_pBtnCodeReq->setText(text);
+
+    m_timerId = startTimer(1 * 1000);
 }
 
 void UCSLogin::slot_onLoginSuccess(QString token, QString nickname)
@@ -209,6 +277,15 @@ void UCSLogin::slot_onLoginSuccess(QString token, QString nickname)
 
     UCSTcpClient::Instance()->doLogin(token);
 
-    this->accept();
+    //    this->accept();
+}
+
+void UCSLogin::slot_onRestFailed(UCSRestError error)
+{
+    if (error != NoError)
+    {
+        onLoginFailed();
+        qDebug() << "onRestFailed error = " << error;
+    }
 }
 

@@ -72,3 +72,13 @@ QString UCSTcpClient::getVersion()
     return TCP_SDK_VERSION;
 }
 
+void UCSTcpClient::registerEventListener(UCSCustomEventType eventType, QObject *receiver)
+{
+    m_pConnManager->registerEventListener(eventType, receiver);
+}
+
+void UCSTcpClient::unRegisterEventListener(UCSCustomEventType eventType, QObject *receiver)
+{
+    m_pConnManager->unRegisterEventListener(eventType, receiver);
+}
+

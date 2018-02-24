@@ -24,9 +24,10 @@ protected:
     static MainWindow* s_pMainWnd;
     explicit MainWindow(QWidget *parent = 0);
 
-    void mouseDoubleClickEvent(QMouseEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event);
-    void closeEvent(QCloseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
+    void customEvent(QEvent *event) override;
 
 private:
     void initLayout();
