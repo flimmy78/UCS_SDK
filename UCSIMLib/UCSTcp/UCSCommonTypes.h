@@ -9,20 +9,18 @@
 /*!
  * \brief UCSCustomEventType SDK自定义事件，使用事件类型范围为
  * (QEvent::User + 20000) -- (QEvent::User + 30000),
- * 请勿占用此范围内事件类型
+ * 请勿占用此范围内事件类型.
+ * SDK将通过异步事件postEvent发送给注册的接收者
  */
 typedef enum
 {
-    UCSCustomEventBase = QEvent::User + 20600,
-    /*
-     * TCP 连接事件类型
-    */
-    kUCSConnectStatusEvent = UCSCustomEventBase,    ///< TCP状态通知 >
-
-    /*
-     * 登录事件类型
-    */
-    kUCSLoginEvent = UCSCustomEventBase + 1,   ///< 登录状态通知 >
+    kUCSCustomEventBase = QEvent::User + 20600,
+    kUCSConnectStatusEvent = kUCSCustomEventBase,    ///< TCP状态通知 >
+    kUCSLoginEvent,         ///< 登录状态通知 >
+    kUCSMsgSendEvent,       ///< IM消息发送通知事件 >
+    kUCSMsgSyncEvent,       ///< IM消息同步拉取事件 >
+    kUCSDiscussionEvent,    ///< 讨论组相关事件 >
+    kUCSVoiceDownloadEvent, ///< 语音下载通知事件 >
 } UCSCustomEventType;
 
 typedef enum
@@ -130,5 +128,6 @@ private:
     QString m_userId;
     UCSErrorCode m_error;
 };
+
 
 #endif // UCSCOMMONTYPES_H

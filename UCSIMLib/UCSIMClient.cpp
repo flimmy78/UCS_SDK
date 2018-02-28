@@ -55,6 +55,11 @@ QString UCSIMClient::version()
     return UCS_IM_CLIENT_VERSION;
 }
 
+void UCSIMClient::setIMReceiver(QObject *receiver)
+{
+    m_pIManager->setIMReceiver(receiver);
+}
+
 bool UCSIMClient::sendMessage(UCSMessage *pMessage)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);

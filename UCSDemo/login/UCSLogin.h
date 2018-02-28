@@ -8,8 +8,8 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QDialog>
-#include <rest/UCSRestManager.h>
-
+#include "RestManager/UCSRestManager.h"
+#include "absFiles/MyTitleBar.h"
 
 class UCSLogin : public QDialog
 {
@@ -21,6 +21,7 @@ public:
 private:
     void initLayout();
     void initConnections();
+    void loadStyleSheet();
 
     void onLoginFailed();
 
@@ -28,11 +29,13 @@ protected:
     void timerEvent(QTimerEvent *event) override;
     void customEvent(QEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 signals:
 
 public slots:
-    void slot_onClosed();
+    void slot_onBtnClose();
+    void slot_onBtnMin();
     void slot_onCodeReqClicked();
     void slot_onLoginClicked();
 
@@ -41,7 +44,7 @@ public slots:
     void slot_onRestFailed(UCSRestError error);
 
 private:
-    MyPushButton *m_pBtnClosed;
+    MyTitleBar   *m_titleBar;
     MyPushButton *m_pBtnLoginOn;
     MyPushButton *m_pBtnCodeReq;
     QLineEdit    *m_pLineUserName;

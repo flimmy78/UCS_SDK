@@ -6,10 +6,16 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 #include <QJsonDocument>
+#include <QSettings>
 
-QString Util::exePath()
+QString Util::appDir()
 {
     return QCoreApplication::applicationDirPath();
+}
+
+QString Util::appName()
+{
+    return QCoreApplication::applicationName();
 }
 
 QList<ContactUtil> Util::parseJson(QString fileName)
@@ -175,4 +181,16 @@ bool Util::sortContactData(const ContactUtil &c1, const ContactUtil &c2)
     {
         return false;
     }
+}
+
+QVariant Util::readSetting(QString &key, const QVariant &defaultVal)
+{
+    QSettings settings(appDir() + "/ucsdemo.ini", QSettings::IniFormat);
+    return settings.value(key, defaultVal);
+}
+
+void Util::writeSetting(const QString &key, const QVariant &value)
+{
+    QSettings settings(appDir() + "/ucsdemo.ini", QSettings::IniFormat);
+    settings.setValue(key, value);
 }

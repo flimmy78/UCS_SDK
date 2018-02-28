@@ -8,12 +8,16 @@
 #include "Common/UCSIMHelper.h"
 #include "Common/UCSClock.h"
 #include "UCSIMPublicDef.h"
-#include <UCSMessage.h>
+#include "UCSMessage.h"
 #include "UCSClock.h"
-#include <UCSDBCenter.h>
+#include "UCSDBCenter.h"
+#include "UCSIMEvent.h"
+#include "UCSIMError.h"
 
 UCSIMManager::UCSIMManager(QObject *parent)
     : QObject(parent)
+    , m_tcpState(TcpDisconnected)
+    , m_pReceiver(Q_NULLPTR)
 {
     m_mapImgUpReq.clear();
 
@@ -37,10 +41,17 @@ void UCSIMManager::init()
     UCSIMTimer::start(UCSIMTimer::kMsgSendTimer);
 }
 
+void UCSIMManager::setIMReceiver(QObject *receiver)
+{
+    m_pReceiver = receiver;
+}
+
 void UCSIMManager::updateTcpState(UcsTcpState state)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMManager,
             QString("updateTcpState state(%1)").arg(state));
+
+    m_tcpState = state;
 }
 
 void UCSIMManager::updateLoginState(UcsLoginState state, QString userid)
@@ -157,6 +168,7 @@ void UCSIMManager::processRecvData(quint32 cmd, QByteArray recvData)
 
 bool UCSIMManager::doSendMessage(UCSMessage *pMessage)
 {
+    bool sendRes = false;
     QString msgId = UCSIMHelper::messageId();
     qint64 nowTime = UCSClock::TimeInMicroseconds();
     QString toUserName = UCSIMHelper::formatToUserName(pMessage->receivedId,
@@ -212,7 +224,7 @@ bool UCSIMManager::doSendMessage(UCSMessage *pMessage)
         request.pList.append(msg);
         QByteArray packData = UCSPackage::PackSendMsgRequest(&request);
 
-        sendData(REQ_SEND_MSG, packData);
+        sendRes = sendData(REQ_SEND_MSG, packData);
     }
     else if (pMessage->messageType == UCS_IM_IMAGE)
     {
@@ -241,7 +253,7 @@ bool UCSIMManager::doSendMessage(UCSMessage *pMessage)
 
         QByteArray packData = UCSPackage::PackUploadMsgImgRequest(&request);
 
-        sendData(REQ_UPLOAD_MSGIMG, packData);
+        sendRes = sendData(REQ_UPLOAD_MSGIMG, packData);
     }
     else if (pMessage->messageType == UCS_IM_Custom)
     {
@@ -265,10 +277,10 @@ bool UCSIMManager::doSendMessage(UCSMessage *pMessage)
         request.iStartPos = 0;
 
         QByteArray packData = UCSPackage::PackCustomMsgRequest(&request);
-        sendData(REQ_SEND_CUSTOMMSG, packData);
+        sendRes = sendData(REQ_SEND_CUSTOMMSG, packData);
     }
 
-    m_sendMsgs.insert(msgId, chatEntity);
+    m_msgSendQueue.insert(msgId, chatEntity);
 
     ///< 聊天消息保存到数据库 >
     UCSDBCenter::chatMgr()->addChat(pMessage->receivedId,
@@ -276,6 +288,12 @@ bool UCSIMManager::doSendMessage(UCSMessage *pMessage)
                                     chatEntity);
 
     UCSDBCenter::conversationMgr()->addConversation(&chatEntity, 0);
+
+    if (!sendRes)
+    {
+        UCSEvent::postEvent(m_pReceiver,
+                            new UCSMsgSendEvent(ErrorCode_NetworkNotConnected, msgId.toLongLong()));
+    }
 
     return true;
 }
@@ -758,6 +776,9 @@ void UCSIMManager::handleSendMessageResponse(QByteArray recvData)
                             QString::number(msgResp.iCreateTime),
                             msgResp.tToUserName);
 
+        UCSEvent::postEvent(m_pReceiver,
+                            new UCSMsgSendEvent(ErrorCode_NoError,
+                                                msgResp.pcClientMsgId.toLongLong()));
     }
     else    ///< 发送失败 >
     {
@@ -768,6 +789,10 @@ void UCSIMManager::handleSendMessageResponse(QByteArray recvData)
                             SendStatus_fail,
                             QString::number(msgResp.iCreateTime),
                             msgResp.tToUserName);
+
+        UCSEvent::postEvent(m_pReceiver,
+                            new UCSMsgSendEvent(ErrorCode_SendMessageFail,
+                                                msgResp.pcClientMsgId.toLongLong()));
     }
 }
 
@@ -1145,12 +1170,20 @@ void UCSIMManager::handleQuitGroupResponse(QByteArray recvData)
 
 }
 
-void UCSIMManager::sendData(quint32 cmd, QByteArray dataArray)
+bool UCSIMManager::sendData(quint32 cmd, QByteArray dataArray)
 {
+    if (m_tcpState != TcpConnected &&
+        m_tcpState != TcpReConnected)
+    {
+        return false;
+    }
+
     if (dataArray.size() > 0)
     {
         UCSEvent::sendData(new UCSSendDataEvent(cmd, dataArray));
     }
+
+    return true;
 }
 
 QString UCSIMManager::userId() const
@@ -1160,14 +1193,14 @@ QString UCSIMManager::userId() const
 
 void UCSIMManager::sendMsgTimeout()
 {
-    if (m_sendMsgs.isEmpty())
+    if (m_msgSendQueue.isEmpty())
     {
         return;
     }
 
     qint64 timeNow = UCSClock::TimeInMicroseconds();
     qint32 timeout = UCSIMTimer::timeout(UCSIMTimer::kMsgSendTimer);
-    foreach (ChatEntity entity, m_sendMsgs)
+    foreach (ChatEntity entity, m_msgSendQueue)
     {
         if ((timeNow - entity.sendTime.toLongLong()) <= timeout)
         {
@@ -1192,9 +1225,9 @@ void UCSIMManager::sendMsgTimeout()
 
 void UCSIMManager::removeMsgFromMap(QString msgId)
 {
-    if (m_sendMsgs.contains(msgId))
+    if (m_msgSendQueue.contains(msgId))
     {
-        m_sendMsgs.remove(msgId);
+        m_msgSendQueue.remove(msgId);
     }
 }
 
@@ -1491,7 +1524,13 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
     saveConversationAndChat(unknownList, UCS_IM_UnknownConversationType);
 
     ///< 消息回调 >
-    /// ToDo
+    if (messageList.size() > 0)
+    {
+        UCSEvent::postEvent(m_pReceiver,
+                            new UCSMsgSyncEvent(ErrorCode_NoError,
+                                                messageList));
+    }
+
     qDeleteAll(messageList.begin(), messageList.end());
     messageList.clear();
 }

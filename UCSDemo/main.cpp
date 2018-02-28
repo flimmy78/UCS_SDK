@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 //    QApplication app(argc, argv);
 
     QTranslator translatorCN;
-    if (translatorCN.load(":/res/qm/qt_zh_CN.qm"))
+    if (translatorCN.load(":/resources/qm/qt_zh_CN.qm"))
     {
         if (!app.installTranslator(&translatorCN))
         {
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     }
 
     QTranslator translator;
-    if (translator.load(":/res/qm/widgets.qm"))
+    if (translator.load(":/resources/qm/widgets.qm"))
     {
         if (!app.installTranslator(&translator))
         {

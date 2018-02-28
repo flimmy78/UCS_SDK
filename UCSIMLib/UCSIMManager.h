@@ -24,6 +24,12 @@ public:
     void init();
 
     /*!
+     * \brief setIMReceiver 注册IM相关事件接收者
+     * \param receiver 事件接收者，需重载customEvent()函数
+     */
+    void setIMReceiver(QObject *receiver);
+
+    /*!
      * \brief updateTcpState 更新tcp连接状态
      * \param state 更新的Tcp状态
      */
@@ -356,7 +362,7 @@ private:
      * \param cmd IM命令字
      * \param dataArray 数据
      */
-    void sendData(quint32 cmd, QByteArray dataArray);
+    bool sendData(quint32 cmd, QByteArray dataArray);
 
     QString userId() const;
 
@@ -406,7 +412,9 @@ private:
 
     ///< 消息发送缓存 >
     typedef QMap<QString, ChatEntity> MsgSendMap;
-    MsgSendMap m_sendMsgs;
+    MsgSendMap m_msgSendQueue;
+
+    QObject *m_pReceiver;
 };
 
 #endif // UCSIMMANAGER_H

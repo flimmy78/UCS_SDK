@@ -49,6 +49,12 @@ public:
     QString version();
 
     /*!
+     * \brief setIMReceiver 注册IM相关事件接收者
+     * \param receiver 事件接收者，需重载customEvent()函数
+     */
+    void setIMReceiver(QObject *receiver);
+
+    /*!
      * \brief sendMessage 发送一条聊天消息
      * \details SDK所有的消息发送都使用这个方法，根据不同的参数来区分不同的消息类型。
      * \param pMessage 待发送的message, 需设置conversationType, receiveId, msgType和content，

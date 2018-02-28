@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "absFiles/myPushButton.h"
-#include "rest/UCSRestManager.h"
+#include <UCSRestManager.h>
 
 class LeftWidget : public QWidget
 {

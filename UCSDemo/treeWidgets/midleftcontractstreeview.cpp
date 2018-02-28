@@ -86,7 +86,7 @@ void MidLeftContractsTreeView::init()
 {
     m_pContactModel = new MidLeftContactTreeModel(this);
     this->setModel(m_pContactModel);
-    m_pContactModel->importJSON(Util::exePath() + "/contacts.json");
+    m_pContactModel->importJSON(Util::appDir() + "/contacts.json");
 
     MidLeftContractItemDelegate *delegate = new MidLeftContractItemDelegate(this);
     this->setItemDelegate(delegate);

@@ -8,49 +8,49 @@ QT       += core gui sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-INCLUDEPATH += $$PWD common
-include(common/common.pri)
+INCLUDEPATH += $$PWD Common
+include(Common/Common.pri)
 
-INCLUDEPATH += $$PWD absFiles
-include(absFiles/absFiles.pri)
+INCLUDEPATH += $$PWD AbsFiles
+include(AbsFiles/AbsFiles.pri)
 
-INCLUDEPATH += $$PWD singleApplication
-include(singleApplication/singleApplication.pri)
+INCLUDEPATH += $$PWD SingleApplication
+include(SingleApplication/SingleApplication.pri)
 
-INCLUDEPATH += $$PWD trayiconmenu
-include(trayiconmenu/trayiconmenu.pri)
+INCLUDEPATH += $$PWD TrayIconMenu
+include(TrayIconMenu/TrayIconMenu.pri)
 
-INCLUDEPATH += $$PWD leftWidget
-include(leftWidget/leftwidget.pri)
+INCLUDEPATH += $$PWD LeftWidget
+include(LeftWidget/LeftWidget.pri)
 
-INCLUDEPATH += $$PWD topWidget
-include(topWidget/topwidget.pri)
+INCLUDEPATH += $$PWD TopWidget
+include(TopWidget/TopWidget.pri)
 
-INCLUDEPATH += $$PWD middleWidget
-include(middleWidget/middlewidget.pri)
+INCLUDEPATH += $$PWD MiddleWidget
+include(MiddleWidget/MiddleWidget.pri)
 
-INCLUDEPATH += $$PWD listWidgets
-include(listWidgets/listwidgets.pri)
+INCLUDEPATH += $$PWD ListWidgets
+include(ListWidgets/Listwidgets.pri)
 
-INCLUDEPATH += $$PWD tableWidgets
-include(tableWidgets/tablewidgets.pri)
+INCLUDEPATH += $$PWD TableWidgets
+include(TableWidgets/TableWidgets.pri)
 
-INCLUDEPATH += $$PWD treeWidgets
-include(treeWidgets/treewidgets.pri)
+INCLUDEPATH += $$PWD TreeWidgets
+include(TreeWidgets/TreeWidgets.pri)
 
-INCLUDEPATH += $$PWD keypadWidget
-include(keypadWidget/keypadWidget.pri)
+INCLUDEPATH += $$PWD KeypadWidget
+include(KeypadWidget/KeypadWidget.pri)
 
-INCLUDEPATH += $$PWD confWidgets
-include(confWidgets/confWidgets.pri)
+INCLUDEPATH += $$PWD ConfWidgets
+include(ConfWidgets/ConfWidgets.pri)
 
-INCLUDEPATH += $$PWD rest
-include(rest/rest.pri)
+INCLUDEPATH += $$PWD RestManager
+include(RestManager/RestManager.pri)
 
-INCLUDEPATH += $$PWD login
-include(login/Login.pri)
+INCLUDEPATH += $$PWD Login
+include(Login/Login.pri)
 
-INCLUDEPATH += $$PWD inc
+INCLUDEPATH += $$PWD Interface
 
 TARGET = UCSDemo
 TEMPLATE = app
@@ -87,7 +87,8 @@ RESOURCES += \
     res_top.qrc \
     qm.qrc \
     res_midright.qrc \
-    res_login.qrc
+    MyTitleBar.qrc \
+    LoginWindow.qrc
 
 VERSION = 1.0.0.0
 RC_ICONS = images/yzx_logo.ico

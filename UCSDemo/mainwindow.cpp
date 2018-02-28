@@ -7,8 +7,8 @@
 #include <QString>
 #include <QRegExpValidator>
 #include <QTextEdit>
-#include <inc/UCSIMClient.h>
-#include <inc/UCSTcpClient.h>
+#include "Interface/UCSTcpClient.h"
+#include "Interface/UCSIMClient.h"
 
 MainWindow *MainWindow::s_pMainWnd = NULL;
 
@@ -89,7 +89,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::customEvent(QEvent *event)
 {
-    if (event->type() == kUCSLoginEvent)
+    switch (event->type()) {
+    case kUCSLoginEvent:
     {
         UCSLoginEvent *loginEvt = (UCSLoginEvent*)event;
         if (loginEvt->error() == ErrorCode_NoError)
@@ -101,7 +102,9 @@ void MainWindow::customEvent(QEvent *event)
             qDebug() << "login failed. error = " << loginEvt->error();
         }
     }
-    else if (event->type() == kUCSConnectStatusEvent)
+        break;
+
+    case kUCSConnectStatusEvent:
     {
         UCSConnectStatusEvent *connEvt = (UCSConnectStatusEvent*)event;
         if (connEvt->status() == UCSConnectionStatus_ConnectFail)
@@ -109,11 +112,40 @@ void MainWindow::customEvent(QEvent *event)
             qDebug() << "connect status changed, status = " << connEvt->status();
         }
     }
+        break;
+
+    case kUCSMsgSendEvent:
+    {
+
+    }
+        break;
+
+    case kUCSDiscussionEvent:
+    {
+
+    }
+        break;
+
+    case kUCSVoiceDownloadEvent:
+    {
+
+    }
+        break;
+
+    case kUCSMsgSyncEvent:
+    {
+
+    }
+        break;
+
+    default:
+        break;
+    }
 }
 
 void MainWindow::initLayout()
 {
-    QHBoxLayout *pMainLayout = new QHBoxLayout;
+    QHBoxLayout *pMainLayout = new QHBoxLayout(this);
 
     pMainLayout->addWidget(&m_leftWid);
     pMainLayout->addWidget(&m_midLeft);
@@ -121,7 +153,6 @@ void MainWindow::initLayout()
 
     pMainLayout->setSpacing(0);
     pMainLayout->setContentsMargins(4, 4, 4, 4);
-    setLayout(pMainLayout);
 }
 
 void MainWindow::initTrayMenu()
@@ -157,8 +188,11 @@ void MainWindow::initConnection()
 void MainWindow::initMisc()
 {
     UCSIMClient::Instance()->init();
+
     UCSTcpClient::Instance()->registerEventListener(kUCSConnectStatusEvent, this);
     UCSTcpClient::Instance()->registerEventListener(kUCSLoginEvent, this);
+
+    UCSIMClient::Instance()->setIMReceiver(this);
 }
 
 void MainWindow::initNetwork()

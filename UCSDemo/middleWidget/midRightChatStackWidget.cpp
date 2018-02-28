@@ -48,6 +48,7 @@ void MidRightChatStackWidget::initLayout()
     pListWid->setFrameShadow(QFrame::Plain);
     pListWid->setFrameShape(QFrame::NoFrame);
 
+
     pMainLayout->addWidget(pListWid);
     pMainLayout->addLayout(pToolsLayout);
     pMainLayout->addWidget(&m_txtSending);

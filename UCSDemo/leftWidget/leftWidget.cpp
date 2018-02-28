@@ -3,8 +3,9 @@
 #include <QString>
 #include <QMessageBox>
 #include <QPainter>
-#include "inc/UCSTcpClient.h"
-#include "inc/UCSIMClient.h"
+#include "Interface/UCSTcpClient.h"
+#include "Interface/UCSIMClient.h"
+#include <util.h>
 
 LeftWidget::LeftWidget(QWidget *parent, int width)
     : QWidget(parent)
@@ -35,7 +36,9 @@ void LeftWidget::initLayout()
     m_pBtnInfo->setStyleSheet("QPushButton{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}"
                                "QPushButton::hover{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}"
                                "QPushButton::pressed{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}");
-//    m_pBtnInfo->setToolTip(QStringLiteral("个人信息"));
+
+    QString loginId = Util::readSetting(QString("loginId")).toString();
+    m_pBtnInfo->setToolTip(loginId);
 
     m_pBtn[0] = new StackButton(0,
                                 ":/images/mainleft/u80.png",
@@ -121,6 +124,5 @@ void LeftWidget::slot_personInfoButtonClick()
 
 void LeftWidget::slot_settingButtonClick()
 {
-//    QMessageBox::information(this, QStringLiteral("设置"), "user setting", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-    m_restManager.getAuthCode("13632780872");
+//    QMessageBox::information(this, QStringLiteral("设置"), "user setting", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);    
 }

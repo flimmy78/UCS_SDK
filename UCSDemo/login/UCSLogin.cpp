@@ -3,22 +3,22 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
-#include <inc/UCSTcpClient.h>
+#include "Interface/UCSTcpClient.h"
+#include <QMovie>
+#include <QPainter>
+#include <util.h>
 
 UCSLogin::UCSLogin(QWidget *parent) : QDialog(parent)
 {
     setMouseTracking(true);
     setFixedSize(445, 345);
-    setWindowFlags(Qt::FramelessWindowHint | windowFlags());
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-//    QPalette palette;
-//    palette.setColor(QPalette::Background, QColor(32, 155, 152));
-//    setPalette(palette);
-//    setAutoFillBackground(true);
+    setAttribute(Qt::WA_TranslucentBackground);
 
     initLayout();
     initConnections();
+    loadStyleSheet();
 
     m_timerId = 0;
     m_count = 60;
@@ -42,64 +42,52 @@ UCSLogin::~UCSLogin()
 void UCSLogin::initLayout()
 {
     QVBoxLayout *pMainLayout = new QVBoxLayout;
-    QHBoxLayout *pTitleLayout = new QHBoxLayout;
     QHBoxLayout *pMidLayout = new QHBoxLayout;
     QGridLayout *pLoginLayout = new QGridLayout;
 
-    m_pBtnClosed = new MyPushButton(this);
     m_pBtnCodeReq = new MyPushButton(this);
     m_pBtnLoginOn = new MyPushButton(this);
     m_pLblHeaderImg = new QLabel;
     m_pLineUserName = new QLineEdit(this);
     m_pLineVerifyCode = new QLineEdit(this);
 
-    m_pBtnClosed->setToolTip(QStringLiteral("关闭"));
-    m_pBtnClosed->setFixedSize(27, 22);
-    m_pBtnClosed->setStyleSheet("QPushButton{border-image:url(:/images/login/close.png);}"
-                                "QPushButton::hover{border-image:url(:/images/login/closeHover.png);}"
-                                "QPushButton::pressed{border-image:url(:/images/login/closePressed.png);}");
+    m_titleBar = new MyTitleBar(this);
+    m_titleBar->setButtonType(MIN_BUTTON);
+    m_titleBar->setMoveParentWindowFlag(true);
+    m_titleBar->setBackgroundColor(32, 155, 152, false);
+    m_titleBar->setTitleContentFontSize(11);
+//    m_titleBar->setTitleIcon(":/resources/MyTitleBar/head_0.png");
+//    m_titleBar->setTitleContent(QStringLiteral("登录"));
 
-    pTitleLayout->addStretch();
-    pTitleLayout->addWidget(m_pBtnClosed);
-    pTitleLayout->setContentsMargins(0, 4, 4, 4);
-    QWidget *titleWid = new QWidget(this);
-    titleWid->setStyleSheet("QWidget{background-color:rgb(32, 155, 152);}");
-    titleWid->setLayout(pTitleLayout);
+    QLabel *lblMovie = new QLabel(this);
+//    QMovie *movie = new QMovie;
+//    movie->setFileName(":/resources/MyTitleBar/back.gif");
+//    lblMovie->setMovie(movie);
+//    movie->start();
 
-    QLabel *lblMovie = new QLabel;
     lblMovie->setFixedHeight(150);
     lblMovie->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     lblMovie->setStyleSheet("QLabel{background-color:rgb(32, 155, 152);}");
 
-
     ///< 设置头像 >
     m_pLblHeaderImg->setFixedSize(50, 50);
-    m_pLblHeaderImg->setPixmap(QPixmap(":/images/login/u6.png"));
+    m_pLblHeaderImg->setPixmap(QPixmap(":/resources/LoginWindow/headImage/u6.png"));
     m_pLblHeaderImg->setScaledContents(true);
+    m_pLblHeaderImg->setObjectName("userHeader");
 
     m_pLineUserName->setPlaceholderText(QStringLiteral("手机号/邮箱"));
     m_pLineUserName->setFixedSize(200, 26);
-    m_pLineUserName->setStyleSheet("QLineEdit{border: 1px solid gray; border-radius:2px;}"
-                                   "QLineEdit::hover{border:1px solid rgb(37, 174, 154); border-radius:2px;}");
-    m_pLineUserName->setFont(QFont(QStringLiteral("微软雅黑"), 10));
 
     m_pLineVerifyCode->setPlaceholderText(QStringLiteral("验证码"));
     m_pLineVerifyCode->setFixedSize(200, 26);
-    m_pLineVerifyCode->setStyleSheet("QLineEdit{border: 1px solid gray; border-radius:2px;}"
-                                     "QLineEdit::hover{border:1px solid rgb(37, 174, 154); border-radius:2px;}");
-    m_pLineVerifyCode->setFont(QFont(QStringLiteral("微软雅黑"), 10));
 
     m_pBtnCodeReq->setText(QStringLiteral("获取验证码"));
     m_pBtnCodeReq->setFixedWidth(80);
     m_pBtnCodeReq->setObjectName("btnCodeReq");
-    m_pBtnCodeReq->setFont(QFont(QStringLiteral("微软雅黑"), 10));
 
     m_pBtnLoginOn->setObjectName("btnLogin");
     m_pBtnLoginOn->setText(QStringLiteral("登录"));
-    m_pBtnLoginOn->setFont(QFont(QStringLiteral("微软雅黑"), 10));
     m_pBtnLoginOn->setFixedHeight(30);
-    m_pBtnLoginOn->setStyleSheet("QPushButton{background-color: rgb(32, 155, 152); border-radius:5px;}"
-                                 "QPushButton::hover{background-color: rgb(37, 174, 154);}");
 
     ///< 头像 第0行 第0列，占3行1列 >
     pLoginLayout->addWidget(m_pLblHeaderImg, 0, 0, 2, 1);
@@ -125,7 +113,7 @@ void UCSLogin::initLayout()
     pMidLayout->addLayout(pLoginLayout);
     pMidLayout->addStretch();
 
-    pMainLayout->addWidget(titleWid);
+    pMainLayout->addWidget(m_titleBar);
     pMainLayout->addWidget(lblMovie);
     pMainLayout->addLayout(pMidLayout);
     pMainLayout->addStretch();
@@ -138,13 +126,27 @@ void UCSLogin::initLayout()
 
 void UCSLogin::initConnections()
 {
-    connect(m_pBtnClosed, SIGNAL(clicked(bool)), SLOT(slot_onClosed()));
+    connect(m_titleBar, SIGNAL(signalBtnCloseClicked()), this, SLOT(slot_onBtnClose()));
+    connect(m_titleBar, SIGNAL(signalBtnMinClicked()), this, SLOT(slot_onBtnMin()));
+
     connect(m_pBtnCodeReq, SIGNAL(clicked(bool)), SLOT(slot_onCodeReqClicked()));
     connect(m_pBtnLoginOn, SIGNAL(clicked(bool)), SLOT(slot_onLoginClicked()));
 
     connect(&m_restManager, SIGNAL(sig_onAuthSuccessed(int)), SLOT(slot_onAuthSuccess(int)));
     connect(&m_restManager, SIGNAL(sig_onLoginSuccessed(QString,QString)), SLOT(slot_onLoginSuccess(QString,QString)));
     connect(&m_restManager, SIGNAL(sig_onFailed(UCSRestError)), SLOT(slot_onRestFailed(UCSRestError)));
+}
+
+void UCSLogin::loadStyleSheet()
+{
+    QFile file(":/resources/LoginWindow/LoginWindow.css");
+    file.open(QFile::ReadOnly);
+    if (file.isOpen())
+    {
+        QString styleSheet = this->styleSheet();
+        styleSheet += QLatin1String(file.readAll());
+        this->setStyleSheet(styleSheet);
+    }
 }
 
 void UCSLogin::onLoginFailed()
@@ -181,6 +183,7 @@ void UCSLogin::customEvent(QEvent *event)
 
             UCSTcpClient::Instance()->unRegisterEventListener(kUCSLoginEvent, this);
 
+            Util::writeSetting("loginId", loginEvt->userId());
             this->accept();
         }
         else
@@ -211,9 +214,26 @@ void UCSLogin::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void UCSLogin::slot_onClosed()
+void UCSLogin::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+
+    QPainter painter(this);
+    QPainterPath pathBack;
+    pathBack.setFillRule(Qt::WindingFill);
+    pathBack.addRoundedRect(QRect(0, 0, this->width(), this->height()), 3, 3);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.fillPath(pathBack, QBrush(QColor(236, 241, 245)));
+}
+
+void UCSLogin::slot_onBtnClose()
 {
     this->close();
+}
+
+void UCSLogin::slot_onBtnMin()
+{
+    this->showMinimized();
 }
 
 void UCSLogin::slot_onCodeReqClicked()
@@ -232,8 +252,6 @@ void UCSLogin::slot_onLoginClicked()
     QString username = m_pLineUserName->text();
     QString code = m_pLineVerifyCode->text();
 
-    qDebug() << "username: " << username;
-    qDebug() << "code: " << code;
     if (username.isEmpty() || code.isEmpty() || m_count <= 0)
     {
         return;
@@ -276,8 +294,6 @@ void UCSLogin::slot_onLoginSuccess(QString token, QString nickname)
     qDebug() << "nickname: " << nickname;
 
     UCSTcpClient::Instance()->doLogin(token);
-
-    //    this->accept();
 }
 
 void UCSLogin::slot_onRestFailed(UCSRestError error)

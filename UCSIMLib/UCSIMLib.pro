@@ -47,7 +47,8 @@ SOURCES += UCSIMClient.cpp \
     UCSVoiceMsg.cpp \
     UCSIMError.cpp \
     UCSDiscussionNotification.cpp \
-    UCSCustomMsg.cpp
+    UCSCustomMsg.cpp \
+    UCSIMEvent.cpp
 
 HEADERS += UCSIMClient.h\
         ucsimlib_global.h \
@@ -65,7 +66,8 @@ HEADERS += UCSIMClient.h\
     UCSVoiceMsg.h \
     UCSIMError.h \
     UCSDiscussionNotification.h \
-    UCSCustomMsg.h
+    UCSCustomMsg.h \
+    UCSIMEvent.h
 
 CONFIG(debug, debug|release) {
     unix:TARGET=$$join(TARGET,,,_debug)

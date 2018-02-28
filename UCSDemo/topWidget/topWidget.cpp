@@ -4,9 +4,9 @@
 #include <QString>
 #include <QDebug>
 
-TopWidget::TopWidget(QWidget *parent) : QWidget(parent)
+TopWidget::TopWidget(QWidget *parent)
+    : QWidget(parent)
 {
-//    setMinimumSize(890, 48);
     setFixedHeight(48);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setMouseTracking(true);
@@ -158,20 +158,16 @@ void TopWidget::updateMaximize()
         if (bMaximize)
         {
             m_btnMax.setToolTip(QStringLiteral("还原"));
-//            m_btnMax->setProperty("maximizeProperty", "restore");
             m_btnMax.setStyleSheet("QPushButton{border-image:url(:/images/top/StoreNormal.png);}"
                                    "QPushButton::hover{border-image:url(:/images/top/StoreFouce.png);}"
                                    "QPushButton::pressed{border-image:url(:/images/top/StoreFouce.png);}");
         }
         else
         {
-//            m_btnMax->setProperty("maximizeProperty", "maximize");
             m_btnMax.setToolTip(QStringLiteral("最大化"));
             m_btnMax.setStyleSheet("QPushButton{border-image:url(:/images/top/MaxNormal.png);}"
                                    "QPushButton::hover{border-image:url(:/images/top/MaxFocus.png);}"
                                    "QPushButton::pressed{border-image:url(:/images/top/MaxFocus.png);}");
         }
-
-//        m_btnMax->setStyle(QApplication::style());
     }
 }

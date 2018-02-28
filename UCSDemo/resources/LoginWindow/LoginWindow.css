@@ -1,0 +1,58 @@
+*{
+	font-family: Microsoft YaHei;
+	font-size: 10pt;
+}
+
+QLineEdit
+{
+	border: 1px solid gray;
+	border-radius:2px;
+}
+
+QLineEdit:hover
+{
+	border: 1px solid rgb(37, 174, 154); 
+	border-radius: 2px;
+}
+
+QLabel#userHeader
+{
+	border-radius:4px;
+}
+
+QPushButton#btnLogin
+{
+	background-color: rgb(32, 155, 152); 
+	border-radius:5px;
+}
+
+QPushButton#btnLogin:hover
+{
+	background-color: rgb(37, 174, 154);
+}
+
+QPushButton#btnLogin:pressed
+{
+	padding-left: 3px;
+	padding-top: 3px;
+}
+
+QPushButton#btnCodeReq
+{
+	background-color:rgb(238 , 238 , 238);
+	border: 1px solid rgb(183 , 183 , 183);
+}
+
+QPushButton#btnCodeReq:hover
+{
+	background-color:rgb(228 , 240 , 250);
+    border: 1px solid rgb(37, 174, 154);
+}
+
+QPushButton#btnCodeReq:pressed
+{
+	background-color:rgb(204 , 228 , 247);
+    border: 1px solid rgb(1 , 84 , 153);
+    padding-left: 3px;
+    padding-top: 3px;
+}
