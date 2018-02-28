@@ -9,6 +9,7 @@ QT       += network xml
 ### use QImage
 #QT       -= gui
 
+INCLUDEPATH += $$PWD UCSTcp
 
 INCLUDEPATH += $$PWD Common
 include(Common/Common.pri)
@@ -67,7 +68,8 @@ HEADERS += UCSIMClient.h\
     UCSIMError.h \
     UCSDiscussionNotification.h \
     UCSCustomMsg.h \
-    UCSIMEvent.h
+    UCSIMEvent.h \
+    UCSIMSDKPublic.h
 
 CONFIG(debug, debug|release) {
     unix:TARGET=$$join(TARGET,,,_debug)

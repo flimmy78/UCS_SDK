@@ -18,9 +18,9 @@ typedef enum
     kUCSConnectStatusEvent = kUCSCustomEventBase,    ///< TCP状态通知 >
     kUCSLoginEvent,         ///< 登录状态通知 >
     kUCSMsgSendEvent,       ///< IM消息发送通知事件 >
+    kUCSMsgSyncEvent,       ///< IM消息同步拉取事件 >
     kUCSDiscussionEvent,    ///< 讨论组相关事件 >
     kUCSVoiceDownloadEvent, ///< 语音下载通知事件 >
-    kUCSMsgSyncEvent,       ///< 消息同步通知事件 >
 } UCSCustomEventType;
 
 typedef enum

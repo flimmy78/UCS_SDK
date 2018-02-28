@@ -165,11 +165,11 @@ class UCSDBEntity
 public:
     explicit UCSDBEntity() {}
 
-    static void convertMessageFromChat(const ChatEntity chatEntity, UCSMessage &message);
+    static void convertMessageFromChat(const ChatEntity &chatEntity, UCSMessage *message);
 
     static void convertDiscussionFromEntity(const DiscussionEntity entity, UCSDiscussion &discussion);
 
-    static void convertConversationFromEntity(const ConversationEntity entity, UCSConversation &conversation);
+    static void convertConversationFromEntity(const ConversationEntity &entity, UCSConversation *conversation);
 
     static void convertEntityFromContact(const UCSIMModContact_t contact, DiscussionEntity &entity);
 };

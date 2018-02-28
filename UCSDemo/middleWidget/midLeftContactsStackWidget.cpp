@@ -4,12 +4,12 @@
 #include <QLabel>
 #include "absFiles/myLabel.h"
 
-MidLeftContactsStackWidget::MidLeftContactsStackWidget(QWidget *parent)
+MidLeftContactsStackWidget::MidLeftContactsStackWidget(QWidget *parent, int width)
     : MyScrollArea(parent)
     , m_contactView(this)
 {
     setMouseTracking(true);
-    setFixedWidth(250);
+    setFixedWidth(width);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
 
     initLayout();
@@ -18,7 +18,6 @@ MidLeftContactsStackWidget::MidLeftContactsStackWidget(QWidget *parent)
 
 void MidLeftContactsStackWidget::initLayout()
 {
-    qDebug() << "MidLeftContactsStackWidget";
     QVBoxLayout *pMainLayout = new QVBoxLayout;
     QHBoxLayout *pTopLayout = new QHBoxLayout;
     QHBoxLayout *pBottomLayout = new QHBoxLayout;

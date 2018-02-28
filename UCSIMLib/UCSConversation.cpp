@@ -2,7 +2,16 @@
 
 UCSConversation::UCSConversation()
 {
+    m_lastestMessage = Q_NULLPTR;
+}
 
+UCSConversation::~UCSConversation()
+{
+    if (m_lastestMessage != Q_NULLPTR)
+    {
+        delete m_lastestMessage;
+        m_lastestMessage = Q_NULLPTR;
+    }
 }
 
 UCS_IM_ConversationType UCSConversation::conversationType() const
@@ -105,12 +114,13 @@ void UCSConversation::setObjectName(const QString &objectName)
     m_objectName = objectName;
 }
 
-UCSMessage UCSConversation::lastestMessage() const
+UCSMessage *UCSConversation::lastestMessage() const
 {
     return m_lastestMessage;
 }
 
-void UCSConversation::setLastestMessage(const UCSMessage &lastestMessage)
+void UCSConversation::setLastestMessage(UCSMessage *lastestMessage)
 {
     m_lastestMessage = lastestMessage;
 }
+

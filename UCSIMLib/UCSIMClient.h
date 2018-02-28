@@ -133,7 +133,7 @@ public:
      * \param conversationListType 获取的会话列表的类型。具体参考UCS_IM_ConversationListType
      * \return 会话数组，每个元素是一个UCSConversation对象
      */
-    QList<UCSConversation> getConversationList(IN UCS_IM_ConversationListType conversationListType);
+    QList<UCSConversation*> getConversationList(IN UCS_IM_ConversationListType conversationListType);
 
     /*!
      * \brief removeConversation 在会话列表中移除一个会话，但是不会删除该会话在数据库中的消息。
@@ -166,9 +166,9 @@ public:
      * \param conversationType 会话类型。类型值参考UCS_IM_ConversationType
      * \param targetId 会话id。单聊为对方的id，讨论组聊天为讨论组id，群组聊天为群组id
      * \param count 需要获取的消息数量。默认获取20条。也可以自己设置,如果该会话的消息总数小于设置的count数，则返回该会话的消息总数。
-     * \return 消息数组。数组中元素的类型是UCSMessage
+     * \return 消息数组。数组中元素的类型是UCSMessage对象，需主动释放
      */
-    QList<UCSMessage> getLatestMessages(IN UCS_IM_ConversationType conversationType,
+    QList<UCSMessage*> getLatestMessages(IN UCS_IM_ConversationType conversationType,
                                         IN QString targetId,
                                         IN quint32 count);
 
@@ -181,7 +181,7 @@ public:
      * \param count 需要获取的消息数量
      * \return 消息数组
      */
-    QList<UCSMessage> getHistoryMessages(IN UCS_IM_ConversationType conversationType,
+    QList<UCSMessage*> getHistoryMessages(IN UCS_IM_ConversationType conversationType,
                                          IN QString targetId,
                                          IN quint64 oldestMessageId,
                                          IN quint32 count);
@@ -230,7 +230,7 @@ public:
      * \param keyWord 关键字
      * \return 查询结果。数组中的每个元素是一个UCSMessage对象
      */
-    QList<UCSMessage> checkChatMessages(IN UCS_IM_ConversationType conversationType,
+    QList<UCSMessage*> checkChatMessages(IN UCS_IM_ConversationType conversationType,
                                         IN QString targetId,
                                         IN QString keyWord);
 

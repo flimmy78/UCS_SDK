@@ -310,9 +310,10 @@ QList<ConversationEntity> ConversationDBManager::getConversationList(const QList
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    QString sql = "SELECT * FROM UCS_IM_CONVERSATION WHERE categoryId in (:categoryIds) ORDER BY indexId DESC;";
+//    QString sql = "SELECT * FROM UCS_IM_CONVERSATION WHERE categoryId in (:categoryIds) ORDER BY indexId DESC;";
+    QString sql = QString("SELECT * FROM UCS_IM_CONVERSATION WHERE categoryId in (%1) ORDER BY indexId DESC;").arg(types);
     sqlQuery.prepare(sql);
-    sqlQuery.bindValue(":categoryIds", types);
+//    sqlQuery.bindValue(":categoryIds", types);
     if (!sqlQuery.exec())
     {
         UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,

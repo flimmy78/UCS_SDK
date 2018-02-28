@@ -47,7 +47,6 @@ SOURCES += \
 HEADERS +=\
     ucstcpsdk_global.h \
     UCSTcpDefine.h \
-    ucstcpversion.h \
     UCSLoginManager.h \
     UCSProxyRequestThread.h \
     UCSTcpMsgDispatch.h \
@@ -57,7 +56,8 @@ HEADERS +=\
     UCSTcpClient.h \
     UCSTcpManager.h \
     UCSTcpPublicDef.h \
-    UCSCommonTypes.h
+    UCSCommonTypes.h \
+    UCSTcpVersion.h
 
 CONFIG(debug, debug|release) {
     unix:TARGET=$$join(TARGET,,,_debug)

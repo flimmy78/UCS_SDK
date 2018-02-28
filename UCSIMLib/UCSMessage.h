@@ -15,11 +15,12 @@
  * \struct UCSMessage
  * \brief 每条消息的结构
 */
-class UCSMessage
+class UCSIMLIBSHARED_EXPORT UCSMessage
 {
 public:
     UCSMessage();
     ~UCSMessage();
+//    UCSMessage &operator=(const UCSMessage& message);
 
 public:
     /*!

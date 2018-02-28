@@ -2,7 +2,7 @@
 #include <QMutexLocker>
 
 #include "UCSTcpManager.h"
-#include "ucstcpversion.h"
+#include "UCSTcpVersion.h"
 
 QMutex UCSTcpClient::m_Mutex;
 QSharedPointer<UCSTcpClient> UCSTcpClient::m_pInstance = Q_NULLPTR;

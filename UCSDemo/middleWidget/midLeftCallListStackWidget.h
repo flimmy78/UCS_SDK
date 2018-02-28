@@ -13,7 +13,7 @@ class MidLeftCallListStackWidget : public MyScrollArea
     Q_OBJECT
 
 public:
-    explicit MidLeftCallListStackWidget(QWidget *parent);
+    explicit MidLeftCallListStackWidget(QWidget *parent, int width = 250);
     ~MidLeftCallListStackWidget() {}
 
     void updateData();

@@ -7,8 +7,8 @@
 #include <QString>
 #include <QRegExpValidator>
 #include <QTextEdit>
-#include "Interface/UCSTcpClient.h"
-#include "Interface/UCSIMClient.h"
+#include "Interface/UCSTcpSDK.h"
+#include "Interface/UCSIMSDKPublic.h"
 
 MainWindow *MainWindow::s_pMainWnd = NULL;
 
@@ -95,11 +95,15 @@ void MainWindow::customEvent(QEvent *event)
         UCSLoginEvent *loginEvt = (UCSLoginEvent*)event;
         if (loginEvt->error() == ErrorCode_NoError)
         {
-            qDebug() << "login success. userId = " << loginEvt->userId();
+            UCS_LOG(UCSLogger::kTraceInfo, "MainWindow",
+                    QString("login success. userId = ").append(loginEvt->userId()));
+
+            m_midLeft.imStackWid()->updateData();
         }
         else
         {
-            qDebug() << "login failed. error = " << loginEvt->error();
+            UCS_LOG(UCSLogger::kTraceError, "MainWindow",
+                    QString("login failed. error = %1").arg(loginEvt->error()));
         }
     }
         break;
@@ -116,7 +120,17 @@ void MainWindow::customEvent(QEvent *event)
 
     case kUCSMsgSendEvent:
     {
-
+        UCSMsgSendEvent *sendEvent = (UCSMsgSendEvent*)event;
+        if (sendEvent->error() == ErrorCode_NoError)
+        {
+            UCS_LOG(UCSLogger::kTraceInfo, "MainWindow",
+                    QString("msgId: %1 success send.").arg(sendEvent->messageId()));
+        }
+        else
+        {
+            UCS_LOG(UCSLogger::kTraceError, "MainWindow",
+                    QString("msgId: %1 failed send.").arg(sendEvent->messageId()));
+        }
     }
         break;
 

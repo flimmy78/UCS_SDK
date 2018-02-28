@@ -122,6 +122,40 @@ void UCSLogger::add(const UcsLogLevel level,
     qInfo() << strMessage;
 }
 
+void UCSLogger::add(const UCSLogger::UcsLogLevel level,
+                    const QString &module,
+                    const QString &msg)
+{
+    if (!(m_levelFilter & level))
+    {
+        return;
+    }
+
+    QString moduleTmp;
+    if (module.size() > 12)
+    {
+        moduleTmp = module.mid(0, 12);
+    }
+    else
+    {
+        quint32 spaceNum = 12 - module.size();
+        moduleTmp = module;
+        while (spaceNum--)
+        {
+            moduleTmp.append(" ");
+        }
+    }
+
+    QString strDateTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    QString strMessage = QString("%1 [%2] - [%3] %4")
+            .arg(strDateTime)
+            .arg(moduleTmp)
+            .arg(addLevel(level))
+            .arg(msg);
+
+    qInfo() << strMessage;
+}
+
 quint32 UCSLogger::levelFilter() const
 {
     return m_levelFilter;

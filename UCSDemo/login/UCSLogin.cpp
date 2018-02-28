@@ -21,7 +21,7 @@ UCSLogin::UCSLogin(QWidget *parent) : QDialog(parent)
     loadStyleSheet();
 
     m_timerId = 0;
-    m_count = 60;
+    m_countDown = 60;
 
     UCSTcpClient::Instance()->registerEventListener(kUCSLoginEvent, this);
 }
@@ -162,9 +162,9 @@ void UCSLogin::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == m_timerId)
     {
-        QString text = QString("%1 s").arg(--m_count);
+        QString text = QString("%1 s").arg(--m_countDown);
         m_pBtnCodeReq->setText(text);
-        if (m_count <= 0)
+        if (m_countDown <= 0)
         {
             killTimer(m_timerId);
             onLoginFailed();
@@ -252,7 +252,7 @@ void UCSLogin::slot_onLoginClicked()
     QString username = m_pLineUserName->text();
     QString code = m_pLineVerifyCode->text();
 
-    if (username.isEmpty() || code.isEmpty() || m_count <= 0)
+    if (username.isEmpty() || code.isEmpty() || m_countDown <= 0)
     {
         return;
     }
@@ -272,9 +272,9 @@ void UCSLogin::slot_onAuthSuccess(int expired)
         killTimer(m_timerId);
     }
 
-    m_count = 60;
+    m_countDown = 60;
 
-    QString text = QString("%1 s").arg(m_count);
+    QString text = QString("%1 s").arg(m_countDown);
     m_pBtnCodeReq->setEnabled(false);
     m_pBtnCodeReq->setText(text);
 

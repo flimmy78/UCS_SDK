@@ -4,10 +4,11 @@
 #include <qglobal.h>
 #include "UCSMsgContent.h"
 
-class UCSVoiceMsg : public UCSMsgContent
+class UCSIMLIBSHARED_EXPORT UCSVoiceMsg : public UCSMsgContent
 {
 public:
     UCSVoiceMsg();
+    ~UCSVoiceMsg(){}
 
 public:
     /*!

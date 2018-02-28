@@ -6,7 +6,7 @@
 #include "UCSIMDefine.h"
 #include "UCSUserInfo.h"
 
-class UCSDiscussion
+class  UCSIMLIBSHARED_EXPORT UCSDiscussion
 {
 
 public:

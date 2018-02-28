@@ -11,8 +11,9 @@ class MidLeftContactsStackWidget : public MyScrollArea
     Q_OBJECT
 
 public:
-    explicit MidLeftContactsStackWidget(QWidget *parent = 0);
+    explicit MidLeftContactsStackWidget(QWidget *parent = 0, int width = 250);
     ~MidLeftContactsStackWidget() {}
+
 
 private:
     void initLayout();

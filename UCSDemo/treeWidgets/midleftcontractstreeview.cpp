@@ -20,45 +20,13 @@ MidLeftContractsTreeView::MidLeftContractsTreeView(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
     setCursor(Qt::ArrowCursor);
 
-    QString viewStyle = "QTreeView {\
-        border: none; \
-        background: rgb(242, 242, 242);\
-    }\
-    QTreeView::item {\
-        height: 30px;\
-        border: none;\
-        background: transparent;\
-        color: black;\
-    }\
-    QTreeView::item:hover {\
-        background: rgb(216, 244, 240);\
-    }\
-    QTreeView::item:selected {\
-        background: rgb(193, 243, 230);\
-    }\
-    QTreeView::branch:open:has-children {\
-        image: url(:/images/arrowBottom.png);\
-    }\
-    QTreeView::branch:closed:has-children {\
-        image: url(:images/arrowRight.png);\
-    }";
-
-    setStyleSheet(viewStyle);
-
-    QString scrollStyle = "QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
-                          "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
-                          "QScrollBar::handle:hover{background: rgb(191,191,191);}"
-                          "QScrollBar::add-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
-                          "QScrollBar::sub-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
-                          "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background:transparent;}";
-    verticalScrollBar()->setStyleSheet(scrollStyle);
-
     /* set icon size for items */
-    setIconSize(QSize(20, 20));
+    setIconSize(QSize(25, 25));
 
     init();
     initConnection();
     initMenu();
+    loadStyleSheet();
 }
 
 void MidLeftContractsTreeView::contextMenuEvent(QContextMenuEvent *event)
@@ -136,6 +104,18 @@ void MidLeftContractsTreeView::initMenu()
     m_pPersonMenu->addAction(pVideoAct);
     m_pPersonMenu->addSeparator();
     m_pPersonMenu->addAction(pDelAct);
+}
+
+void MidLeftContractsTreeView::loadStyleSheet()
+{
+    QFile file(":/Resources/TreeView/TreeView.css");
+    file.open(QFile::ReadOnly);
+    if (file.isOpen())
+    {
+        QString styleSheet = this->styleSheet();
+        styleSheet += QLatin1String(file.readAll());
+        this->setStyleSheet(styleSheet);
+    }
 }
 
 void MidLeftContractsTreeView::slot_itemClicked(QModelIndex index)

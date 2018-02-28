@@ -1,6 +1,6 @@
-﻿#include "midLeftIMListWidget.h"
+﻿#include "MidLeftConversationListWidget.h"
 
-MidLeftIMRowWidget::MidLeftIMRowWidget(ImMsgItem *pItem, QWidget *parent)
+MidLeftIMRowWidget::MidLeftIMRowWidget(IMConversationItem *pItem, QWidget *parent)
     : QWidget(parent)
 {
     setFixedSize(250, 60);
@@ -10,26 +10,27 @@ MidLeftIMRowWidget::MidLeftIMRowWidget(ImMsgItem *pItem, QWidget *parent)
     m_LblHeaderIcon.setFixedSize(50, 50);
     m_LblHeaderIcon.setPixmap(QPixmap(pItem->headerPath));
 
-    QString strName = m_LblName.fontMetrics().elidedText(pItem->nickName,
+    QString strName = m_LblName.fontMetrics().elidedText(pItem->conversationTitle,
                                                          Qt::ElideRight,
                                                          100,
                                                          Qt::TextShowMnemonic);
 
-    QString strData = m_LblData.fontMetrics().elidedText(pItem->msgData,
+    QString strData = m_LblContent.fontMetrics().elidedText(pItem->lastMsgContent,
                                                          Qt::ElideRight,
                                                          150,
                                                          Qt::TextShowMnemonic);
 
     m_LblName.setText(strName);
-    m_LblTime.setText(pItem->msgTime);
-    m_LblData.setText(strData);
+    m_LblTime.setText(pItem->lastMsgTime);
+    m_LblContent.setText(strData);
+    m_LblUnReadCount.setText(QString::number(pItem->unReadCount));
 
     QString style1 = "QLabel{font: 11 微软雅黑; color: black;}";
     QString style2 = "QLabel{font: 10 微软雅黑; color: rgb(158, 158, 158);}";
 
     m_LblName.setStyleSheet(style1);
     m_LblTime.setStyleSheet(style2);
-    m_LblData.setStyleSheet(style2);
+    m_LblContent.setStyleSheet(style2);
 
     initLayout();
 }
@@ -53,7 +54,7 @@ void MidLeftIMRowWidget::initLayout()
     pTopLayout->setSpacing(0);
     pTopLayout->setContentsMargins(10, 0, 10, 0);
 
-    pBottomLayout->addWidget(&m_LblData);
+    pBottomLayout->addWidget(&m_LblContent);
     pBottomLayout->setContentsMargins(10, 0, 0, 0);
 
     pRightLayout->addLayout(pTopLayout);
@@ -68,7 +69,7 @@ void MidLeftIMRowWidget::initLayout()
     setLayout(pMainLayout);
 }
 
-MidLeftIMListWidget::MidLeftIMListWidget(QWidget *parent)
+MidLeftConversationListWidget::MidLeftConversationListWidget(QWidget *parent)
     :QListWidget(parent)
 {
     setMouseTracking(true);
@@ -91,7 +92,7 @@ MidLeftIMListWidget::MidLeftIMListWidget(QWidget *parent)
     initConnection();
 }
 
-void MidLeftIMListWidget::addListItem(ImMsgItem *pItem)
+void MidLeftConversationListWidget::addListItem(IMConversationItem *pItem)
 {
     QListWidgetItem *item = new QListWidgetItem(this);
     MidLeftIMRowWidget *pMsg = new MidLeftIMRowWidget(pItem, this);
@@ -100,7 +101,7 @@ void MidLeftIMListWidget::addListItem(ImMsgItem *pItem)
     addItem(item);
 }
 
-void MidLeftIMListWidget::contextMenuEvent(QContextMenuEvent * event)
+void MidLeftConversationListWidget::contextMenuEvent(QContextMenuEvent * event)
 {
     int row = this->indexAt(event->pos()).row();
     if (row > -1)
@@ -123,23 +124,23 @@ void MidLeftIMListWidget::contextMenuEvent(QContextMenuEvent * event)
     }
 }
 
-void MidLeftIMListWidget::initConnection()
+void MidLeftConversationListWidget::initConnection()
 {
     connect(this, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(slot_itemCliecked(QListWidgetItem*)));
 }
 
-void MidLeftIMListWidget::slot_itemCliecked(QListWidgetItem *pItem)
+void MidLeftConversationListWidget::slot_itemCliecked(QListWidgetItem *pItem)
 {
     qDebug() << "slot_itemCliecked " << currentIndex().row();
     emit sig_itemClicked(this->row(pItem));
 }
 
-void MidLeftIMListWidget::slot_addItem(ImMsgItem *pItem)
+void MidLeftConversationListWidget::slot_addItem(IMConversationItem *pItem)
 {
 
 }
 
-void MidLeftIMListWidget::slot_removeRow()
+void MidLeftConversationListWidget::slot_removeRow()
 {
     int row = currentIndex().row();
     qDebug() << "slot_removeRow " << row;
@@ -152,7 +153,7 @@ void MidLeftIMListWidget::slot_removeRow()
     }
 }
 
-void MidLeftIMListWidget::slot_setTopRow()
+void MidLeftConversationListWidget::slot_setTopRow()
 {
     int row = currentIndex().row();
     qDebug() << "slot_setTopRow " << row;

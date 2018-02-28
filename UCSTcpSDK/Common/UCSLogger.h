@@ -47,6 +47,11 @@ public:
     void add(const UcsLogLevel level,
              const UcsLogModule module,
              const QString &msg);
+
+    void add(const UcsLogLevel level,
+             const QString &module,
+             const QString &msg);
+
     quint32 levelFilter() const;
     void setLevelFilter(const quint32 &levelFilter);
 

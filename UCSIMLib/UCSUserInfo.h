@@ -3,12 +3,13 @@
 
 #include <QObject>
 #include <qglobal.h>
+#include "ucsimlib_global.h"
 
 /*!
  * \class UCSUserInfo
  * \brief 用户信息
  */
-class UCSUserInfo
+class UCSIMLIBSHARED_EXPORT UCSUserInfo
 {
 
 public:

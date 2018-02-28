@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QList>
 #include "absFiles/myScrollArea.h"
-#include "listWidgets/midLeftIMListWidget.h"
+#include "MidLeftConversationListWidget.h"
 
 class MiddleLeftWidget;
 
@@ -14,7 +14,7 @@ class MidLeftIMStackWidget : public MyScrollArea
     Q_OBJECT
 
 public:
-    explicit MidLeftIMStackWidget(QWidget *parent = 0);
+    explicit MidLeftIMStackWidget(QWidget *parent = 0, int width = 250);
 
     void setMidLeftWidget(MiddleLeftWidget *p) { m_pMidLeftWid = p; }
     void updateData();
@@ -32,9 +32,9 @@ public slots:
 
 private:
     MiddleLeftWidget *m_pMidLeftWid;
-    MidLeftIMListWidget m_imListWid;    
+    MidLeftConversationListWidget m_imListWid;
 
-    QList<ImMsgItem> m_imItems;
+    QList<IMConversationItem> m_imItems;
 };
 
 #endif // IMESSAGESTACKWIDGET_H

@@ -3,7 +3,8 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QTextEdit>
-#include "absFiles/myIconStyle.h"
+#include "AbsFiles/myIconStyle.h"
+#include "Interface/UCSIMClient.h"
 
 MidRightChatStackWidget::MidRightChatStackWidget(QWidget *parent)
     : QWidget(parent)
@@ -18,7 +19,6 @@ MidRightChatStackWidget::MidRightChatStackWidget(QWidget *parent)
 
 void MidRightChatStackWidget::initLayout()
 {
-    qDebug() << "MidRightChatStackWidget";
     QVBoxLayout *pMainLayout = new QVBoxLayout;
     QHBoxLayout *pToolsLayout = new QHBoxLayout;
 
@@ -47,7 +47,6 @@ void MidRightChatStackWidget::initLayout()
     QListWidget *pListWid = new QListWidget(this);
     pListWid->setFrameShadow(QFrame::Plain);
     pListWid->setFrameShape(QFrame::NoFrame);
-
 
     pMainLayout->addWidget(pListWid);
     pMainLayout->addLayout(pToolsLayout);
@@ -118,6 +117,14 @@ void MidRightChatStackWidget::slot_sendingMsg()
     if (!m_txtSending.toPlainText().isEmpty())
     {
         qDebug() << "sending msg: " << m_txtSending.toPlainText();
+        UCSMessage message;
+        UCSTextMsg *txtMsg = new UCSTextMsg(m_txtSending.toPlainText());
+        message.receivedId = "18018780872";
+        message.conversationType = UCS_IM_SOLOCHAT;
+        message.messageType = UCS_IM_TEXT;
+        message.content = txtMsg;
+
+        UCSIMClient::Instance()->sendMessage(&message);
         m_txtSending.clear();
     }
 }

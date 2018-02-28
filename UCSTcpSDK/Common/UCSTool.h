@@ -4,7 +4,7 @@
 
 QString charToQString(char *ptr)
 {
-    if (ptr != NULL)
+    if (ptr != NULL && ptr[0] != '\0')
     {
         return QString(ptr);
     }

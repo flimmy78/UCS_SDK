@@ -4,11 +4,12 @@
 #include <qglobal.h>
 #include "UCSMsgContent.h"
 
-class UCSTextMsg : public UCSMsgContent
+class UCSIMLIBSHARED_EXPORT UCSTextMsg : public UCSMsgContent
 {
 public:
     explicit UCSTextMsg();
     explicit UCSTextMsg(QString content);
+    ~UCSTextMsg(){}
 
 public:
     /*!

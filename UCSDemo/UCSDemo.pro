@@ -30,7 +30,7 @@ INCLUDEPATH += $$PWD MiddleWidget
 include(MiddleWidget/MiddleWidget.pri)
 
 INCLUDEPATH += $$PWD ListWidgets
-include(ListWidgets/Listwidgets.pri)
+include(ListWidgets/ListWidgets.pri)
 
 INCLUDEPATH += $$PWD TableWidgets
 include(TableWidgets/TableWidgets.pri)
@@ -49,6 +49,9 @@ include(RestManager/RestManager.pri)
 
 INCLUDEPATH += $$PWD Login
 include(Login/Login.pri)
+
+#INCLUDEPATH += $$PWD Logger
+#include(Logger/Logger.pri)
 
 INCLUDEPATH += $$PWD Interface
 
@@ -88,7 +91,8 @@ RESOURCES += \
     qm.qrc \
     res_midright.qrc \
     MyTitleBar.qrc \
-    LoginWindow.qrc
+    LoginWindow.qrc \
+    TreeView.qrc
 
 VERSION = 1.0.0.0
 RC_ICONS = images/yzx_logo.ico

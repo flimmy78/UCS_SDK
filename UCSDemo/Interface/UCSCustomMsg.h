@@ -8,11 +8,13 @@
 /*!
  * \brief The UCSCustomMsg class 自定义消息
  */
-class UCSCustomMsg : public UCSMsgContent
+class UCSIMLIBSHARED_EXPORT UCSCustomMsg : public UCSMsgContent
 {
 public:
     explicit UCSCustomMsg();
     explicit UCSCustomMsg(QByteArray data);
+    ~UCSCustomMsg(){}
+
     QByteArray data() const;
 
     void setData(const QByteArray &data);

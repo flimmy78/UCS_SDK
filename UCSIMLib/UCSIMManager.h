@@ -109,7 +109,7 @@ public:
      * \return true for success
      */
     bool doGetConversationList(UCS_IM_ConversationListType typeList,
-                              QList<UCSConversation> &conversationList);
+                              QList<UCSConversation*> &conversationList);
 
     /*!
      * \brief doRemoveConversation 删除指定会话
@@ -144,7 +144,7 @@ public:
     bool doGetLastestMessages(UCS_IM_ConversationType type,
                               QString targetId,
                               quint32 count,
-                              QList<UCSMessage> &messageList);
+                              QList<UCSMessage*> &messageList);
 
     /*!
      * \brief doGetHistoryMessages 拉取更多历史消息
@@ -159,7 +159,7 @@ public:
                               QString targetId,
                               quint64 oldestMessageId,
                               quint32 count,
-                              QList<UCSMessage> &messageList);
+                              QList<UCSMessage*> &messageList);
 
     /*!
      * \brief doDeleteMessage 删除一条指定消息
@@ -207,7 +207,7 @@ public:
     bool doSearchMessage(UCS_IM_ConversationType type,
                          QString targetId,
                          QString keyWord,
-                         QList<UCSMessage> &messageList);
+                         QList<UCSMessage*> &messageList);
 
     /*!
      * \brief doSetTop 聊天会话是否置顶

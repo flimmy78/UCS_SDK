@@ -8,12 +8,13 @@
 /*!
  * \brief The UCSDiscussionNotification class 讨论组通知类
  */
-class UCSDiscussionNotification : public UCSMsgContent
+class UCSIMLIBSHARED_EXPORT UCSDiscussionNotification : public UCSMsgContent
 {
 public:
     explicit UCSDiscussionNotification();
     explicit UCSDiscussionNotification(QString operatorId,
                                        QString extension);
+    ~UCSDiscussionNotification(){}
 
 public:
     ///< 讨论组Id >

@@ -53,7 +53,7 @@ private:
 
     UCSRestManager m_restManager;
     qint32 m_timerId;
-    qint32 m_count;
+    qint32 m_countDown;
 };
 
 #endif // UCSLOGIN_H

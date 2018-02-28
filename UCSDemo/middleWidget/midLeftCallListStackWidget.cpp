@@ -4,12 +4,12 @@
 #include <QLabel>
 
 
-MidLeftCallListStackWidget::MidLeftCallListStackWidget(QWidget *parent)
+MidLeftCallListStackWidget::MidLeftCallListStackWidget(QWidget *parent, int width)
     : MyScrollArea(parent)
     , m_callListWid(this)
 {
     setMouseTracking(true);
-    setFixedWidth(250);
+    setFixedWidth(width);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
 
     initLayout();

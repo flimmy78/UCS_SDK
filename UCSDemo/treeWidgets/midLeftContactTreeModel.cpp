@@ -137,10 +137,10 @@ QVariant MidLeftContactTreeModel::data(const QModelIndex &index, int role) const
             return QIcon(":/images/u1183.png");
         }
     }
-    else if (role == Qt::FontRole)
-    {
-        return QFont("微软雅黑", 10, QFont::Normal, false);
-    }
+//    else if (role == Qt::FontRole)
+//    {
+//        return QFont("微软雅黑", 10, QFont::Normal, false);
+//    }
     else if (role == GroupRole)
     {
         return contactUtil.sex < 0;

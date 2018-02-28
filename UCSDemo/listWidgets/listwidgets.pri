@@ -1,10 +1,10 @@
 HEADERS += \
-    $$PWD/midLeftIMListWidget.h \
-    $$PWD/midLeftCallListWidget.h
+    $$PWD/midLeftCallListWidget.h \
+    $$PWD/MidLeftConversationListWidget.h
 
 SOURCES += \
     $$PWD/midLeftCallListWidget.cpp \
-    $$PWD/midLeftIMListWidget.cpp
+    $$PWD/MidLeftConversationListWidget.cpp
 
 
 #    $$PWD/historycallmodel.h \

@@ -7,16 +7,16 @@
 #include <UCSDiscussion.h>
 #include <UCSDBCenter.h>
 
-void UCSDBEntity::convertMessageFromChat(const ChatEntity chatEntity, UCSMessage &message)
+void UCSDBEntity::convertMessageFromChat(const ChatEntity &chatEntity, UCSMessage *message)
 {
-    message.messageId = chatEntity.msgId.toLongLong();
-    message.conversationType = (UCS_IM_ConversationType)chatEntity.categoryId.toInt();
-    message.messageType = (UCS_IM_MsgType)chatEntity.msgType.toInt();
-    message.receivedId = chatEntity.targetId;
-    message.senderUserId = chatEntity.senderId;
-    message.senderNickName = chatEntity.senderNickName;
-    message.sendStatus = (UCSSendStatus)chatEntity.sendStatus.toInt();
-    message.receivedStatus = (UCSReceivedStatus)chatEntity.readStatus.toInt();
+    message->messageId = chatEntity.msgId.toLongLong();
+    message->conversationType = (UCS_IM_ConversationType)chatEntity.categoryId.toInt();
+    message->messageType = (UCS_IM_MsgType)chatEntity.msgType.toInt();
+    message->receivedId = chatEntity.targetId;
+    message->senderUserId = chatEntity.senderId;
+    message->senderNickName = chatEntity.senderNickName;
+    message->sendStatus = (UCSSendStatus)chatEntity.sendStatus.toInt();
+    message->receivedStatus = (UCSReceivedStatus)chatEntity.readStatus.toInt();
 
     qint64 nowTime = UCSClock::TimeInMicroseconds();
     qint64 loginTime = UCSIMHelper::readSettings(UCS_LOGIN_TIME_KEY).toLongLong();
@@ -24,54 +24,54 @@ void UCSDBEntity::convertMessageFromChat(const ChatEntity chatEntity, UCSMessage
     bool isFromMySelf = QStringUtil::toBool(chatEntity.isFromMySelf);
     if (isFromMySelf)
     {
-        message.messageDirection = MessageDirection_SEND;
+        message->messageDirection = MessageDirection_SEND;
 
         ///< receiveTime = 0, 说明尚未收到响应 >
         if (chatEntity.receivedTime.isEmpty() ||
             chatEntity.receivedTime.toInt() == 0)
         {
-            message.time = chatEntity.sendTime.toLongLong();
+            message->time = chatEntity.sendTime.toLongLong();
 
             ///< 30s发送超时，或发送中退出或被踢线，发送状态认为失败 >
             quint32 timeout = UCSIMTimer::timeout(UCSIMTimer::kMsgSendTimer) / 1000;
-            if (((nowTime - message.time > timeout) || (message.time < loginTime))
-                && (message.sendStatus == SendStatus_sending))
+            if (((nowTime - message->time > timeout) || (message->time < loginTime))
+                && (message->sendStatus == SendStatus_sending))
             {
-                message.sendStatus = SendStatus_fail;
+                message->sendStatus = SendStatus_fail;
             }
         }
         else
         {
-            message.time = chatEntity.receivedTime.toLongLong();
+            message->time = chatEntity.receivedTime.toLongLong();
         }
     }
     else
     {
-        message.messageDirection = MessageDirection_RECEIVE;
+        message->messageDirection = MessageDirection_RECEIVE;
 
-        message.time = chatEntity.sendTime.toLongLong();
+        message->time = chatEntity.sendTime.toLongLong();
 
         ///< 单聊情况下，接收的消息，receivedId应该是自己的Id >
         QString userId = UCSIMHelper::readSettings(UCS_LOGIN_USERID_KEY).toString();
-        message.receivedId = userId;
+        message->receivedId = userId;
 
-        if (message.receivedStatus == ReceivedStatus_DOWNLOADING)
+        if (message->receivedStatus == ReceivedStatus_DOWNLOADING)
         {
             ///< 语音或图片消息在下载中用户退出或超时无响应，视为下载失败 >
             quint32 timeout = UCSIMTimer::timeout(UCSIMTimer::kMsgSendTimer) / 1000;
             qint64 receiveTime = chatEntity.receivedTime.toLongLong();
             if ((receiveTime < loginTime) || (nowTime - receiveTime > timeout))
             {
-                message.receivedStatus = ReceivedStatus_DOWNLOADFail;
+                message->receivedStatus = ReceivedStatus_DOWNLOADFail;
             }
         }
     }
 
-    switch (message.messageType) {
+    switch (message->messageType) {
     case UCS_IM_TEXT:
     {
         UCSTextMsg *textMsg = new UCSTextMsg(chatEntity.content);
-        message.content = textMsg;
+        message->content = textMsg;
     }
         break;
 
@@ -79,7 +79,7 @@ void UCSDBEntity::convertMessageFromChat(const ChatEntity chatEntity, UCSMessage
     {
         UCSImageMsg *imgMsg = new UCSImageMsg();
         imgMsg->thumbnailLocalPath = chatEntity.thumbnaiUrl;
-        if (message.messageDirection == MessageDirection_SEND)
+        if (message->messageDirection == MessageDirection_SEND)
         {
             imgMsg->imageLocalPath = chatEntity.content;
         }
@@ -88,7 +88,7 @@ void UCSDBEntity::convertMessageFromChat(const ChatEntity chatEntity, UCSMessage
             imgMsg->imageRemoteUrl = chatEntity.content;
         }
 
-        message.content = imgMsg;
+        message->content = imgMsg;
     }
         break;
 
@@ -97,23 +97,23 @@ void UCSDBEntity::convertMessageFromChat(const ChatEntity chatEntity, UCSMessage
         UCSVoiceMsg *voiceMsg = new UCSVoiceMsg();
         voiceMsg->voicePath = chatEntity.content;
         voiceMsg->duration = chatEntity.msgLength.toInt();
-        message.content = voiceMsg;
+        message->content = voiceMsg;
     }
         break;
 
     case UCS_IM_System:
     {
         UCSDiscussionNotification *notify = new UCSDiscussionNotification();
-        notify->m_operatorId = message.receivedId;
+        notify->m_operatorId = message->receivedId;
         notify->m_extension = chatEntity.content;
-        message.content = notify;
+        message->content = notify;
     }
         break;
 
     case UCS_IM_Custom:
     {
         UCSCustomMsg *customMsg = new UCSCustomMsg(chatEntity.content.toLocal8Bit());
-        message.content = customMsg;
+        message->content = customMsg;
     }
         break;
 
@@ -128,16 +128,16 @@ void UCSDBEntity::convertMessageFromChat(const ChatEntity chatEntity, UCSMessage
     }
 }
 
-void UCSDBEntity::convertConversationFromEntity(const ConversationEntity entity, UCSConversation &conversation)
+void UCSDBEntity::convertConversationFromEntity(const ConversationEntity &entity,
+                                                UCSConversation *conversation)
 {
-    conversation.setConversationType((UCS_IM_ConversationType)entity.categoryId.toInt());
-    conversation.setConversationTitle(entity.conversationTitle);
-    conversation.setTargetId(entity.targetId);
-    conversation.setDraft(entity.draft);
-    conversation.setUnreadMessageCount(entity.unReadMsgCount.toInt());
-    conversation.setTime(entity.lastTime.toLongLong());
-    conversation.setIsTop(QStringUtil::toBool(entity.isTop));
-    //    conversation.setLastestMessage();
+    conversation->setConversationType((UCS_IM_ConversationType)entity.categoryId.toInt());
+    conversation->setConversationTitle(entity.conversationTitle);
+    conversation->setTargetId(entity.targetId);
+    conversation->setDraft(entity.draft);
+    conversation->setUnreadMessageCount(entity.unReadMsgCount.toInt());
+    conversation->setTime(entity.lastTime.toLongLong());
+    conversation->setIsTop(QStringUtil::toBool(entity.isTop));
 }
 
 void UCSDBEntity::convertEntityFromContact(const UCSIMModContact_t contact, DiscussionEntity &entity)

@@ -8,7 +8,7 @@
  * \class UCSImageMsg
  * \brief 图片类型消息
 */
-class UCSImageMsg : public UCSMsgContent
+class UCSIMLIBSHARED_EXPORT UCSImageMsg : public UCSMsgContent
 {
 public:
     UCSImageMsg();

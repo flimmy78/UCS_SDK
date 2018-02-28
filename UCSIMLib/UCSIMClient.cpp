@@ -225,11 +225,11 @@ QList<UCSDiscussion> UCSIMClient::getDiscussions()
     return discussionList;
 }
 
-QList<UCSConversation> UCSIMClient::getConversationList(UCS_IM_ConversationListType conversationListType)
+QList<UCSConversation*> UCSIMClient::getConversationList(UCS_IM_ConversationListType conversationListType)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
 
-    QList<UCSConversation> conversationList;
+    QList<UCSConversation*> conversationList;
 
     m_pIManager->doGetConversationList(conversationListType, conversationList);
     return conversationList;
@@ -288,13 +288,13 @@ bool UCSIMClient::clearConversations()
     return m_pIManager->doClearConversations();
 }
 
-QList<UCSMessage> UCSIMClient::getLatestMessages(UCS_IM_ConversationType conversationType,
+QList<UCSMessage*> UCSIMClient::getLatestMessages(UCS_IM_ConversationType conversationType,
                                                    QString targetId,
                                                    quint32 count)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
 
-    QList<UCSMessage> messageList;
+    QList<UCSMessage*> messageList;
 
     if (!UCSIMHelper::checkConversationType(conversationType))
     {
@@ -324,14 +324,14 @@ QList<UCSMessage> UCSIMClient::getLatestMessages(UCS_IM_ConversationType convers
     return messageList;
 }
 
-QList<UCSMessage> UCSIMClient::getHistoryMessages(UCS_IM_ConversationType conversationType,
+QList<UCSMessage*> UCSIMClient::getHistoryMessages(UCS_IM_ConversationType conversationType,
                                                     QString targetId,
                                                     quint64 oldestMessageId,
                                                     quint32 count)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
 
-    QList<UCSMessage> messageList;
+    QList<UCSMessage*> messageList;
 
     if (!UCSIMHelper::checkConversationType(conversationType))
     {
@@ -432,13 +432,13 @@ bool UCSIMClient::clearConversationsUnreadCount(UCS_IM_ConversationType conversa
     return m_pIManager->doClearUnReadCount(conversationType, targetId);
 }
 
-QList<UCSMessage> UCSIMClient::checkChatMessages(UCS_IM_ConversationType conversationType,
+QList<UCSMessage*> UCSIMClient::checkChatMessages(UCS_IM_ConversationType conversationType,
                                                    QString targetId,
                                                    QString keyWord)
 {    
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
 
-    QList<UCSMessage> messageList;
+    QList<UCSMessage*> messageList;
     if (!UCSIMHelper::checkConversationType(conversationType))
     {
         UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMClient,

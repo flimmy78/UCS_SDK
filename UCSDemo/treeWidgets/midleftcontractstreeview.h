@@ -18,6 +18,7 @@ private:
     void init();
     void initConnection();
     void initMenu();
+    void loadStyleSheet();
 
 signals:
 

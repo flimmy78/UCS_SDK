@@ -3,8 +3,9 @@
 
 #include <qglobal.h>
 #include <QObject>
+#include "ucsimlib_global.h"
 
-class UCSMsgContent
+class UCSIMLIBSHARED_EXPORT UCSMsgContent
 {
 public:
     UCSMsgContent();

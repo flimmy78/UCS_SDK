@@ -1,45 +1,93 @@
 ﻿#include "midLeftIMStackWidget.h"
+#include <QDateTime>
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QLabel>
 #include "middleWidget/middleLeftWidget.h"
+#include "Interface/UCSIMSDKPublic.h"
 
-MidLeftIMStackWidget::MidLeftIMStackWidget(QWidget *parent)
+MidLeftIMStackWidget::MidLeftIMStackWidget(QWidget *parent, int width)
     : MyScrollArea(parent)
     , m_imListWid(this)
 {
     setMouseTracking(true);
-    setFixedWidth(250);
+    setFixedWidth(width);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
 
     initLayout();
     initConnection();
-    updateData();
+//    updateData();
 }
 
 void MidLeftIMStackWidget::updateData()
 {
-    for (int i = 0; i < 12; i++)
+
+    QList<UCSConversation*> conversationList =  UCSIMClient::Instance()->getConversationList(allChat);
+    foreach (UCSConversation *conversation, conversationList)
     {
-        ImMsgItem item;
-        if (i % 2)
+        IMConversationItem item;
+
+        item.conversationId = conversation->targetId();
+        item.conversationTitle = conversation->conversationTitle();
+        item.unReadCount = conversation->unreadMessageCount();
+        item.headerPath = ":/images/u29.png";
+
+        UCSMessage *message = conversation->lastestMessage();
+        if (message != Q_NULLPTR)
         {
-            item.headerPath = ":/images/u57.png";
-            item.nickName = QStringLiteral("小美");
-            item.msgTime = "2018/01/08";
-            item.msgData = QStringLiteral("8点30分准时龙门例会");
-        }
-        else
-        {
-            item.headerPath = ":/images/u29.png";
-            item.nickName = QStringLiteral("全球唯一云通讯能力提供商");
-            item.msgTime = "10:04";
-            item.msgData = QStringLiteral("刚才他说的话好逗哦，笑死俺老牛了。。。");
+            QDateTime dateTime;
+            item.lastMsgTime = dateTime.fromTime_t(message->time).toString("MM-dd hh:mm");
+
+            UCS_IM_MsgType msgType = message->messageType;
+            switch (msgType) {
+            case UCS_IM_TEXT:
+            {
+                UCSTextMsg *textMsg = static_cast<UCSTextMsg*>(message->content);
+                item.lastMsgContent = textMsg->content();
+            }
+                break;
+
+            case UCS_IM_IMAGE:
+            {
+                item.lastMsgContent = QStringLiteral("[图片]");
+            }
+                break;
+
+            case UCS_IM_VOICE:
+            {
+                item.lastMsgContent = QStringLiteral("[语音]");
+            }
+                break;
+
+            case UCS_IM_Location:
+            {
+                item.lastMsgContent = QStringLiteral("[位置]");
+            }
+                break;
+
+            case UCS_IM_Custom:
+            {
+                item.lastMsgContent = QStringLiteral("[自定义消息]");
+            }
+                break;
+
+            case UCS_IM_DiscussionNotification:
+            {
+                item.lastMsgContent = QStringLiteral("[通知]");
+            }
+                break;
+
+            default:
+                item.lastMsgContent = QStringLiteral("[未知类型消息]");
+                break;
+            }
         }
         m_imItems.append(item);
         m_imListWid.addListItem(&item);
     }
-    m_imListWid.setCurrentRow(1);
+
+    qDeleteAll(conversationList);
+    conversationList.clear();
 }
 
 void MidLeftIMStackWidget::initLayout()
@@ -61,12 +109,12 @@ void MidLeftIMStackWidget::initConnection()
 
 QString MidLeftIMStackWidget::currentName()
 {
-    return m_imItems.at(m_imListWid.currentRow()).nickName;
+    return m_imItems.at(m_imListWid.currentRow()).conversationTitle;
 }
 
 void MidLeftIMStackWidget::slot_itemClicked(int row)
 {
-    QString name = m_imItems.at(row).nickName;
+    QString name = m_imItems.at(row).conversationTitle;
     qDebug() << "MidLeftIMStackWidget slot_itemClicked " << name;
 
     emit sig_itemClicked(name);

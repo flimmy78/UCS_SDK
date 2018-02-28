@@ -9,11 +9,12 @@
 /*!
  * \brief The UCSConversation class 会话类，每一个会话对应一个聊天
  */
-class UCSConversation
+class UCSIMLIBSHARED_EXPORT UCSConversation
 {
 
 public:
     explicit UCSConversation();
+    ~UCSConversation();
 
     UCS_IM_ConversationType conversationType() const;
     void setConversationType(const UCS_IM_ConversationType &conversationType);
@@ -45,8 +46,8 @@ public:
     QString objectName() const;
     void setObjectName(const QString &objectName);
 
-    UCSMessage lastestMessage() const;
-    void setLastestMessage(const UCSMessage &lastestMessage);
+    UCSMessage *lastestMessage() const;
+    void setLastestMessage(UCSMessage *lastestMessage);
 
 private:
     /*!
@@ -99,7 +100,7 @@ private:
      */
     QString m_objectName;
 
-    UCSMessage m_lastestMessage;
+    UCSMessage *m_lastestMessage;
 };
 
 #endif // UCSCONVERSATION_H

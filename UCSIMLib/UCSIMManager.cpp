@@ -449,7 +449,7 @@ bool UCSIMManager::doGetAllDiscussions(QList<UCSDiscussion> &discussionList)
 }
 
 bool UCSIMManager::doGetConversationList(UCS_IM_ConversationListType typeList,
-                                         QList<UCSConversation> &conversationList)
+                                         QList<UCSConversation*> &conversationList)
 {
     QList<qint32> types;
     switch (typeList) {
@@ -501,29 +501,29 @@ bool UCSIMManager::doGetConversationList(UCS_IM_ConversationListType typeList,
         break;
     }
 
-    QList<UCSConversation> topList;
-    QList<UCSConversation> normalList;
+    QList<UCSConversation*> topList;
+    QList<UCSConversation*> normalList;
 
     QList<ConversationEntity> entityList;
     entityList = UCSDBCenter::conversationMgr()->getConversationList(types);
     foreach (ConversationEntity entity, entityList)
     {
-        UCSConversation conversation;
+        UCSConversation* conversation = new UCSConversation;
         UCSDBEntity::convertConversationFromEntity(entity, conversation);
 
         ///< 取出该会话的最近一条消息记录 >
-        QList<UCSMessage> messageList;
-        doGetLastestMessages(conversation.conversationType(),
-                             conversation.targetId(),
+        QList<UCSMessage*> messageList;
+        doGetLastestMessages(conversation->conversationType(),
+                             conversation->targetId(),
                              1,
                              messageList);
 
         if (!messageList.isEmpty())
         {
-            conversation.setLastestMessage(messageList.first());
+            conversation->setLastestMessage(messageList.first());
         }
 
-        if (conversation.isTop())
+        if (conversation->isTop())
         {
             topList.append(conversation);
         }
@@ -557,13 +557,13 @@ bool UCSIMManager::doClearConversations()
 bool UCSIMManager::doGetLastestMessages(UCS_IM_ConversationType type,
                                         QString targetId,
                                         quint32 count,
-                                        QList<UCSMessage> &messageList)
+                                        QList<UCSMessage*> &messageList)
 {
     QList<ChatEntity> chatList;
     chatList = UCSDBCenter::chatMgr()->getChats(targetId, type, count);
     foreach (ChatEntity chatEntity, chatList)
     {
-        UCSMessage message;
+        UCSMessage *message = new UCSMessage;
         UCSDBEntity::convertMessageFromChat(chatEntity, message);
         messageList.append(message);
     }
@@ -575,13 +575,13 @@ bool UCSIMManager::doGetHistoryMessages(UCS_IM_ConversationType type,
                                         QString targetId,
                                         quint64 oldestMessageId,
                                         quint32 count,
-                                        QList<UCSMessage> &messageList)
+                                        QList<UCSMessage*> &messageList)
 {
     QList<ChatEntity> chatList;
     chatList = UCSDBCenter::chatMgr()->getHistoryChats(targetId, type, count, QString::number(oldestMessageId));
     foreach (ChatEntity chatEntity, chatList)
     {
-        UCSMessage message;
+        UCSMessage *message = new UCSMessage;
         UCSDBEntity::convertMessageFromChat(chatEntity, message);
         messageList.append(message);
     }
@@ -612,13 +612,13 @@ bool UCSIMManager::doClearUnReadCount(UCS_IM_ConversationType type, QString targ
 bool UCSIMManager::doSearchMessage(UCS_IM_ConversationType type,
                                    QString targetId,
                                    QString keyWord,
-                                   QList<UCSMessage> &messageList)
+                                   QList<UCSMessage*> &messageList)
 {
     QList<ChatEntity> chatList;
     chatList = UCSDBCenter::chatMgr()->searchChats(targetId, type, keyWord);
     foreach (ChatEntity chatEntity, chatList)
     {
-        UCSMessage message;
+        UCSMessage* message = new UCSMessage;
         UCSDBEntity::convertMessageFromChat(chatEntity, message);
         messageList.append(message);
     }
@@ -755,7 +755,6 @@ void UCSIMManager::handleSendMessageResponse(QByteArray recvData)
     }
 
     UCSSendMsgResponse_t response;
-    memset(&response, 0x00, sizeof(UCSSendMsgResponse_t));
 
     UCSPackage::UnpackSendMsgResponse(recvData, &response);
 
