@@ -9,8 +9,9 @@ SearchLineEdit::SearchLineEdit(QWidget *parent)
     setMouseTracking(true);
 //    setContextMenuPolicy(Qt::NoContextMenu);
 
+    setObjectName("SearchLineEdit");
+
     setMaxLength(60);
-    setStyleSheet("QLineEdit{border-radius:5px;background:rgb(221, 231, 231);}");
     setPlaceholderText(QStringLiteral("搜索"));
 
     installEventFilter(this);

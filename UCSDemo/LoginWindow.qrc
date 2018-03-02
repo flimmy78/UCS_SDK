@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/LoginWindow/LoginWindow.css</file>
-        <file>resources/LoginWindow/headImage/u6.png</file>
+        <file>Resources/LoginWindow/LoginWindow.qss</file>
+        <file>Resources/LoginWindow/headImage/u6.png</file>
     </qresource>
 </RCC>

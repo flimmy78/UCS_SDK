@@ -8,7 +8,6 @@
 
 MidLeftIMStackWidget::MidLeftIMStackWidget(QWidget *parent, int width)
     : MyScrollArea(parent)
-    , m_imListWid(this)
 {
     setMouseTracking(true);
     setFixedWidth(width);
@@ -16,11 +15,13 @@ MidLeftIMStackWidget::MidLeftIMStackWidget(QWidget *parent, int width)
 
     initLayout();
     initConnection();
-//    updateData();
 }
 
 void MidLeftIMStackWidget::updateData()
 {
+#if 0
+    m_imItems.clear();
+    m_pConversationList->clearAllItems();
 
     QList<UCSConversation*> conversationList =  UCSIMClient::Instance()->getConversationList(allChat);
     foreach (UCSConversation *conversation, conversationList)
@@ -83,33 +84,40 @@ void MidLeftIMStackWidget::updateData()
             }
         }
         m_imItems.append(item);
-        m_imListWid.addListItem(&item);
+        m_pConversationList->addListItem(&item);
     }
 
     qDeleteAll(conversationList);
     conversationList.clear();
+#else
+    m_pConversationListView->updateConversationList();
+#endif
 }
 
 void MidLeftIMStackWidget::initLayout()
 {
     qDebug() << "MidLeftIMStackWidget";
-    QHBoxLayout *pMainLayout = new QHBoxLayout;
+//    m_pConversationList = new MidLeftConversationListWidget(this);
 
-    pMainLayout->addWidget(&m_imListWid);
+    m_pConversationListView = new ConversationListView(this);
+    QHBoxLayout *pMainLayout = new QHBoxLayout(this);
+
+//    pMainLayout->addWidget(m_pConversationList);
+    pMainLayout->addWidget(m_pConversationListView);
     pMainLayout->setSpacing(0);
     pMainLayout->setContentsMargins(0, 0, 0, 0);
-
     setLayout(pMainLayout);
 }
 
 void MidLeftIMStackWidget::initConnection()
 {
-    connect(&m_imListWid, SIGNAL(sig_itemClicked(int)), this, SLOT(slot_itemClicked(int)));
+//    connect(m_pConversationList, SIGNAL(sig_itemClicked(int)), this, SLOT(slot_itemClicked(int)));
+    connect(m_pConversationListView, SIGNAL(itemClicked(QString,quint32)), this, SLOT(onItemClicked(QString,quint32)));
 }
 
 QString MidLeftIMStackWidget::currentName()
 {
-    return m_imItems.at(m_imListWid.currentRow()).conversationTitle;
+    return m_imItems.at(m_pConversationList->currentRow()).conversationTitle;
 }
 
 void MidLeftIMStackWidget::slot_itemClicked(int row)
@@ -118,4 +126,15 @@ void MidLeftIMStackWidget::slot_itemClicked(int row)
     qDebug() << "MidLeftIMStackWidget slot_itemClicked " << name;
 
     emit sig_itemClicked(name);
+}
+
+void MidLeftIMStackWidget::onItemClicked(QString targetId, quint32 type)
+{
+    qDebug() << "targetId: " << targetId;
+    qDebug() << "type: " << type;
+}
+
+ConversationListView *MidLeftIMStackWidget::getListView() const
+{
+    return m_pConversationListView;
 }

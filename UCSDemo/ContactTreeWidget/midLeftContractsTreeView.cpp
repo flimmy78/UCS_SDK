@@ -108,13 +108,14 @@ void MidLeftContractsTreeView::initMenu()
 
 void MidLeftContractsTreeView::loadStyleSheet()
 {
-    QFile file(":/Resources/TreeView/TreeView.css");
+    QFile file(":/Resources/TreeView/TreeView.qss");
     file.open(QFile::ReadOnly);
     if (file.isOpen())
     {
         QString styleSheet = this->styleSheet();
-        styleSheet += QLatin1String(file.readAll());
+        styleSheet += QString(file.readAll());
         this->setStyleSheet(styleSheet);
+        file.close();
     }
 }
 

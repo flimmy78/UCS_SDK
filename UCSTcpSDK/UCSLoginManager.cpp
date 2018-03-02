@@ -102,6 +102,11 @@ void UCSLoginManager::doNoop()
     timerStart(kNoopTimerT1);
 }
 
+void UCSLoginManager::doLogout()
+{
+    timerStop(kAllTimer);
+}
+
 UcsLoginState UCSLoginManager::state() const
 {
     QMutexLocker locker((QMutex*)&m_Mutex);

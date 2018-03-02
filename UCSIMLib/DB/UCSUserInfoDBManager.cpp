@@ -235,7 +235,7 @@ bool UserInfoDBManager::updateUserInfo(MapValues values, MapConditions condition
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    QString sql = QString("UPDATE UCS_IM_USERINFO SET").append(UCSDBHelper::formatValueCondition(values, conditions));
+    QString sql = QString("UPDATE UCS_IM_USERINFO SET ").append(UCSDBHelper::formatValueCondition(values, conditions));
     sqlQuery.prepare(sql);
     if (!sqlQuery.exec())
     {

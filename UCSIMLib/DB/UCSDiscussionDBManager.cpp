@@ -271,7 +271,7 @@ bool DiscussionDBManager::updateDiscussion(MapValues values, MapConditions condi
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    QString sql = QString("UPDATE UCS_IM_DISCUSSION SET").append(UCSDBHelper::formatValueCondition(values, conditions));
+    QString sql = QString("UPDATE UCS_IM_DISCUSSION SET ").append(UCSDBHelper::formatValueCondition(values, conditions));
     sqlQuery.prepare(sql);
     if (!sqlQuery.exec())
     {

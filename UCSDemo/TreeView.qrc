@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>Resources/TreeView/TreeView.css</file>
         <file>Resources/TreeView/arrowBottom.png</file>
         <file>Resources/TreeView/arrowRight.png</file>
+        <file>Resources/TreeView/TreeView.qss</file>
     </qresource>
 </RCC>

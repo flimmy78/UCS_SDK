@@ -20,8 +20,8 @@ include(SingleApplication/SingleApplication.pri)
 INCLUDEPATH += $$PWD TrayIconMenu
 include(TrayIconMenu/TrayIconMenu.pri)
 
-INCLUDEPATH += $$PWD LeftWidget
-include(LeftWidget/LeftWidget.pri)
+INCLUDEPATH += $$PWD LeftNavigatorBarWidget
+include(LeftNavigatorBarWidget/LeftNavigatorBarWidget.pri)
 
 INCLUDEPATH += $$PWD TopWidget
 include(TopWidget/TopWidget.pri)
@@ -35,20 +35,29 @@ include(ListWidgets/ListWidgets.pri)
 INCLUDEPATH += $$PWD TableWidgets
 include(TableWidgets/TableWidgets.pri)
 
-INCLUDEPATH += $$PWD TreeWidgets
-include(TreeWidgets/TreeWidgets.pri)
+INCLUDEPATH += $$PWD ContactTreeWidget
+include(ContactTreeWidget/ContactTreeWidget.pri)
 
 INCLUDEPATH += $$PWD KeypadWidget
 include(KeypadWidget/KeypadWidget.pri)
 
-INCLUDEPATH += $$PWD ConfWidgets
-include(ConfWidgets/ConfWidgets.pri)
+INCLUDEPATH += $$PWD ConferenceWidgets
+include(ConferenceWidgets/ConferenceWidgets.pri)
 
 INCLUDEPATH += $$PWD RestManager
 include(RestManager/RestManager.pri)
 
 INCLUDEPATH += $$PWD Login
 include(Login/Login.pri)
+
+INCLUDEPATH += $$PWD CallWidget
+include(CallWidget/CallWidget.pri)
+
+INCLUDEPATH += $$PWD ContactWidget
+include(ContactWidget/ContactWidget.pri)
+
+INCLUDEPATH += $$PWD IMWidget
+include(IMWidget/IMWidget.pri)
 
 #INCLUDEPATH += $$PWD Logger
 #include(Logger/Logger.pri)
@@ -90,9 +99,10 @@ RESOURCES += \
     res_top.qrc \
     qm.qrc \
     res_midright.qrc \
-    MyTitleBar.qrc \
     LoginWindow.qrc \
-    TreeView.qrc
+    TreeView.qrc \
+    MyTitleBar.qrc \
+    main_skin.qrc
 
 VERSION = 1.0.0.0
 RC_ICONS = images/yzx_logo.ico

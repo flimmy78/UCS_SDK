@@ -13,6 +13,8 @@ MidRightDialStackWidget::MidRightDialStackWidget(QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setCursor(Qt::ArrowCursor);
 
+    setObjectName("DialStackWidget");
+
     initLayout();
     initConnection();
     initMisc();

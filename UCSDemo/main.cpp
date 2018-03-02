@@ -44,11 +44,11 @@ int main(int argc, char *argv[])
         MainWindow *pMain = MainWindow::InitInstance();
         app._wid = pMain;
 
-        UCSLogin *pLogin = new UCSLogin;
-        if (pLogin->exec() != QDialog::Accepted)
-        {
-            return 0;
-        }
+//        UCSLogin *pLogin = new UCSLogin;
+//        if (pLogin->exec() != QDialog::Accepted)
+//        {
+//            return 0;
+//        }
 
         pMain->show();
         pMain->setGeometry((QApplication::desktop()->width() - pMain->width()) / 2,

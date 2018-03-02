@@ -413,7 +413,7 @@ bool ConversationDBManager::updateConversation(MapValues values, MapConditions c
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    QString sql = QString("UPDATE UCS_IM_CONVERSATION SET").append(UCSDBHelper::formatValueCondition(values, conditions));
+    QString sql = QString("UPDATE UCS_IM_CONVERSATION SET ").append(UCSDBHelper::formatValueCondition(values, conditions));
     sqlQuery.prepare(sql);
     if (!sqlQuery.exec())
     {

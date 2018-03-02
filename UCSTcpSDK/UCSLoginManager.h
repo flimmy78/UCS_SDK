@@ -17,6 +17,7 @@ public:
     void doAuth();
     void doReAuth();
     void doNoop();
+    void doLogout();
 
     UcsLoginState state() const;
 

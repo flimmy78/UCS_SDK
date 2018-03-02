@@ -83,7 +83,7 @@ public:
      * \param memberList 创建时需要邀请到讨论组的成员数组(不需要把自己加进去),数组中每个元素为UCSUserInfo类的对象。
      *                  加入到这个成员数组的每个成员必须保证是已经在云平台注册的成员，否知会失败。
      */
-    bool createDiscussionWithTopic(IN QString topic, IN QList<UCSUserInfo> memberList);
+    bool createDiscussionWithTopic(IN QString topic, IN QList<UCSUserInfo> &memberList);
 
     /*!
      * \brief addMemberToDiscussionWithDiscussionId 给已经存在的讨论组添加新的用户
@@ -91,7 +91,7 @@ public:
      * \param discussionId 讨论组id
      * \param memberList 要新加的成员的数组，数组中的每个元素为UCSUserInfo类的对象。
      */
-    bool addMemberToDiscussionWithDiscussionId(IN QString discussionId, IN QList<UCSUserInfo> memberList);
+    bool addMemberToDiscussionWithDiscussionId(IN QString discussionId, IN QList<UCSUserInfo> &memberList);
 
     /*!
      * \brief removeMemberFromDiscussionWithDiscussionId 在讨论组中移除已经存在的用户
@@ -99,7 +99,7 @@ public:
      * \param discussionId 讨论组id
      * \param memberList 要移除的用户的数组，数组中的每个元素为UCSUserInfo类的对象。
      */
-    bool removeMemberFromDiscussionWithDiscussionId(IN QString discussionId, IN QList<UCSUserInfo> memberList);
+    bool removeMemberFromDiscussionWithDiscussionId(IN QString discussionId, IN QList<UCSUserInfo> &memberList);
 
     /*!
      * \brief quitDiscussionWithDiscussionId 主动退出讨论组

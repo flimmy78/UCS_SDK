@@ -6,6 +6,7 @@
 #include <QList>
 #include "absFiles/myScrollArea.h"
 #include "MidLeftConversationListWidget.h"
+#include "ConversationListView.h"
 
 class MiddleLeftWidget;
 
@@ -19,6 +20,8 @@ public:
     void setMidLeftWidget(MiddleLeftWidget *p) { m_pMidLeftWid = p; }
     void updateData();
 
+    ConversationListView *getListView() const;
+
 private:
     void initLayout();
     void initConnection();
@@ -29,11 +32,12 @@ signals:
 
 public slots:
     void slot_itemClicked(int row);
+    void onItemClicked(QString targetId, quint32 type);
 
 private:
     MiddleLeftWidget *m_pMidLeftWid;
-    MidLeftConversationListWidget m_imListWid;
-
+    MidLeftConversationListWidget *m_pConversationList;
+    ConversationListView *m_pConversationListView;
     QList<IMConversationItem> m_imItems;
 };
 

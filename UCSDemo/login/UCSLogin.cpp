@@ -8,7 +8,11 @@
 #include <QPainter>
 #include <util.h>
 
-UCSLogin::UCSLogin(QWidget *parent) : QDialog(parent)
+UCSLogin::UCSLogin(QWidget *parent)
+    : BaseDialog(parent)
+    , m_timerId(0)
+    , m_countDown(60)
+    , m_isLoggin(false)
 {
     setMouseTracking(true);
     setFixedSize(445, 345);
@@ -18,10 +22,7 @@ UCSLogin::UCSLogin(QWidget *parent) : QDialog(parent)
 
     initLayout();
     initConnections();
-    loadStyleSheet();
-
-    m_timerId = 0;
-    m_countDown = 60;
+    loadStyleSheet(":/Resources/LoginWindow/LoginWindow.qss");
 
     UCSTcpClient::Instance()->registerEventListener(kUCSLoginEvent, this);
 }
@@ -71,7 +72,7 @@ void UCSLogin::initLayout()
 
     ///< 设置头像 >
     m_pLblHeaderImg->setFixedSize(50, 50);
-    m_pLblHeaderImg->setPixmap(QPixmap(":/resources/LoginWindow/headImage/u6.png"));
+    m_pLblHeaderImg->setPixmap(QPixmap(":/Resources/LoginWindow/headImage/u6.png"));
     m_pLblHeaderImg->setScaledContents(true);
     m_pLblHeaderImg->setObjectName("userHeader");
 
@@ -137,18 +138,6 @@ void UCSLogin::initConnections()
     connect(&m_restManager, SIGNAL(sig_onFailed(UCSRestError)), SLOT(slot_onRestFailed(UCSRestError)));
 }
 
-void UCSLogin::loadStyleSheet()
-{
-    QFile file(":/resources/LoginWindow/LoginWindow.css");
-    file.open(QFile::ReadOnly);
-    if (file.isOpen())
-    {
-        QString styleSheet = this->styleSheet();
-        styleSheet += QLatin1String(file.readAll());
-        this->setStyleSheet(styleSheet);
-    }
-}
-
 void UCSLogin::onLoginFailed()
 {
     m_pBtnLoginOn->setEnabled(true);
@@ -168,6 +157,10 @@ void UCSLogin::timerEvent(QTimerEvent *event)
         {
             killTimer(m_timerId);
             onLoginFailed();
+            if (m_isLoggin)
+            {
+                UCSTcpClient::Instance()->doLogout();
+            }
         }
     }
 }
@@ -184,6 +177,11 @@ void UCSLogin::customEvent(QEvent *event)
             UCSTcpClient::Instance()->unRegisterEventListener(kUCSLoginEvent, this);
 
             Util::writeSetting("loginId", loginEvt->userId());
+            if (m_timerId)
+            {
+                killTimer(m_timerId);
+            }
+
             this->accept();
         }
         else
@@ -283,17 +281,18 @@ void UCSLogin::slot_onAuthSuccess(int expired)
 
 void UCSLogin::slot_onLoginSuccess(QString token, QString nickname)
 {
-    if (m_timerId)
-    {
-        killTimer(m_timerId);
-        m_pBtnCodeReq->setEnabled(true);
-        m_pBtnCodeReq->setText(QStringLiteral("获取验证码"));
-    }
+//    if (m_timerId)
+//    {
+//        killTimer(m_timerId);
+//        m_pBtnCodeReq->setEnabled(true);
+//        m_pBtnCodeReq->setText(QStringLiteral("获取验证码"));
+//    }
 
     qDebug() << "token: " << token;
     qDebug() << "nickname: " << nickname;
 
     UCSTcpClient::Instance()->doLogin(token);
+    m_isLoggin = true;
 }
 
 void UCSLogin::slot_onRestFailed(UCSRestError error)

@@ -7,11 +7,12 @@
 #include <myPushButton.h>
 #include <QLineEdit>
 #include <QLabel>
-#include <QDialog>
+//#include <QDialog>
+#include "BaseDialog.h"
 #include "RestManager/UCSRestManager.h"
 #include "absFiles/MyTitleBar.h"
 
-class UCSLogin : public QDialog
+class UCSLogin : public BaseDialog
 {
     Q_OBJECT
 public:
@@ -21,7 +22,6 @@ public:
 private:
     void initLayout();
     void initConnections();
-    void loadStyleSheet();
 
     void onLoginFailed();
 
@@ -54,6 +54,7 @@ private:
     UCSRestManager m_restManager;
     qint32 m_timerId;
     qint32 m_countDown;
+    bool m_isLoggin;
 };
 
 #endif // UCSLOGIN_H

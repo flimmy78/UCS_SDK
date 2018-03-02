@@ -5,8 +5,8 @@
 #include <QWidget>
 #include "common/qtheaders.h"
 #include "absFiles/myPushButton.h"
-#include "keypadWidget/keypadWidget.h"
-#include "confWidgets/conferenceStackWidget.h"
+#include "keypadWidget.h"
+#include "conferenceStackWidget.h"
 
 class MidRightDialStackWidget : public QWidget
 {

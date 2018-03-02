@@ -106,16 +106,12 @@ MidLeftCallListWidget::MidLeftCallListWidget(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setSelectionMode(QAbstractItemView::SingleSelection);
-
-    verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
-                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
-                                        "QScrollBar::handle:hover{background: rgb(191,191,191);}"
-                                        "QScrollBar::add-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
-                                        "QScrollBar::sub-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
-                                        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background:transparent;}");
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
 
     /* 去除底部多出的空白行 */
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    setObjectName("CallListWidget");
 
 #if 0
     setStyleSheet("QListWidget{background:white; border:none;}"

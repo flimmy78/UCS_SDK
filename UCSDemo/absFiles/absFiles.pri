@@ -8,7 +8,9 @@ HEADERS += \
     $$PWD/myLabel.h \
     $$PWD/myChatTextEdit.h \
     $$PWD/myIconStyle.h \
-    $$PWD/MyTitleBar.h
+    $$PWD/MyTitleBar.h \
+    $$PWD/BaseWidget.h \
+    $$PWD/BaseDialog.h
 
 SOURCES += \
     $$PWD/absFramelessAutoSize.cpp \
@@ -20,4 +22,6 @@ SOURCES += \
     $$PWD/myLabel.cpp \
     $$PWD/myChatTextEdit.cpp \
     $$PWD/myIconStyle.cpp \
-    $$PWD/MyTitleBar.cpp
+    $$PWD/MyTitleBar.cpp \
+    $$PWD/BaseWidget.cpp \
+    $$PWD/BaseDialog.cpp

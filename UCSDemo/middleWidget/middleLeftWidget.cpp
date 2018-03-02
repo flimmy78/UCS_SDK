@@ -89,7 +89,6 @@ void MiddleLeftWidget::initConnection()
     connect(&m_searchLine, SIGNAL(returnPressed()), this, SLOT(slot_lineSearch()));
     connect(&m_searchLine, SIGNAL(textChanged(QString)), this, SLOT(slot_lineSearch()));
     connect(&m_searchLine, SIGNAL(sig_FocusChanged(bool)), this, SLOT(slot_lineSearchFocusChanged(bool)));
-
 }
 
 void MiddleLeftWidget::initMisc()

@@ -2,7 +2,7 @@
 #define MIDLEFTCONTRACTSTREEVIEW_H
 
 #include "common/qtheaders.h"
-#include "treeWidgets/midLeftContactTreeModel.h"
+#include "midLeftContactTreeModel.h"
 
 class MidLeftContractsTreeView : public QTreeView
 {

@@ -1,0 +1,71 @@
+﻿*{
+	font-family:Microsoft YaHei;
+}
+
+QLabel#TitleContent
+{
+	color:black;
+}
+
+QPushButton#BtnMin
+{
+        border-image: url(:/Resources/MyTitleBar/min.png) 0 60 0 0;
+}
+
+QPushButton#BtnMin:hover
+{
+        border-image: url(:/Resources/MyTitleBar/min.png) 0 30 0 30;
+}
+
+QPushButton#BtnMin:pressed
+{
+        border-image: url(:/Resources/MyTitleBar/min.png) 0 0 0 60;
+}
+
+QPushButton#BtnRestore
+{
+        border-image: url(:/Resources/MyTitleBar/restore.png) 0 81 0 0;
+}
+
+QPushButton#BtnRestore:hover
+{
+        border-image: url(:/Resources/MyTitleBar/restore.png) 0 54 0 27;
+}
+
+QPushButton#BtnRestore:pressed
+{
+        border-image: url(:/Resources/MyTitleBar/restore.png) 0 27 0 54;
+}
+
+QPushButton#BtnMax
+{
+        border-image: url(:/Resources/MyTitleBar/max.png) 0 81 0 0;
+}
+
+QPushButton#BtnMax:hover
+{
+        border-image: url(:/Resources/MyTitleBar/max.png) 0 54 0 27;
+}
+
+QPushButton#BtnMax:pressed
+{
+        border-image: url(:/Resources/MyTitleBar/max.png) 0 27 0 54;
+}
+
+QPushButton#BtnClose
+{
+        border-image: url(:/Resources/MyTitleBar/close.png) 0 60 0 0;
+	border-top-right-radius: 3;
+}
+
+QPushButton#BtnClose:hover
+{
+        border-image: url(:/Resources/MyTitleBar/close.png) 0 30 0 30;
+	border-top-right-radius: 3;
+}
+
+QPushButton#BtnClose:pressed
+{
+        border-image: url(:/Resources/MyTitleBar/close.png) 0 0 0 60;
+	border-top-right-radius: 3;
+}

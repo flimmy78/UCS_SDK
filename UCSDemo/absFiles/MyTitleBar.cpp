@@ -10,7 +10,7 @@
 #define TITLE_HEIGHT    30  ///< 标题栏高度 >
 
 MyTitleBar::MyTitleBar(QWidget *parent)
-    : QWidget(parent)
+    : BaseWidget(parent)
     , m_colorR(153)
     , m_colorG(153)
     , m_colorB(153)
@@ -25,7 +25,7 @@ MyTitleBar::MyTitleBar(QWidget *parent)
 
     initLayout();
     initConnections();
-    loadStyleSheet();
+    loadStyleSheet(":/Resources/MyTitleBar/MyTitleBar.qss");
 
     setButtonType(MIN_MAX_BUTTON);
 }
@@ -257,18 +257,6 @@ void MyTitleBar::initConnections()
     connect(m_pBtnClose, SIGNAL(clicked()), this, SLOT(slotOnBtnCloseClicked()));
 
     connect(&m_titleRollTimer, SIGNAL(timeout()), this, SLOT(slotOnRollTitle()));
-}
-
-void MyTitleBar::loadStyleSheet()
-{
-    QFile file(":/resources/MyTitleBar/MyTitleBar.css");
-    file.open(QFile::ReadOnly);
-    if (file.isOpen())
-    {
-        QString styleSheet = this->styleSheet();
-        styleSheet += QLatin1String(file.readAll());
-        this->setStyleSheet(styleSheet);
-    }
 }
 
 void MyTitleBar::slotOnBtnMinClicked()

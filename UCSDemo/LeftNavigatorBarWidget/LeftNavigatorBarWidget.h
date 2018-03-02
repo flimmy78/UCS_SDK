@@ -6,12 +6,12 @@
 #include "absFiles/myPushButton.h"
 #include <UCSRestManager.h>
 
-class LeftWidget : public QWidget
+class LeftNavigatorBarWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LeftWidget(QWidget *parent = 0, int width = 94);
-    ~LeftWidget();
+    explicit LeftNavigatorBarWidget(QWidget *parent = 0, int width = 94);
+    ~LeftNavigatorBarWidget();
 
 private:
     void initLayout();
@@ -23,7 +23,7 @@ protected:
 signals:
 
 public slots:
-    void slot_changeButtonSelected(int index);
+    void onChangeButtonSelected(int index);
     void slot_personInfoButtonClick();
     void slot_settingButtonClick();
 

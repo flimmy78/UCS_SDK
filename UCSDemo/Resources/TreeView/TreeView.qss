@@ -1,4 +1,4 @@
-*{
+ï»¿*{
 	font-family: Microsoft YaHei;
 }
 
@@ -16,19 +16,19 @@ QTreeView::item {
 	color: black;
 }
 
-QTreeView::item:hover, QTreeView::branch:hover {   /** Êó±ê»¬¹ý item **/
+QTreeView::item:hover, QTreeView::branch:hover {
 	background-color: rgb(216, 244, 240);
 }
 
-QTreeView::item:selected, QTreeView::branch:selected {   /** Êó±êÑ¡ÖÐ item **/
+QTreeView::item:selected, QTreeView::branch:selected {
 	background-color: rgb(193, 243, 230);
 }
 
-QTreeView::branch:open:has-children {   /** ·ÖÖ§ - Õ¹¿ª item£¨ÓÐº¢×Ó£© **/
+QTreeView::branch:open:has-children {
 	image: url(:/Resources/TreeView/arrowBottom.png);
 }
 
-QTreeView::branch:closed:has-children {  /** ·ÖÖ§ - ÕÛµþ item£¨ÎÞº¢×Ó£© **/
+QTreeView::branch:closed:has-children {
 	image: url(:/Resources/TreeView/arrowRight.png);
 }
 

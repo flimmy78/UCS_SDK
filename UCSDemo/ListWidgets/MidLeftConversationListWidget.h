@@ -41,6 +41,7 @@ class MidLeftConversationListWidget : public QListWidget
 public:
     explicit MidLeftConversationListWidget(QWidget *parent = 0);
     void addListItem(IMConversationItem *pItem);
+    void clearAllItems();
 
 protected:
     void contextMenuEvent(QContextMenuEvent *);

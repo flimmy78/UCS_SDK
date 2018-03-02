@@ -1,0 +1,182 @@
+/**** 提示*****/
+QToolTip {
+    border: 1px solid rgb(111, 156, 207);
+    background-color: white;
+    color: rgb(51, 51, 51);
+}
+
+/*****菜单*****/
+QMenu {
+    border: 1px solid rgb(111, 156, 207);
+    background: rgb(232, 241, 250);
+    width:150px;
+}
+
+QMenu::item {
+    height: 22px;
+    padding: 0px 25px 0px 20px;
+}
+
+QMenu::item:enabled {
+    color: rgb(84, 84, 84);
+}
+
+QMenu::item:!enabled {
+    color: rgb(155, 155, 155);
+}
+
+QMenu::item:enabled:selected {
+    color: rgb(2, 65, 132);
+    background: rgba(255, 255, 255, 200);
+}
+
+QMenu::separtor {
+    height: 1px;
+    background: rgb(111, 156, 207);
+}
+
+QMenu::indicator {
+    width: 13px;
+    height: 13px;
+}
+
+QMenu::icon {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/*********表格***********/
+QTableView {
+    border: none;
+    background: rgb(224, 238, 255);
+}
+
+QTableView::item {
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+    background: white;
+}
+
+QTableView::item:selected {
+    background: rgba(255, 255, 255, 100);
+}
+
+QTableView::item:selected:!active {
+    color: rgb(65, 65, 65);
+}
+
+/**********滚动条-水平*************/
+QScrollBar:horizontal {
+    height: 20px;
+    background: transparent;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+QScrollBar::handle:horizontal {
+    height: 20px;
+    min-width: 30px;
+    background: rgb(170, 200, 230);
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: rgb(165, 195, 225);
+}
+
+QScrollBar::sub-line:horizontal {
+    width: 15px;
+    background: transparent;
+    subcontrol-position: left;
+}
+
+QScrollBar::add-line:horizontal {
+    width: 15px;
+    background: transparent;
+    subcontrol-position: right;
+}
+
+QScrollBar::sub-line:horizontal:hover {
+    background: rgb(170, 200, 230);
+}
+
+QScrollBar::add-line:horizontal:hover {
+    background: rgb(170, 200, 230);
+}
+
+QScrollBar::add-page:horizontal,QScrollBar::sub-page:horizontal {
+    background: transparent;
+}
+
+/**** 滚动条-垂直*****/
+QScrollBar:vertical {
+    background: transparent;
+    width: 10px;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+QScrollBar::handle:vertical {
+    width: 20px;
+    min-height: 30px;
+    background: rgb(217, 217, 217);
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 3px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgb(191, 191, 191);
+}
+
+QScrollBar::sub-line:vertical {
+    height: 1px;
+    border: 1px rgb(230, 230, 230);
+}
+
+QScrollBar::sub-line:vertical:hover {
+    background: rgb(170, 200, 230);
+}
+
+QScrollBar::add-line:vertical {
+    height: 1px;
+    border: 1px rgb(230, 230, 230);
+}
+
+QScrollBar::add-line:vertical:hover {
+    background: rgb(170, 200, 230);
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+QScrollBar#verticalScrollBar:vertical {
+    margin-top: 30px;
+}
+
+QListView {
+/*    background: lightgray;*/
+    font-size: 10pt;
+    font-family: Microsoft YaHei;
+}
+
+QListWidget#CallListWidget {
+    width: 250px;
+    background: rgb(242, 242, 242);
+}
+
+QWidget#DialStackWidget {
+    
+}
+
+QWidget#CallWidget {
+    background: rgb(242, 242, 242);
+}
+
+QLineEdit#SearchLineEdit {
+    border-radius:5px;
+    background:rgb(221, 231, 231);
+}

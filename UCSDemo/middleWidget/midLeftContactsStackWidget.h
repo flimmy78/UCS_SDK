@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "absFiles/myScrollArea.h"
-#include "treeWidgets/midleftcontractstreeview.h"
+#include "midleftcontractstreeview.h"
 
 class MidLeftContactsStackWidget : public MyScrollArea
 {

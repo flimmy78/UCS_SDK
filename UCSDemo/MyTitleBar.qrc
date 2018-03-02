@@ -1,11 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/MyTitleBar/close.png</file>
-        <file>resources/MyTitleBar/max.png</file>
-        <file>resources/MyTitleBar/min.png</file>
-        <file>resources/MyTitleBar/restore.png</file>
-        <file>resources/MyTitleBar/head_0.png</file>
-        <file>resources/MyTitleBar/back.gif</file>
-        <file>resources/MyTitleBar/MyTitleBar.css</file>
+        <file>Resources/MyTitleBar/back.gif</file>
+        <file>Resources/MyTitleBar/close.png</file>
+        <file>Resources/MyTitleBar/head_0.png</file>
+        <file>Resources/MyTitleBar/max.png</file>
+        <file>Resources/MyTitleBar/min.png</file>
+        <file>Resources/MyTitleBar/MyTitleBar.qss</file>
     </qresource>
 </RCC>

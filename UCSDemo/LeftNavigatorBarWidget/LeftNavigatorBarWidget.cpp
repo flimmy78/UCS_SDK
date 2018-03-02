@@ -1,4 +1,4 @@
-﻿#include "leftWidget.h"
+﻿#include "LeftNavigatorBarWidget.h"
 #include <QVBoxLayout>
 #include <QString>
 #include <QMessageBox>
@@ -7,7 +7,7 @@
 #include "Interface/UCSIMClient.h"
 #include <util.h>
 
-LeftWidget::LeftWidget(QWidget *parent, int width)
+LeftNavigatorBarWidget::LeftNavigatorBarWidget(QWidget *parent, int width)
     : QWidget(parent)
 {
     QPalette palette;
@@ -22,12 +22,12 @@ LeftWidget::LeftWidget(QWidget *parent, int width)
     initConnection();
 }
 
-LeftWidget::~LeftWidget()
+LeftNavigatorBarWidget::~LeftNavigatorBarWidget()
 {
 
 }
 
-void LeftWidget::initLayout()
+void LeftNavigatorBarWidget::initLayout()
 {
     QVBoxLayout *vlayout = new QVBoxLayout;
 
@@ -85,19 +85,19 @@ void LeftWidget::initLayout()
     setLayout(vlayout);
 }
 
-void LeftWidget::initConnection()
+void LeftNavigatorBarWidget::initConnection()
 {
     connect(m_pBtnInfo, SIGNAL(pressed()), this, SLOT(slot_personInfoButtonClick()));
     connect(m_pBtnSetting, SIGNAL(pressed()), this, SLOT(slot_settingButtonClick()));
 }
 
-void LeftWidget::paintEvent(QPaintEvent *event)
+void LeftNavigatorBarWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
 }
 
-void LeftWidget::slot_changeButtonSelected(int index)
+void LeftNavigatorBarWidget::onChangeButtonSelected(int index)
 {
     if (index >= 3)
     {
@@ -117,12 +117,12 @@ void LeftWidget::slot_changeButtonSelected(int index)
     }
 }
 
-void LeftWidget::slot_personInfoButtonClick()
+void LeftNavigatorBarWidget::slot_personInfoButtonClick()
 {
 
 }
 
-void LeftWidget::slot_settingButtonClick()
+void LeftNavigatorBarWidget::slot_settingButtonClick()
 {
 //    QMessageBox::information(this, QStringLiteral("设置"), "user setting", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);    
 }

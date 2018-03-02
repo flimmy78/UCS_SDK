@@ -124,7 +124,7 @@ bool UCSIMClient::downloadVoiceWithConversationType(UCS_IM_ConversationType conv
 }
 
 bool UCSIMClient::createDiscussionWithTopic(QString topic,
-                                            QList<UCSUserInfo> memberList)
+                                            QList<UCSUserInfo> &memberList)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
 
@@ -138,7 +138,7 @@ bool UCSIMClient::createDiscussionWithTopic(QString topic,
 }
 
 bool UCSIMClient::addMemberToDiscussionWithDiscussionId(QString discussionId,
-                                                        QList<UCSUserInfo> memberList)
+                                                        QList<UCSUserInfo> &memberList)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
 
@@ -153,7 +153,7 @@ bool UCSIMClient::addMemberToDiscussionWithDiscussionId(QString discussionId,
 }
 
 bool UCSIMClient::removeMemberFromDiscussionWithDiscussionId(QString discussionId,
-                                                             QList<UCSUserInfo> memberList)
+                                                             QList<UCSUserInfo> &memberList)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
 

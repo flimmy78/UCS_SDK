@@ -222,7 +222,7 @@ bool GroupDBManager::updateGroup(MapValues values, MapConditions conditions)
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    QString sql = QString("UPDATE UCS_IM_GROUP SET").append(UCSDBHelper::formatValueCondition(values, conditions));
+    QString sql = QString("UPDATE UCS_IM_GROUP SET ").append(UCSDBHelper::formatValueCondition(values, conditions));
     sqlQuery.prepare(sql);
     if (!sqlQuery.exec())
     {

@@ -90,6 +90,7 @@ void UCSTcpManager::doLogin(QString imToken)
 
 void UCSTcpManager::doLogout()
 {
+    m_pLoginManager->doLogout();
     m_pTcpSocket->doDisConnect();
 }
 

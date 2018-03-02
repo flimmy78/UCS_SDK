@@ -80,12 +80,12 @@ MidLeftConversationListWidget::MidLeftConversationListWidget(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
-                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
-                                        "QScrollBar::handle:hover{background: rgb(191,191,191);}"
-                                        "QScrollBar::add-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
-                                        "QScrollBar::sub-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
-                                        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background:transparent;}");
+//    verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
+//                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
+//                                        "QScrollBar::handle:hover{background: rgb(191,191,191);}"
+//                                        "QScrollBar::add-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
+//                                        "QScrollBar::sub-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
+//                                        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background:transparent;}");
 
     /* 去除底部多出的空白行 */
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -101,14 +101,22 @@ void MidLeftConversationListWidget::addListItem(IMConversationItem *pItem)
     addItem(item);
 }
 
+void MidLeftConversationListWidget::clearAllItems()
+{
+    for (int row = 0; row < count(); row++)
+    {
+        QListWidgetItem *pItem = takeItem(row);
+        removeItemWidget(pItem);
+        delete pItem;
+    }
+}
+
 void MidLeftConversationListWidget::contextMenuEvent(QContextMenuEvent * event)
 {
     int row = this->indexAt(event->pos()).row();
     if (row > -1)
     {
         QMenu * pMenu = new QMenu(this);
-        pMenu->setFixedWidth(120);
-//        pMenu->setStyleSheet("QMenu{background-color:white;}");
         pMenu->setContentsMargins(0, 0, 0, 0);
 
         QAction *pDelAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("删除聊天"), pMenu);

@@ -9,6 +9,7 @@
 #include <QTextEdit>
 #include "Interface/UCSTcpSDK.h"
 #include "Interface/UCSIMSDKPublic.h"
+#include "CommonHelper.h"
 
 MainWindow *MainWindow::s_pMainWnd = NULL;
 
@@ -32,16 +33,11 @@ MainWindow::~MainWindow()
 
 MainWindow::MainWindow(QWidget *parent)
     : BaseWindow(parent)
-    , m_leftWid(this, 94)
-    , m_midLeft(this, 250)
-    , m_midRight(this, 612)
 {
     s_pMainWnd = this;
     setWindowFlags(Qt::FramelessWindowHint | windowFlags());
     setMinimumSize(964, 648);
     installEventFilter(this);
-
-    m_midLeft.setMidRightWidget(&m_midRight);
 
     /* 加载布局 */
     initLayout();
@@ -53,11 +49,13 @@ MainWindow::MainWindow(QWidget *parent)
     initTrayMenu();
 
     /* 信号与槽连接 */
-    initConnection();
+    initConnections();
 
     initMisc();
 
     readSetting();
+
+    CommonHelper::loadStyle(":/Resources/app.qss");
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
@@ -98,7 +96,7 @@ void MainWindow::customEvent(QEvent *event)
             UCS_LOG(UCSLogger::kTraceInfo, "MainWindow",
                     QString("login success. userId = ").append(loginEvt->userId()));
 
-            m_midLeft.imStackWid()->updateData();
+            m_pMidLeft->imStackWid()->updateData();
         }
         else
         {
@@ -161,10 +159,30 @@ void MainWindow::initLayout()
 {
     QHBoxLayout *pMainLayout = new QHBoxLayout(this);
 
-    pMainLayout->addWidget(&m_leftWid);
-    pMainLayout->addWidget(&m_midLeft);
-    pMainLayout->addWidget(&m_midRight);
+    m_pLeftNavBar = new LeftNavigatorBarWidget(this, 94);
+    pMainLayout->addWidget(m_pLeftNavBar);
 
+#if 0
+    m_pMidLeft = new MiddleLeftWidget(this, 250);
+    m_pMidRight = new MiddleRightWidget(this, 612);
+
+    m_pMidLeft->setMidRightWidget(m_pMidRight);
+
+    pMainLayout->addWidget(m_pMidLeft);
+    pMainLayout->addWidget(m_pMidRight);
+#else
+    m_pStackedLayout = new QStackedLayout;
+
+    m_pCallWidget = new CallWidget(this);
+    m_pContactWidget = new ContactWidget(this);
+    m_pImWidget = new IMWidget(this);
+
+    m_pStackedLayout->addWidget(m_pCallWidget);
+    m_pStackedLayout->addWidget(m_pContactWidget);
+    m_pStackedLayout->addWidget(m_pImWidget);
+
+    pMainLayout->addLayout(m_pStackedLayout);
+#endif
     pMainLayout->setSpacing(0);
     pMainLayout->setContentsMargins(4, 4, 4, 4);
 }
@@ -187,20 +205,28 @@ void MainWindow::initTrayMenu()
             SLOT(slot_quitApp()));
 }
 
-void MainWindow::initConnection()
+void MainWindow::initConnections()
 {
+#if 0
     for (int i = 0; i < 3; i++)
     {
-        connect(m_leftWid.m_pBtn[i], SIGNAL(pressed()), &m_midLeft, SLOT(slot_switchStack()));
-        connect(m_leftWid.m_pBtn[i], SIGNAL(pressed()), &m_midRight, SLOT(slot_switchStack()));
+        connect(m_pLeftNavBar->m_pBtn[i], SIGNAL(pressed()), m_pMidLeft, SLOT(slot_switchStack()));
+        connect(m_pLeftNavBar->m_pBtn[i], SIGNAL(pressed()), m_pMidRight, SLOT(slot_switchStack()));
     }
-    connect(&m_midLeft.m_stackWid, SIGNAL(currentChanged(int)), &m_leftWid, SLOT(slot_changeButtonSelected(int)));
+    connect(&m_pMidLeft->m_stackWid, SIGNAL(currentChanged(int)), m_pLeftNavBar, SLOT(slot_changeButtonSelected(int)));
 
-    connect(&m_midLeft.m_imMsgSWid, SIGNAL(sig_itemClicked(QString)), &m_midRight, SLOT(slot_setTitle(QString)));
+    connect(&m_pMidLeft->m_imMsgSWid, SIGNAL(sig_itemClicked(QString)), m_pMidRight, SLOT(slot_setTitle(QString)));
+#else
+    for (int i = 0; i < 3; i++)
+    {
+        connect(m_pLeftNavBar->m_pBtn[i], SIGNAL(pressed()), this, SLOT(onSwitchPage()));
+    }
+#endif
 }
 
 void MainWindow::initMisc()
 {
+
     UCSIMClient::Instance()->init();
 
     UCSTcpClient::Instance()->registerEventListener(kUCSConnectStatusEvent, this);
@@ -248,6 +274,13 @@ void MainWindow::slot_quitApp()
 {
     m_system_tray.hide();
     close();
+}
+
+void MainWindow::onSwitchPage()
+{
+    StackButton *stackBtn = (StackButton*)sender();
+    m_pStackedLayout->setCurrentIndex(stackBtn->index());
+    m_pLeftNavBar->onChangeButtonSelected(stackBtn->index());
 }
 
 

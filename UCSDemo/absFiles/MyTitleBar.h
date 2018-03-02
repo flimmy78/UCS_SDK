@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QMouseEvent>
+#include "BaseWidget.h"
 
 enum ButtonType
 {
@@ -15,7 +16,7 @@ enum ButtonType
     ONLY_CLOSE_BUTTON,  ///< 只有关闭按钮 >
 };
 
-class MyTitleBar : public QWidget
+class MyTitleBar : public BaseWidget
 {
     Q_OBJECT
 public:
@@ -98,11 +99,6 @@ private:
      * \brief initConnections 信号槽绑定
      */
     void initConnections();
-
-    /*!
-     * \brief loadStyleSheet 加载样式文件
-     */
-    void loadStyleSheet();
 
 signals:
     ///< 按钮触发的信号 >
