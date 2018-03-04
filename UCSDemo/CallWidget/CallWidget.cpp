@@ -1,5 +1,6 @@
 ﻿#include "CallWidget.h"
 #include <QHBoxLayout>
+#include <QPainter>
 #include <QVBoxLayout>
 
 CallWidget::CallWidget(QWidget *parent)
@@ -76,3 +77,4 @@ void CallWidget::updateListData()
         m_pCallListWidget->addCallListItem(&item);
     }
 }
+

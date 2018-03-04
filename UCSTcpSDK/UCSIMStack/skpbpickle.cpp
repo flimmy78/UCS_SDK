@@ -668,7 +668,7 @@ int SKPBPickle :: GetBaseTypeSize(
 	if ( ptMetaField->cIsPtr )
 	{
 		pcValue = *(char **)(pcBase+ptMetaField->hOffset);
-		if( NULL == pcValue ) pcValue = "";
+        if( NULL == pcValue ) pcValue = (char*)("");
 	}
 	else
 	{
@@ -719,11 +719,12 @@ int SKPBPickle :: PackBaseType(
 	int iSize = 0;
 
 	char *pcValue = NULL;
+    char empty[1] = {""};
 
 	if ( ptMetaField->cIsPtr )
 	{
 		pcValue = *(char **)(pcBase+ptMetaField->hOffset);
-		if( NULL == pcValue ) pcValue = "";
+        if( NULL == pcValue ) pcValue = empty;
 	}
 	else
 	{

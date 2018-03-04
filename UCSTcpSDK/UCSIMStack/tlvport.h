@@ -33,7 +33,9 @@ inline int WriteToFile(const char* pFile, const char* pInput, int nLen)
 
 #include "typexp.h"
 
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
 #define snprintf _snprintf
+#endif
 #define strcasecmp _stricmp
 
 inline int WriteToFile(const char* pFile, const char* pInput, int nLen)

@@ -47,7 +47,7 @@ struct tagTLVPackInternalData
 #define eMode_t (((tagTLVPackInternalData*)m_pvInternal)->eMode_t)
 #define iIsCheckHeader_t (((tagTLVPackInternalData*)m_pvInternal)->iIsCheckHeader)
 
-static char *func = "SKTLVBuffer";
+static const char *func = "SKTLVBuffer";
 
 typedef tagTLVPackHeader TLVHeader_t;
 

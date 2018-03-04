@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QEvent>
 #include <qglobal.h>
+#include <QMutex>
 #include "ucstcpsdk_global.h"
 #include "UCSTcpDefine.h"
 

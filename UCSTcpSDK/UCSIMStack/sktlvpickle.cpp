@@ -578,7 +578,8 @@ int SKTLVPickle :: PackBaseType(
 	if ( ptMetaField->cIsPtr )
 	{
 		pcValue = *(char **)(pcBase+ptMetaField->hOffset);
-		if( NULL == pcValue ) pcValue = "";
+        char empty[1] = {""};
+        if( NULL == pcValue ) pcValue = empty;
 	}
 	else
 	{

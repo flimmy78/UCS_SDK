@@ -24,6 +24,7 @@ private:
     void initConnections();
 
     void updateListData();
+
 private:
     TopWidget *m_pTitleBar;
     SearchLineEdit *m_pSearchEdit;

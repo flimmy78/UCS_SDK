@@ -11,6 +11,8 @@ public:
     explicit BaseWidget(QWidget *parent = 0);
 
 protected:
+    void paintEvent(QPaintEvent *event) override;
+
     /*!
      * \brief loadStyleSheet 加载样式文件
      * \param stylePath 样式文件资源路径

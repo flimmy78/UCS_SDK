@@ -1,6 +1,7 @@
 ﻿#ifndef UCSLOGGER_H
 #define UCSLOGGER_H
 
+#include <QMutex>
 #include <QObject>
 #include <QSharedPointer>
 #include "ucstcpsdk_global.h"

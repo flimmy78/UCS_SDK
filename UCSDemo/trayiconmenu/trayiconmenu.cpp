@@ -3,8 +3,7 @@
 TrayIconMenu::TrayIconMenu(QWidget *parent)
     :QMenu(parent)
 {
-    setFixedWidth(200);
-    setContentsMargins(0, 0, 0, 0);
+    setObjectName("TrayIconMenu");
 
     QAction* act_level4 = new QAction(QIcon(":/images/yzx_logo.ico"), tr("Exit"), this);
     addAction(act_level4);
