@@ -5,9 +5,9 @@
 #include <qglobal.h>
 #include "BaseWidget.h"
 #include "searchLineEdit.h"
-#include "midLeftCallListWidget.h"
-#include "midRightDialStackWidget.h"
 #include "topWidget.h"
+#include "CallListView.h"
+#include "DialWidget.h"
 
 class CallWidget : public BaseWidget
 {
@@ -23,13 +23,11 @@ private:
     void initLayout();
     void initConnections();
 
-    void updateListData();
-
 private:
     TopWidget *m_pTitleBar;
     SearchLineEdit *m_pSearchEdit;
-    MidLeftCallListWidget *m_pCallListWidget;
-    MidRightDialStackWidget *m_pDialWidget;
+    DialWidget *m_pDialWidget;
+    CallListView *m_pCallListView;
 };
 
 #endif // CALLWIDGET_H

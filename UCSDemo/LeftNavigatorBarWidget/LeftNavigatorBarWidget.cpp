@@ -7,16 +7,16 @@
 #include "Interface/UCSIMClient.h"
 #include <util.h>
 
-LeftNavigatorBarWidget::LeftNavigatorBarWidget(QWidget *parent, int width)
-    : QWidget(parent)
+LeftNavigatorBarWidget::LeftNavigatorBarWidget(QWidget *parent)
+    : BaseWidget(parent)
 {
-    QPalette palette;
-    palette.setColor(QPalette::Background, QColor(32, 155, 152));
-    setPalette(palette);
-    setAutoFillBackground(true);
+//    QPalette palette;
+//    palette.setColor(QPalette::Background, QColor(32, 155, 152));
+//    setPalette(palette);
+//    setAutoFillBackground(true);
 
-    setFixedWidth(width);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    setObjectName("NavigatorBar");
 
     initLayout();
     initConnection();
@@ -89,12 +89,6 @@ void LeftNavigatorBarWidget::initConnection()
 {
     connect(m_pBtnInfo, SIGNAL(pressed()), this, SLOT(slot_personInfoButtonClick()));
     connect(m_pBtnSetting, SIGNAL(pressed()), this, SLOT(slot_settingButtonClick()));
-}
-
-void LeftNavigatorBarWidget::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-
 }
 
 void LeftNavigatorBarWidget::onChangeButtonSelected(int index)

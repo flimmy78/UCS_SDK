@@ -7,8 +7,9 @@
 #include <QLabel>
 #include "absFiles/myPushButton.h"
 #include "absFiles/myLabel.h"
+#include "BaseWidget.h"
 
-class TopWidget : public QWidget
+class TopWidget : public BaseWidget
 {
     Q_OBJECT
 public:
@@ -17,7 +18,7 @@ public:
     void setTitle(QString title);
 
 private:
-    void initWidget();
+    void initLayout();
     void initConnection();
     void updateMaximize();
 

@@ -2,7 +2,7 @@
 #include <QHeaderView>
 
 MidRightContactStackWidget::MidRightContactStackWidget(QWidget *parent)
-    : QWidget(parent)
+    : BaseWidget(parent)
     , m_lblHeader(this)
     , m_lblName(this)
     , m_lblSex(this)
@@ -14,6 +14,8 @@ MidRightContactStackWidget::MidRightContactStackWidget(QWidget *parent)
     setMouseTracking(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setCursor(Qt::ArrowCursor);
+
+    setObjectName("ContactStackWidget");
 
     initLayout();
     initConnection();
@@ -81,11 +83,6 @@ void MidRightContactStackWidget::updateData()
     ((QLabel*)m_tableWid.cellWidget(2, 2))->setText(QStringLiteral("手机"));
     ((QLabel*)m_tableWid.cellWidget(2, 3))->setText(QStringLiteral("18111111111"));
 #endif
-}
-
-void MidRightContactStackWidget::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
 }
 
 void MidRightContactStackWidget::initLayout()

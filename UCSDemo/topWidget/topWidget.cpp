@@ -5,20 +5,21 @@
 #include <QDebug>
 
 TopWidget::TopWidget(QWidget *parent)
-    : QWidget(parent)
+    : BaseWidget(parent)
 {
-    setFixedHeight(48);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setMouseTracking(true);
-//    setStyleSheet("QWidget{background:transparent;}");
 
-    QPalette palette;
-    palette.setColor(QPalette::Background, QColor(255, 255, 255));
-    setPalette(palette);
-    setAutoFillBackground(true);
+    setObjectName("TopWidget");
+
+//    QPalette palette;
+//    palette.setColor(QPalette::Background, QColor(255, 255, 255));
+//    setPalette(palette);
+//    setAutoFillBackground(true);
+
     installEventFilter(this);
 
-    initWidget();
+    initLayout();
     initConnection();
 }
 
@@ -27,7 +28,7 @@ void TopWidget::setTitle(QString title)
     m_lblTitle.setText(title);
 }
 
-void TopWidget::initWidget()
+void TopWidget::initLayout()
 {
     QVBoxLayout *pMainLayout = new QVBoxLayout;
     QHBoxLayout *pCaptionLayout = new QHBoxLayout;
@@ -65,8 +66,8 @@ void TopWidget::initWidget()
     QFrame* pVLine = new QFrame();
     pVLine->setFrameShape(QFrame::VLine);
     pVLine->setFrameShadow(QFrame::Plain);
-    pVLine->setFixedSize(1, this->height());
-    pVLine->setStyleSheet("QFrame{background-color: gray; border:none}");
+    pVLine->setFixedSize(1, 48);
+    pVLine->setStyleSheet("QFrame{background-color: lightgray; border:none}");
 
     pCaptionLayout->addWidget(&m_lblTitle);
     pCaptionLayout->addSpacerItem(new QSpacerItem(20, this->height(), QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -84,7 +85,7 @@ void TopWidget::initWidget()
     pHLine->setFixedHeight(1);
     pHLine->setMinimumWidth(this->width());
     pHLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    pHLine->setStyleSheet("QFrame{background-color: gray; border:none}");
+    pHLine->setStyleSheet("QFrame{background-color: lightgray; border:none}");
 
     pMainLayout->addLayout(pCaptionLayout);
     pMainLayout->addWidget(pHLine);

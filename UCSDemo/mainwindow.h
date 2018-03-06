@@ -7,9 +7,6 @@
 #include "baseWindow.h"
 #include "trayiconmenu/trayIconMenu.h"
 #include "LeftNavigatorBarWidget.h"
-#include "topWidget/topWidget.h"
-#include "middleWidget/middleLeftWidget.h"
-#include "middleWidget/middleRightWidget.h"
 #include "CallWidget.h"
 #include "ContactWidget.h"
 #include "IMWidget.h"
@@ -54,9 +51,6 @@ private:
     QSystemTrayIcon m_system_tray;
     TrayIconMenu m_traymenu;
     LeftNavigatorBarWidget *m_pLeftNavBar;
-    MiddleLeftWidget *m_pMidLeft;
-    MiddleRightWidget *m_pMidRight;
-
     CallWidget *m_pCallWidget;
     ContactWidget *m_pContactWidget;
     IMWidget *m_pImWidget;

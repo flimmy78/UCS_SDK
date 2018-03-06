@@ -4,13 +4,14 @@
 #include <QObject>
 #include <QWidget>
 #include "absFiles/myPushButton.h"
-#include <UCSRestManager.h>
+#include "UCSRestManager.h"
+#include "BaseWidget.h"
 
-class LeftNavigatorBarWidget : public QWidget
+class LeftNavigatorBarWidget : public BaseWidget
 {
     Q_OBJECT
 public:
-    explicit LeftNavigatorBarWidget(QWidget *parent = 0, int width = 94);
+    explicit LeftNavigatorBarWidget(QWidget *parent = 0);
     ~LeftNavigatorBarWidget();
 
 private:
@@ -18,7 +19,7 @@ private:
     void initConnection();
 
 protected:
-    void paintEvent(QPaintEvent *event);
+
 
 signals:
 

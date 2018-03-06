@@ -46,7 +46,6 @@ QList<ContactUtil> Util::parseJson(QString fileName)
             return contactList;
         }
 
-        int id = 0;
         QJsonArray jsonArray = document.array();
         int arraySize = jsonArray.size();
         for (int idx = 0; idx < arraySize; idx++)

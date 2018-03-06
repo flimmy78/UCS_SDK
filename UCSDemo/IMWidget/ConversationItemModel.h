@@ -45,47 +45,19 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    /*!
-     * \brief refreshModelData 刷新列表数据
-     */
-    void refreshModelData();
+    // add data:
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    /*!
-     * \brief removeItem delete specific row item
-     * \param row
-     */
-    void removeItem(int row);
+    // remove data
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    /*!
-     * \brief topItem set specific row to top
-     * \param row
-     */
-    void topItem(int row);
+    // refresh model
+    void refreshModel();
 
-    /*!
-     * \brief modifyItem 修改群组名称
-     * \param row
-     * \param title 新群组名称
-     */
-    void modifyItem(int row, QString &title);
+    void setModelData(QList<ConversationItem> *dataList);
 
-    /*!
-     * \brief clearAll clear all data
-     */
-    void clearAll();
-
-    /*!
-     * \brief itemType get item type
-     * \param row
-     * \return item type
-     */
-    ConversationItemType itemType(int row);
-
-    QString conversationId(int row);
-
-    quint32 conversationType(int row);
 private:
-    QList<ConversationItem> m_conversationList;
+    QList<ConversationItem> *m_pDataList;
 };
 
 #endif // CONVERSATIONITEMMODEL_H

@@ -21,20 +21,24 @@ private:
     void initConnections();
 
     void contextMenuEvent(QContextMenuEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
 
 signals:
     void itemClicked(QString, quint32);
+    void itemDeleted();
+
+public slots:
+    void onUpdateData();
 
 private slots:
     void onClickedItem(QModelIndex index);
-    void onDeleteItem();
-    void onSetTopItem();
-    void onModifyItem();
+    void onDeleteItemAction();
+    void onSetTopItemAction();
+    void onModifyItemAction();
 
 private:
     ConversationItemModel *m_pModel;
     QPoint m_eventPos;
+    QList<ConversationItem> m_conversationList;
 };
 
 #endif // CONVERSATIONLISTWIDGET_H

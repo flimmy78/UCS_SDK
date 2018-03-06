@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QListView>
 #include "absFiles/myScrollArea.h"
-#include "listWidgets/historycalllistview.h"
+//#include "listWidgets/historycalllistview.h"
 #include "listWidgets/midLeftCallListWidget.h"
 
 class MidLeftCallListStackWidget : public MyScrollArea

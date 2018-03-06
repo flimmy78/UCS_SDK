@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     readSetting();
 
-    CommonHelper::loadStyle(":/Resources/app.qss");
+    CommonHelper::loadAppStyle(":/Resources/app.qss");
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
@@ -96,7 +96,7 @@ void MainWindow::customEvent(QEvent *event)
             UCS_LOG(UCSLogger::kTraceInfo, "MainWindow",
                     QString("login success. userId = ").append(loginEvt->userId()));
 
-            m_pMidLeft->imStackWid()->updateData();
+            m_pImWidget->conversationListView()->updateConversationList();
         }
         else
         {
@@ -159,18 +159,9 @@ void MainWindow::initLayout()
 {
     QHBoxLayout *pMainLayout = new QHBoxLayout(this);
 
-    m_pLeftNavBar = new LeftNavigatorBarWidget(this, 94);
+    m_pLeftNavBar = new LeftNavigatorBarWidget(this);
     pMainLayout->addWidget(m_pLeftNavBar);
 
-#if 0
-    m_pMidLeft = new MiddleLeftWidget(this, 250);
-    m_pMidRight = new MiddleRightWidget(this, 612);
-
-    m_pMidLeft->setMidRightWidget(m_pMidRight);
-
-    pMainLayout->addWidget(m_pMidLeft);
-    pMainLayout->addWidget(m_pMidRight);
-#else
     m_pStackedLayout = new QStackedLayout;
 
     m_pCallWidget = new CallWidget(this);
@@ -182,7 +173,6 @@ void MainWindow::initLayout()
     m_pStackedLayout->addWidget(m_pImWidget);
 
     pMainLayout->addLayout(m_pStackedLayout);
-#endif
     pMainLayout->setSpacing(0);
     pMainLayout->setContentsMargins(4, 4, 4, 4);
 }
@@ -207,26 +197,14 @@ void MainWindow::initTrayMenu()
 
 void MainWindow::initConnections()
 {
-#if 0
-    for (int i = 0; i < 3; i++)
-    {
-        connect(m_pLeftNavBar->m_pBtn[i], SIGNAL(pressed()), m_pMidLeft, SLOT(slot_switchStack()));
-        connect(m_pLeftNavBar->m_pBtn[i], SIGNAL(pressed()), m_pMidRight, SLOT(slot_switchStack()));
-    }
-    connect(&m_pMidLeft->m_stackWid, SIGNAL(currentChanged(int)), m_pLeftNavBar, SLOT(slot_changeButtonSelected(int)));
-
-    connect(&m_pMidLeft->m_imMsgSWid, SIGNAL(sig_itemClicked(QString)), m_pMidRight, SLOT(slot_setTitle(QString)));
-#else
     for (int i = 0; i < 3; i++)
     {
         connect(m_pLeftNavBar->m_pBtn[i], SIGNAL(pressed()), this, SLOT(onSwitchPage()));
     }
-#endif
 }
 
 void MainWindow::initMisc()
 {
-
     UCSIMClient::Instance()->init();
 
     UCSTcpClient::Instance()->registerEventListener(kUCSConnectStatusEvent, this);

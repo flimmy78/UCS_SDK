@@ -10,7 +10,8 @@ HEADERS += \
     $$PWD/myIconStyle.h \
     $$PWD/MyTitleBar.h \
     $$PWD/BaseWidget.h \
-    $$PWD/BaseDialog.h
+    $$PWD/BaseDialog.h \
+    $$PWD/EmptyWidget.h
 
 SOURCES += \
     $$PWD/absFramelessAutoSize.cpp \
@@ -24,4 +25,5 @@ SOURCES += \
     $$PWD/myIconStyle.cpp \
     $$PWD/MyTitleBar.cpp \
     $$PWD/BaseWidget.cpp \
-    $$PWD/BaseDialog.cpp
+    $$PWD/BaseDialog.cpp \
+    $$PWD/EmptyWidget.cpp

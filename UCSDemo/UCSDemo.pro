@@ -26,23 +26,23 @@ include(LeftNavigatorBarWidget/LeftNavigatorBarWidget.pri)
 INCLUDEPATH += $$PWD TopWidget
 include(TopWidget/TopWidget.pri)
 
-INCLUDEPATH += $$PWD MiddleWidget
-include(MiddleWidget/MiddleWidget.pri)
+#INCLUDEPATH += $$PWD MiddleWidget
+#include(MiddleWidget/MiddleWidget.pri)
 
-INCLUDEPATH += $$PWD ListWidgets
-include(ListWidgets/ListWidgets.pri)
+#INCLUDEPATH += $$PWD ListWidgets
+#include(ListWidgets/ListWidgets.pri)
 
-INCLUDEPATH += $$PWD TableWidgets
-include(TableWidgets/TableWidgets.pri)
+#INCLUDEPATH += $$PWD TableWidgets
+#include(TableWidgets/TableWidgets.pri)
 
-INCLUDEPATH += $$PWD ContactTreeWidget
-include(ContactTreeWidget/ContactTreeWidget.pri)
+#INCLUDEPATH += $$PWD ContactTreeWidget
+#include(ContactTreeWidget/ContactTreeWidget.pri)
 
-INCLUDEPATH += $$PWD KeypadWidget
-include(KeypadWidget/KeypadWidget.pri)
+#INCLUDEPATH += $$PWD KeypadWidget
+#include(KeypadWidget/KeypadWidget.pri)
 
-INCLUDEPATH += $$PWD ConferenceWidgets
-include(ConferenceWidgets/ConferenceWidgets.pri)
+#INCLUDEPATH += $$PWD ConferenceWidgets
+#include(ConferenceWidgets/ConferenceWidgets.pri)
 
 INCLUDEPATH += $$PWD RestManager
 include(RestManager/RestManager.pri)

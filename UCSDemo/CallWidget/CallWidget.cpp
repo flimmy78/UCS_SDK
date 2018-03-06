@@ -13,28 +13,25 @@ CallWidget::CallWidget(QWidget *parent)
 
     initLayout();
     initConnections();
-
-    // test
-    updateListData();
 }
 
 void CallWidget::initLayout()
 {
     m_pTitleBar = new TopWidget(this);
     m_pSearchEdit = new SearchLineEdit(this);
-    m_pDialWidget = new MidRightDialStackWidget(this);
-    m_pCallListWidget = new MidLeftCallListWidget(this);
+    m_pDialWidget = new DialWidget(this);
+    m_pCallListView = new CallListView(this);
 
     QHBoxLayout *pMainLayout = new QHBoxLayout(this);
     QVBoxLayout *pLeftLayout = new QVBoxLayout;
     QVBoxLayout *pRightLayout = new QVBoxLayout;
-    QHBoxLayout *pLayout = new QHBoxLayout;
+    QHBoxLayout *pSearchLayout = new QHBoxLayout;
 
-    pLayout->addWidget(m_pSearchEdit);
-    pLayout->setContentsMargins(15, 20, 15, 10);
-    pLeftLayout->addLayout(pLayout);
+    pSearchLayout->addWidget(m_pSearchEdit);
+    pSearchLayout->setContentsMargins(15, 20, 15, 10);
+    pLeftLayout->addLayout(pSearchLayout);
 
-    pLeftLayout->addWidget(m_pCallListWidget);
+    pLeftLayout->addWidget(m_pCallListView);
     pLeftLayout->setSpacing(0);
     pLeftLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -52,29 +49,5 @@ void CallWidget::initLayout()
 void CallWidget::initConnections()
 {
 
-}
-
-void CallWidget::updateListData()
-{
-    for (int i = 0; i < 15; i++)
-    {
-        CallHistoryItem item;
-        if (i % 2)
-        {
-            item.headerPath = ":/images/u57.png";
-            item.nickName = QStringLiteral("小美");
-            item.callTime = "2018/01/06";
-            item.callType = kAudioCall;
-        }
-        else
-        {
-            item.headerPath = ":/images/u29.png";
-            item.nickName = QStringLiteral("全球唯一云通讯能力提供商");
-            item.callTime = "17:50";
-            item.callType = kAudioConf;
-        }
-
-        m_pCallListWidget->addCallListItem(&item);
-    }
 }
 

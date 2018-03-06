@@ -5,8 +5,9 @@
 #include "absFiles/myPushButton.h"
 #include "absFiles/myToolButton.h"
 #include "absFiles/myLabel.h"
+#include "BaseWidget.h"
 
-class MidRightContactStackWidget : public QWidget
+class MidRightContactStackWidget : public BaseWidget
 {
     Q_OBJECT
 public:
@@ -15,7 +16,7 @@ public:
     void updateData();
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+
 
 private:
     void initLayout();

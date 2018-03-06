@@ -348,7 +348,7 @@ QList<ChatEntity> ChatDBManager::getChats(const QString targetId,
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    QString sql = QString("SELECT * FROM %1 ORDER BY chatId DESC LIMIT :count")
+    QString sql = QString("SELECT * FROM %1 ORDER BY sendTime DESC LIMIT :count")
                         .arg(tableName(targetId, type));
 
     sqlQuery.prepare(sql);

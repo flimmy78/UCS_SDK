@@ -5,12 +5,17 @@
 #include <QTextEdit>
 #include "AbsFiles/myIconStyle.h"
 #include "Interface/UCSIMClient.h"
+#include "Interface/UCSLogger.h"
+
+#define TAG "ChatWidget"
 
 MidRightChatStackWidget::MidRightChatStackWidget(QWidget *parent)
-    : QWidget(parent)
+    : BaseWidget(parent)
     , m_txtSending(this)
     , m_btnSend(this)
 {
+    setObjectName("ChatStackWidget");
+
     initLayout();
     initTBtnMenu();
     initConnections();
@@ -60,8 +65,8 @@ void MidRightChatStackWidget::initLayout()
 
 void MidRightChatStackWidget::initConnections()
 {
-    connect(&m_txtSending, SIGNAL(sig_msgSending()), this, SLOT(slot_sendingMsg()));
-    connect(&m_btnSend, SIGNAL(clicked()), this, SLOT(slot_sendingMsg()));
+    connect(&m_txtSending, SIGNAL(sig_msgSending()), this, SLOT(onSendingMsg()));
+    connect(&m_btnSend, SIGNAL(clicked()), this, SLOT(onSendingMsg()));
 }
 
 void MidRightChatStackWidget::initTBtnMenu()
@@ -87,7 +92,7 @@ void MidRightChatStackWidget::initTBtnMenu()
 //                "QMenu::indicator:exclusive:unchecked{image: url(:/images/midright/radiobutton_unchecked.png);}"
 //                "QMenu::indicator:exclusive:checked{image: url(:/images/midright/radiobutton_checked.png);}");
 
-    connect(pActionGrp, SIGNAL(triggered(QAction*)), this, SLOT(slot_updateAction(QAction*)));
+    connect(pActionGrp, SIGNAL(triggered(QAction*)), this, SLOT(onUpdateSendAction(QAction*)));
 
     m_btnSend.setMenu(pMenu);
     m_btnSend.setPopupMode(QToolButton::MenuButtonPopup);
@@ -112,7 +117,14 @@ void MidRightChatStackWidget::readSetting()
     m_txtSending.setSendingMode((CustomSendingMode)sendingMode);
 }
 
-void MidRightChatStackWidget::slot_sendingMsg()
+void MidRightChatStackWidget::onChangeConversation(QString targetId, quint32 type)
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, TAG,
+            QString("onChangeConversation targetId: %1 type: %2")
+            .arg(targetId).arg(type));
+}
+
+void MidRightChatStackWidget::onSendingMsg()
 {
     if (!m_txtSending.toPlainText().isEmpty())
     {
@@ -129,7 +141,7 @@ void MidRightChatStackWidget::slot_sendingMsg()
     }
 }
 
-void MidRightChatStackWidget::slot_updateAction(QAction *pAction)
+void MidRightChatStackWidget::onUpdateSendAction(QAction *pAction)
 {
 
     if (pAction == m_pAct[0])

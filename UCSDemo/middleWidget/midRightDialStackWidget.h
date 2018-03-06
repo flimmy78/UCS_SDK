@@ -7,8 +7,9 @@
 #include "absFiles/myPushButton.h"
 #include "keypadWidget.h"
 #include "conferenceStackWidget.h"
+#include "BaseWidget.h"
 
-class MidRightDialStackWidget : public QWidget
+class MidRightDialStackWidget : public BaseWidget
 {
     Q_OBJECT
 
@@ -17,7 +18,6 @@ public:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
 
 
 private:

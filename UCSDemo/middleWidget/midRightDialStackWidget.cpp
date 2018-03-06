@@ -6,7 +6,7 @@ QString btnNormalStyle = "QPushButton{color:rgb(68,68,68); border:none;}"
 QString btnSelectedStyle = "QPushButton{border-image: url(:/images/midright/btn_mask.png); color:rgb(40,143,231); border:none;}";
 
 MidRightDialStackWidget::MidRightDialStackWidget(QWidget *parent)
-    : QWidget(parent)
+    : BaseWidget(parent)
     , m_stackWid(this)
 {
     setMouseTracking(true);
@@ -23,11 +23,6 @@ MidRightDialStackWidget::MidRightDialStackWidget(QWidget *parent)
 bool MidRightDialStackWidget::eventFilter(QObject *watched, QEvent *event)
 {
     return QObject::eventFilter(watched, event);
-}
-
-void MidRightDialStackWidget::paintEvent(QPaintEvent *event)
-{
-
 }
 
 void MidRightDialStackWidget::initLayout()

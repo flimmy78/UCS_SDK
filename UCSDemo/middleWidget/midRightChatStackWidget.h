@@ -5,8 +5,9 @@
 #include "absFiles/myPushButton.h"
 #include "absFiles/myChatTextEdit.h"
 #include "absFiles/myToolButton.h"
+#include "BaseWidget.h"
 
-class MidRightChatStackWidget : public QWidget
+class MidRightChatStackWidget : public BaseWidget
 {
     Q_OBJECT
 public:
@@ -23,8 +24,12 @@ private:
 signals:
 
 public slots:
-    void slot_sendingMsg();
-    void slot_updateAction(QAction* pAction);
+    void onChangeConversation(QString targetId, quint32 type);
+
+private slots:
+    void onSendingMsg();
+    void onUpdateSendAction(QAction* pAction);
+
 
 private:
     MyChatTextEdit m_txtSending;

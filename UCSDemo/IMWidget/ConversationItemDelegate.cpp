@@ -31,19 +31,19 @@ void ConversationItemDelegate::paint(QPainter *painter, const QStyleOptionViewIt
     painter->restore();
     painter->save();
 
-    QFont font;
-    font.setPointSize(10);
+    QFont font = painter->font();
+    font.setPointSize(9);
     painter->setFont(font);
     painter->setPen(QColor(Qt::lightGray));
     QFontMetrics fm(painter->font());
 
     QSize timeSize = QSize(fm.width(time), fm.height());
-    QRect timeRect = QRect(option.rect.topRight() + QPoint(-(fm.width(time) + scroll_width), padding), timeSize);
+    QRect timeRect = QRect(option.rect.topRight() + QPoint(-(timeSize.width() + scroll_width), padding), timeSize);
     painter->drawText(timeRect, time);
 
     ///< content_width = item_width - header_width - scroll_width(10) >
     /// header_width contains real header img width and padding, so eaual to item height.
-    QSize contentSize = QSize(itemSize.width() - itemSize.height() - scroll_width, fm.height());
+    QSize contentSize = QSize(itemSize.width() - itemSize.height() - padding - scroll_width, fm.height());
     QString contentElided = fm.elidedText(content, Qt::ElideRight,
                                           contentSize.width(),
                                           Qt::TextShowMnemonic);
@@ -54,15 +54,15 @@ void ConversationItemDelegate::paint(QPainter *painter, const QStyleOptionViewIt
     painter->restore();
     painter->save();
 
-    QFont titleFont;
-    titleFont.setPointSize(11);
+    QFont titleFont = painter->font();
+    titleFont.setPointSize(10);
     painter->setFont(titleFont);
     painter->setPen(QColor(Qt::black));
 
     QFontMetrics fm1(painter->font());
 
     ///< title_width = item_width - header_width -  time_width - scroll_width(10) >
-    QSize titleSize = QSize(itemSize.width() - itemSize.height() - timeSize.width() - scroll_width, fm1.height());
+    QSize titleSize = QSize(itemSize.width() - itemSize.height() - timeSize.width() - padding - scroll_width, fm1.height());
     QString titleElided = fm1.elidedText(title, Qt::ElideRight,
                                        titleSize.width(),
                                        Qt::TextShowMnemonic);

@@ -1,6 +1,7 @@
 ﻿#include "myToolButton.h"
 
 MyToolButton::MyToolButton(QWidget *parent)
+    : QToolButton(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setStyleSheet("QToolButton{background:transparent;}");

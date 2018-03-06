@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "absFiles/myScrollArea.h"
-#include "midleftcontractstreeview.h"
+#include "ContractsTreeView.h"
 
 class MidLeftContactsStackWidget : public MyScrollArea
 {
@@ -24,7 +24,7 @@ signals:
 public slots:
 
 private:
-    MidLeftContractsTreeView m_contactView;
+    ContractsTreeView m_contactView;
 };
 
 #endif // ADDRESSBOOKWIDGET_H

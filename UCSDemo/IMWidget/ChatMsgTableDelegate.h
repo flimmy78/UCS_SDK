@@ -1,19 +1,18 @@
-﻿#ifndef HISTORYCALLITEMDELEGATE_H
-#define HISTORYCALLITEMDELEGATE_H
+﻿#ifndef CHATMSGTABLEDELEGATE_H
+#define CHATMSGTABLEDELEGATE_H
 
 #include <QObject>
-#include <QWidget>
 #include <QPainter>
 #include <QStyledItemDelegate>
-#include "common/qtheaders.h"
+#include <qglobal.h>
 
-class HistoryCallItemDelegate : public QStyledItemDelegate
+class ChatMsgTableDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
 public:
-    explicit HistoryCallItemDelegate(QObject* parent = 0);
-    virtual ~HistoryCallItemDelegate() {}
+    explicit ChatMsgTableDelegate(QObject *parent = 0);
+    ~ChatMsgTableDelegate();
 
 protected:
     void paint(QPainter *painter,
@@ -24,4 +23,4 @@ protected:
                    const QModelIndex &index) const;
 };
 
-#endif // HISTORYCALLITEMDELEGATE_H
+#endif // CHATMSGTABLEDELEGATE_H
