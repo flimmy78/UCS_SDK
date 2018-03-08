@@ -87,11 +87,31 @@ QVariant ChatMsgTableModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+bool ChatMsgTableModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    beginInsertRows(parent, row, row + count - 1);
+    // FIXME: Implement me!
+    endInsertRows();
+
+    return true;
+}
+
+bool ChatMsgTableModel::insertColumns(int column, int count, const QModelIndex &parent)
+{
+    beginInsertColumns(parent, column, column + count - 1);
+    // FIXME: Implement me!
+    endInsertColumns();
+
+    return true;
+}
+
 bool ChatMsgTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, row, row + count - 1);
     // FIXME: Implement me!
     endRemoveRows();
+
+    return true;
 }
 
 bool ChatMsgTableModel::removeColumns(int column, int count, const QModelIndex &parent)
@@ -99,6 +119,17 @@ bool ChatMsgTableModel::removeColumns(int column, int count, const QModelIndex &
     beginRemoveColumns(parent, column, column + count - 1);
     // FIXME: Implement me!
     endRemoveColumns();
+
+    return true;
+}
+
+Qt::ItemFlags ChatMsgTableModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::NoItemFlags;
+
+    Qt::ItemFlags flags = Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+    return flags;
 }
 
 void ChatMsgTableModel::setModelData(QList<ChatMsgItem> *pChatMsgList)

@@ -2,6 +2,8 @@
 #define CHATMSGTABLEMODEL_H
 
 #include <QAbstractTableModel>
+#include <QImage>
+#include <QSize>
 #include <qglobal.h>
 #include "Interface/UCSIMSDKPublic.h"
 
@@ -100,16 +102,21 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+    // Add data:
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
 
     void setModelData(QList<ChatMsgItem> *pChatMsgList);
     void refreshModel();
 
 private:
     QList<ChatMsgItem> *m_pMsgList;
-
 };
 
 #endif // CHATMSGTABLEMODEL_H

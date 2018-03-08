@@ -146,7 +146,11 @@ void MainWindow::customEvent(QEvent *event)
 
     case kUCSMsgSyncEvent:
     {
-
+        UCSMsgSyncEvent *syncEvent = static_cast<UCSMsgSyncEvent*>(event);
+        if (syncEvent->error() == ErrorCode_NoError)
+        {
+            QList<UCSMessage*> messageList = syncEvent->messages();
+        }
     }
         break;
 

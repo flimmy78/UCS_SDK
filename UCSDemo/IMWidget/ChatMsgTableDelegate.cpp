@@ -1,7 +1,9 @@
 ﻿#include "ChatMsgTableDelegate.h"
 #include "ChatMsgTableModel.h"
+#include "BaseMsgWidget.h"
 
 ChatMsgTableDelegate::ChatMsgTableDelegate(QObject *parent)
+    : QItemDelegate(parent)
 {
 
 }
@@ -28,10 +30,36 @@ void ChatMsgTableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     }
 
     painter->restore();
-    QStyledItemDelegate::paint(painter, option, index);
+    QItemDelegate::paint(painter, option, index);
 }
 
 QSize ChatMsgTableDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    return QStyledItemDelegate::sizeHint(option, index);
+    return QItemDelegate::sizeHint(option, index);
+}
+
+QWidget *ChatMsgTableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    BaseMsgWidget *msgWidget = new BaseMsgWidget(parent);
+    return msgWidget;
+}
+
+void ChatMsgTableDelegate::setEditorData(QWidget *editor,
+                                         const QModelIndex &index) const
+{
+
+}
+
+void ChatMsgTableDelegate::setModelData(QWidget *editor,
+                                        QAbstractItemModel *model,
+                                        const QModelIndex &index) const
+{
+
+}
+
+void ChatMsgTableDelegate::updateEditorGeometry(QWidget *editor,
+                                                const QStyleOptionViewItem &option,
+                                                const QModelIndex &/*index*/) const
+{
+    editor->setGeometry(option.rect);
 }

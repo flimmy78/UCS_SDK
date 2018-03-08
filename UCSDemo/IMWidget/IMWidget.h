@@ -18,6 +18,8 @@ public:
 
     ConversationListView *conversationListView() const;
 
+    IMChatWidget *msgChatWidget() const;
+
 private:
     void initLayout();
     void initConnections();

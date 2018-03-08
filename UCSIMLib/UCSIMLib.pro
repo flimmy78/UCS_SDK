@@ -71,6 +71,8 @@ HEADERS += UCSIMClient.h\
     UCSIMEvent.h \
     UCSIMSDKPublic.h
 
+DESTDIR = $$PWD/../Bin/
+
 CONFIG(debug, debug|release) {
     unix:TARGET=$$join(TARGET,,,_debug)
     win32:TARGET=$$join(TARGET,,,_d)
@@ -82,8 +84,8 @@ unix {
 }
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build/UCSTcpSDK/Debug/debug/ -lUCSTcpSDK_
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/UCSTcpSDK/Debug/debug/ -lUCSTcpSDK_d
+win32:CONFIG(release, debug|release): LIBS += -L$$DESTDIR -lUCSTcpSDK_
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$DESTDIR -lUCSTcpSDK_d
 
-INCLUDEPATH += $$PWD/../build/UCSTcpSDK/Debug/debug
-DEPENDPATH += $$PWD/../build/UCSTcpSDK/Debug/debug
+INCLUDEPATH += $$PWD/../UCSTcpSDK
+DEPENDPATH += $$PWD/../UCSTcpSDK

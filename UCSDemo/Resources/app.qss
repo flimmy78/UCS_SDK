@@ -92,7 +92,7 @@ QMenu#TrayIconMenu::item {
     padding-right: 25px;
 }
 
-QTableView {
+/*QTableView {
     border: none;
     background: rgb(224, 238, 255);
 }
@@ -110,6 +110,17 @@ QTableView::item:selected {
 
 QTableView::item:selected:!active {
     color: rgb(65, 65, 65);
+}*/
+
+QTableView#ChatMsgTableView {
+/*    background: skyblue;*/
+}
+
+QTableView#ChatMsgTableView::item {
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+/*    background: green;*/
 }
 
 QScrollBar:horizontal {
@@ -203,8 +214,8 @@ QScrollBar#verticalScrollBar:vertical {
 
 QListView {
 /*    background: lightgray;*/
-    font-size: 10pt;
-    font-family: Microsoft YaHei;
+/*    font-size: 10pt;*/
+/*    font-family: Microsoft YaHei;*/
 }
 
 QListView#ConversationListView {

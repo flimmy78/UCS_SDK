@@ -14,10 +14,15 @@ public:
     explicit ChatMsgTableView(QWidget *parent = 0);
     ~ChatMsgTableView();
 
+
 protected:
 
 private:
+    void initList();
+
+private:
     ChatMsgTableModel *m_pTableModel;
+    QList<ChatMsgItem> m_msgList;
 };
 
 #endif // CHATMSGTABLEVIEW_H

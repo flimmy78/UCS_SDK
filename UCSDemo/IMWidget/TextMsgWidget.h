@@ -15,7 +15,7 @@ signals:
 public slots:
 
 private:
-    QString
+//    QString
 };
 
 #endif // TEXTMSGWIDGET_H

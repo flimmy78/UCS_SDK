@@ -23,8 +23,9 @@ public:
 
     QString nickName() const;
 
-protected:
-    void paintEvent(QPaintEvent *event) override;
+private:
+    void initLayout();
+    void initConnections();
 
 signals:
 

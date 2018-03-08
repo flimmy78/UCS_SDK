@@ -246,7 +246,7 @@ void MyTitleBar::initLayout()
     mainLayout->addWidget(m_pBtnClose);
 
     mainLayout->setContentsMargins(5, 0, 0, 0);
-    mainLayout->setSpacing(0);
+    mainLayout->setSpacing(1);
 }
 
 void MyTitleBar::initConnections()

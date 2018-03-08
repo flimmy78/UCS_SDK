@@ -4,10 +4,7 @@
 #include <QLabel>
 #include <QTextEdit>
 #include "AbsFiles/myIconStyle.h"
-#include "Interface/UCSIMClient.h"
 #include "Interface/UCSLogger.h"
-
-#define TAG "ChatWidget"
 
 IMChatWidget::IMChatWidget(QWidget *parent)
     : BaseWidget(parent)
@@ -49,11 +46,18 @@ void IMChatWidget::initLayout()
     m_btnSend.setText(QStringLiteral("发送"));
     m_btnSend.setFixedSize(65, 30);
 
-    QListWidget *pListWid = new QListWidget(this);
-    pListWid->setFrameShadow(QFrame::Plain);
-    pListWid->setFrameShape(QFrame::NoFrame);
+//    QListWidget *pListWid = new QListWidget(this);
+//    pListWid->setFrameShadow(QFrame::Plain);
+//    pListWid->setFrameShape(QFrame::NoFrame);
+//    pMainLayout->addWidget(pListWid);
 
-    pMainLayout->addWidget(pListWid);
+    QTextEdit *pMsgShow = new QTextEdit;
+    pMsgShow->setReadOnly(true);
+    pMsgShow->setFrameShape(QFrame::NoFrame);
+    pMsgShow->setFrameShadow(QFrame::Plain);
+    pMsgShow->setText("test......222.2233...");
+    pMainLayout->addWidget(pMsgShow);
+
     pMainLayout->addLayout(pToolsLayout);
     pMainLayout->addWidget(&m_txtSending);
     pMainLayout->addWidget(&m_btnSend, 0, Qt::AlignRight);
@@ -112,7 +116,7 @@ void IMChatWidget::readSetting()
 
 void IMChatWidget::onChangeConversation(QString targetId, quint32 type)
 {
-    UCS_LOG(UCSLogger::kTraceApiCall, TAG,
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
             QString("onChangeConversation targetId: %1 type: %2")
             .arg(targetId).arg(type));
     m_targetId = targetId;
@@ -130,7 +134,7 @@ void IMChatWidget::onSendingMsg()
     {
         qDebug() << "sending msg: " << m_txtSending.toPlainText();
         UCSMessage message;
-        UCSTextMsg *txtMsg = new UCSTextMsg(m_txtSending.toPlainText());
+        UCSTextMsg *txtMsg = new UCSTextMsg(m_txtSending.toPlainText().trimmed());
         message.receivedId = m_targetId;
         message.conversationType = (UCS_IM_ConversationType)(m_type);
         message.messageType = UCS_IM_TEXT;

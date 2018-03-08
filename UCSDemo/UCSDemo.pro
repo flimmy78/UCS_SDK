@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui sql network
+#QT += webenginewidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -84,13 +85,12 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h
 
-DESTDIR = $$PWD/Bin/
+DESTDIR = $$PWD/../Bin/
 
 CONFIG(debug, debug|release) {
     unix:TARGET=$$join(TARGET,,,_debug)
     win32:TARGET=$$join(TARGET,,,_d)
 } else {
-
 }
 
 RESOURCES += \
@@ -110,14 +110,15 @@ QMAKE_TARGET_COMPANY = "UCPAAS"
 QMAKE_TARGET_PRODUCT = "YZX Demo"
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build/UCSTcpSDK/Debug/release/ -lUCSTcpSDK
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/UCSTcpSDK/Debug/debug/ -lUCSTcpSDK_d
 
-INCLUDEPATH += $$PWD/../build/UCSTcpSDK/Debug/debug
-DEPENDPATH += $$PWD/../build/UCSTcpSDK/Debug/debug
+win32:CONFIG(release, debug|release): LIBS += -L$$DESTDIR/ -lUCSTcpSDK
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$DESTDIR/ -lUCSTcpSDK_d
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build/UCSIMLib/Debug/debug/ -lUCSIMLib
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/UCSIMLib/Debug/debug/ -lUCSIMLib_d
+INCLUDEPATH += $$PWD/../UCSTcpSDK
+DEPENDPATH += $$PWD/../UCSTcpSDK
 
-INCLUDEPATH += $$PWD/../build/UCSIMLib/Debug/debug
-DEPENDPATH += $$PWD/../build/UCSIMLib/Debug/debug
+win32:CONFIG(release, debug|release): LIBS += -L$$DESTDIR/ -lUCSIMLib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$DESTDIR/ -lUCSIMLib_d
+
+INCLUDEPATH += $$PWD/../UCSIMLib
+DEPENDPATH += $$PWD/../UCSIMLib

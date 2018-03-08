@@ -78,6 +78,11 @@ void IMWidget::onConversationItemClicked(QString targetId, quint32 type)
     m_pStackedLayout->setCurrentIndex(1);
 }
 
+IMChatWidget *IMWidget::msgChatWidget() const
+{
+    return m_pMsgChatWidget;
+}
+
 ConversationListView *IMWidget::conversationListView() const
 {
     return m_pConversationListView;

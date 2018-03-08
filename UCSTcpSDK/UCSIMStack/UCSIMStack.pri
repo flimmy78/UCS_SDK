@@ -106,12 +106,3 @@ HEADERS += \
     $$PWD/oldrbdes.h \
     $$PWD/UCSPackage.h \
     $$PWD/UCSStackDefine.h
-
-
-win32: LIBS += -L$$PWD/libs/ -lzlibwapi
-
-INCLUDEPATH += $$PWD/zlib
-DEPENDPATH += $$PWD/zlib
-
-# win32:!win32-g++: PRE_TARGETDEPS += $$PWD/libs/zlibwapi.lib
-# else:win32-g++: PRE_TARGETDEPS += $$PWD/libs/libzlibwapi.a

@@ -24,7 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-DEFINES += _WIN32
+DEFINES += _WIN32 ZLIB_WINAPI
 
 LIBS += -lws2_32
 
@@ -59,6 +59,11 @@ HEADERS +=\
     UCSCommonTypes.h \
     UCSTcpVersion.h
 
+DESTDIR = $$PWD/../Bin/
+
+#win32:CONFIG(release, debug|release): DESTDIR = $$PWD/../Bin/
+#else:win32:CONFIG(debug, debug|release): DESTDIR = $$PWD/../Bin/Debug
+
 CONFIG(debug, debug|release) {
     unix:TARGET=$$join(TARGET,,,_debug)
     win32:TARGET=$$join(TARGET,,,_d)
@@ -69,6 +74,11 @@ unix {
     INSTALLS += target
 }
 
-# QMAKE_CXXFLAGS_DEBUG += /NODEFAULTLIB:"LIBCMTD.lib" /NODEFAULTLIB:"LIBCMT.lib"
 QMAKE_LFLAGS_DEBUG += /NODEFAULTLIB:"LIBCMT.lib"
 QMAKE_LFLAGS_RELEASE +=  /NODEFAULTLIB:"LIBCMT.lib"
+
+win32:CONFIG(release, debug|release): LIBS += -L$$DESTDIR/ -lzlib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$DESTDIR/ -lzlib_d
+
+INCLUDEPATH += $$PWD/../3rdparty/zlib
+DEPENDPATH += $$PWD/../3rdparty/zlib

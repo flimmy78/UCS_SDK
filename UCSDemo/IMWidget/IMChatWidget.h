@@ -6,6 +6,7 @@
 #include "absFiles/myChatTextEdit.h"
 #include "absFiles/myToolButton.h"
 #include "BaseWidget.h"
+#include "Interface/UCSIMSDKPublic.h"
 
 
 class IMChatWidget : public BaseWidget
@@ -13,6 +14,7 @@ class IMChatWidget : public BaseWidget
     Q_OBJECT
 public:
     explicit IMChatWidget(QWidget *parent = 0);
+    void updateMessages(QList<UCSMessage*> pMessageList);
 
 private:
     void initLayout();
