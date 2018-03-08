@@ -8,12 +8,14 @@
 #include "BaseWidget.h"
 #include "Interface/UCSIMSDKPublic.h"
 
-
+class QWebEngineView;
 class IMChatWidget : public BaseWidget
 {
     Q_OBJECT
 public:
     explicit IMChatWidget(QWidget *parent = 0);
+    ~IMChatWidget();
+
     void updateMessages(QList<UCSMessage*> pMessageList);
 
 private:
@@ -37,6 +39,7 @@ private slots:
 
 
 private:
+    QWebEngineView *m_pWebView;
     MyChatTextEdit m_txtSending;
     MyToolButton m_btnSend;
     QAction *m_pAct[2];

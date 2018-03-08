@@ -41,22 +41,20 @@ int main(int argc, char *argv[])
 
     if (!app.isRunning())
     {
-        MainWindow *pMain = MainWindow::InitInstance();
-        app._wid = pMain;
+        MainWindow mainWindow;
+        app._wid = &mainWindow;
 
-        UCSLogin *pLogin = new UCSLogin;
-        if (pLogin->exec() != QDialog::Accepted)
+        UCSLogin login;
+        if (login.exec() != QDialog::Accepted)
         {
             return 0;
         }
 
-        delete pLogin;
-
-        pMain->show();
-        pMain->setGeometry((QApplication::desktop()->width() - pMain->width()) / 2,
-                            (QApplication::desktop()->height() - pMain->height()) / 2,
-                           pMain->width(),
-                           pMain->height());
+        mainWindow.show();
+        mainWindow.setGeometry((QApplication::desktop()->width() - mainWindow.width()) / 2,
+                            (QApplication::desktop()->height() - mainWindow.height()) / 2,
+                           mainWindow.width(),
+                           mainWindow.height());
 
         return app.exec();
     }

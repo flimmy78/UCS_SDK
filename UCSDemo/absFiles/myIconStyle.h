@@ -9,7 +9,7 @@ class MyIconStyle : public QCommonStyle
 
 public:
     explicit MyIconStyle();
-    ~MyIconStyle(){};
+    ~MyIconStyle(){}
 
     void setIconSize(int size);
 

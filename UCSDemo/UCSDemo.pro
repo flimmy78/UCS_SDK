@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui sql network
-#QT += webenginewidgets
+QT       += webenginewidgets webchannel
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -102,7 +102,8 @@ RESOURCES += \
     LoginWindow.qrc \
     TreeView.qrc \
     MyTitleBar.qrc \
-    main_skin.qrc
+    main_skin.qrc \
+    ChatWindow.qrc
 
 VERSION = 1.0.0.0
 RC_ICONS = images/yzx_logo.ico

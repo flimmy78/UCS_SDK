@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/Chat/messageBox.html</file>
+        <file>Resources/Chat/qwebchannel.js</file>
+    </qresource>
+</RCC>

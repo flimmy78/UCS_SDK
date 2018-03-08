@@ -19,11 +19,11 @@ public:
     static MainWindow* InitInstance();
     static MainWindow *GetInstance() { return s_pMainWnd; }
 
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
 protected:
     static MainWindow* s_pMainWnd;
-    explicit MainWindow(QWidget *parent = 0);
 
     void mouseDoubleClickEvent(QMouseEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;

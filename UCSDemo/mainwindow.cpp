@@ -17,7 +17,7 @@ MainWindow *MainWindow::InitInstance()
 {
     if (!s_pMainWnd)
     {
-        s_pMainWnd = new MainWindow;
+        s_pMainWnd = new MainWindow();
     }
 
     return s_pMainWnd;

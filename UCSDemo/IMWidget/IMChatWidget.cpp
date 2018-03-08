@@ -3,7 +3,10 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QTextEdit>
-#include "AbsFiles/myIconStyle.h"
+#include <QtWebEngineWidgets>
+#include <QWebEngineView>
+#include <QWebChannel>
+#include <QWebEnginePage>
 #include "Interface/UCSLogger.h"
 
 IMChatWidget::IMChatWidget(QWidget *parent)
@@ -17,6 +20,11 @@ IMChatWidget::IMChatWidget(QWidget *parent)
     initTBtnMenu();
     initConnections();
     readSetting();
+}
+
+IMChatWidget::~IMChatWidget()
+{
+
 }
 
 void IMChatWidget::initLayout()
@@ -46,17 +54,13 @@ void IMChatWidget::initLayout()
     m_btnSend.setText(QStringLiteral("发送"));
     m_btnSend.setFixedSize(65, 30);
 
-//    QListWidget *pListWid = new QListWidget(this);
-//    pListWid->setFrameShadow(QFrame::Plain);
-//    pListWid->setFrameShape(QFrame::NoFrame);
-//    pMainLayout->addWidget(pListWid);
+    m_pWebView = new QWebEngineView(this);
+    QWebEnginePage *page = new QWebEnginePage(this);
+    m_pWebView->setPage(page);
+//    page->setUrl(QUrl("http://www.hao123.com"));
+    page->setUrl(QUrl("qrc:/Resources/Chat/messageBox.html"));
 
-    QTextEdit *pMsgShow = new QTextEdit;
-    pMsgShow->setReadOnly(true);
-    pMsgShow->setFrameShape(QFrame::NoFrame);
-    pMsgShow->setFrameShadow(QFrame::Plain);
-    pMsgShow->setText("test......222.2233...");
-    pMainLayout->addWidget(pMsgShow);
+    pMainLayout->addWidget(m_pWebView);
 
     pMainLayout->addLayout(pToolsLayout);
     pMainLayout->addWidget(&m_txtSending);
@@ -142,6 +146,18 @@ void IMChatWidget::onSendingMsg()
 
         UCSIMClient::Instance()->sendMessage(&message);
         m_txtSending.clear();
+
+        QString html = QString("appendMyMessage(%1, %2);scrollBottom();")
+                            .arg("'haha'")
+                            .arg("'fafsdfasdfa'");
+
+        m_pWebView->page()->runJavaScript(html);
+
+//        QString MyHead = QString("<img src=qrc:/images/u1183.png width='30px' heigth='30px'/>");
+//        QString html = QString("document.getElementById(\"content\").insertAdjacentHTML(\"beforeEnd\",\"<div style='overflow:hidden;'><p class='divotherHead'>%1 </p><p class='triangle-left left'>fsdfsdfasdfas</p></div>\")")
+//                                .arg(MyHead);
+//                                .arg(m_txtSending.toPlainText());
+//        m_pWebView->page()->runJavaScript(html);
 
         emit sendingNewMsg();
     }
