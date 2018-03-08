@@ -59,6 +59,7 @@ void IMChatWidget::initLayout()
     m_pWebView->setPage(page);
 //    page->setUrl(QUrl("http://www.hao123.com"));
     page->setUrl(QUrl("qrc:/Resources/Chat/messageBox.html"));
+//    m_pWebView->resize(this->width(), m_pWebView->height());
 
     pMainLayout->addWidget(m_pWebView);
 
@@ -145,20 +146,20 @@ void IMChatWidget::onSendingMsg()
         message.content = txtMsg;
 
         UCSIMClient::Instance()->sendMessage(&message);
-        m_txtSending.clear();
 
-        QString html = QString("appendMyMessage(%1, %2);scrollBottom();")
-                            .arg("'haha'")
-                            .arg("'fafsdfasdfa'");
 
-        m_pWebView->page()->runJavaScript(html);
-
-//        QString MyHead = QString("<img src=qrc:/images/u1183.png width='30px' heigth='30px'/>");
-//        QString html = QString("document.getElementById(\"content\").insertAdjacentHTML(\"beforeEnd\",\"<div style='overflow:hidden;'><p class='divotherHead'>%1 </p><p class='triangle-left left'>fsdfsdfasdfas</p></div>\")")
-//                                .arg(MyHead);
-//                                .arg(m_txtSending.toPlainText());
+//        QString html = QString("appendMyMessage(%1, %2);scrollBottom();")
+//                            .arg("'haha'")
+//                            .arg("'fafsdfasdfa'");
 //        m_pWebView->page()->runJavaScript(html);
 
+        QString MyHead = QString("<img src=qrc:/images/u1183.png width='30px' heigth='30px'/>");
+        QString html = QString("document.getElementById(\"content\").insertAdjacentHTML(\"beforeEnd\",\"<div style='overflow:hidden;'><p class='divotherHead'>%1 </p><p class='triangle-left left'>%2</p></div>\")")
+                                .arg(MyHead)
+                                .arg(m_txtSending.toPlainText().replace("\n", "</br>"));
+        m_pWebView->page()->runJavaScript(html);
+
+        m_txtSending.clear();
         emit sendingNewMsg();
     }
 }
