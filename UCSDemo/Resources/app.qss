@@ -16,6 +16,16 @@ QWidget#DialWidget, QWidget#ContactStackWidget, QWidget#IMChatWidget {
     background: white;
 }
 
+QListView#ConversationListView, QListView#CallListView, QTreeView#ContractsTreeView {
+    background: rgb(242, 242, 242);
+    width: 250px;
+}
+
+QLineEdit#SearchLineEdit {
+    border-radius:5px;
+    background:rgb(221, 231, 231);
+}
+
 QWidget#TopWidget {
     background: white;
     height: 48px;
@@ -210,29 +220,4 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
 QScrollBar#verticalScrollBar:vertical {
     margin-top: 30px;
-}
-
-QListView {
-/*    background: lightgray;*/
-/*    font-size: 10pt;*/
-/*    font-family: Microsoft YaHei;*/
-}
-
-QListView#ConversationListView {
-    background: rgb(242, 242, 242);
-}
-
-QListView#CallListView {
-    background: rgb(242, 242, 242);
-}
-
-QListWidget#CallListWidget {
-    width: 250px;
-/*    background: rgb(242, 242, 242);*/
-    background: transparent;
-}
-
-QLineEdit#SearchLineEdit {
-    border-radius:5px;
-    background:rgb(221, 231, 231);
 }

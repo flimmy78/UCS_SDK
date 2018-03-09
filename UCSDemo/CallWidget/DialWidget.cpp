@@ -6,7 +6,6 @@ QString btnSelectedStyle = "QPushButton{border-image: url(:/images/midright/btn_
 
 DialWidget::DialWidget(QWidget *parent)
     : BaseWidget(parent)
-//    , m_stackWid(this)
 {
     setMouseTracking(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -55,13 +54,10 @@ void DialWidget::initLayout()
 
     m_pStackedLayout->addWidget(m_pKeypadWid);
     m_pStackedLayout->addWidget(m_pConfWid);
-//    m_stackWid.addWidget(m_pKeypadWid);
-//    m_stackWid.addWidget(m_pConfWid);
 
     pMainLayout->addStretch();
     pMainLayout->addLayout(pTopLayout);
     pMainLayout->addSpacerItem(new QSpacerItem(this->width(), 16, QSizePolicy::Expanding, QSizePolicy::Minimum));
-//    pMainLayout->addWidget(&m_stackWid);
     pMainLayout->addLayout(m_pStackedLayout);
     pMainLayout->addStretch();
     pMainLayout->setContentsMargins(0, 0, 0, 0);
@@ -78,7 +74,6 @@ void DialWidget::initConnection()
         connect(&m_btnArray[i], SIGNAL(clicked()), this, SLOT(onSwitchPage()));
     }
 
-//    connect(&m_stackWid, SIGNAL(currentChanged(int)), this, SLOT(slot_curStackChanged(int)));
     connect(m_pKeypadWid, SIGNAL(sig_Clicked(QString)), this, SLOT(slot_keypadClicked(QString)));
     connect(m_pConfWid->m_pStartConfBtn, SIGNAL(clicked(bool)), this, SLOT(slot_startConference()));
     connect(m_pConfWid->m_pBookConfBtn, SIGNAL(clicked(bool)), this, SLOT(slot_bookConference()));
@@ -87,14 +82,12 @@ void DialWidget::initConnection()
 void DialWidget::initMisc()
 {
     preIndex = 0;
-//    m_stackWid.setCurrentIndex(0);
     m_btnArray[0].setStyleSheet(btnSelectedStyle);
 }
 
 void DialWidget::onSwitchPage()
 {
     int index = sender()->objectName().toInt();
-//    m_stackWid.setCurrentIndex(index);
     m_pStackedLayout->setCurrentIndex(index);
 
     for (int i = 0; i < 2; i++)
@@ -108,7 +101,6 @@ void DialWidget::onSwitchPage()
             m_btnArray[i].setStyleSheet(btnNormalStyle);
         }
     }
-//    preIndex = index;
 }
 
 void DialWidget::slot_curStackChanged(int index)

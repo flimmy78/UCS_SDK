@@ -19,6 +19,7 @@ ContractsTreeView::ContractsTreeView(QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setCursor(Qt::ArrowCursor);
+    setObjectName("ContractsTreeView");
 
     /* set icon size for items */
     setIconSize(QSize(25, 25));

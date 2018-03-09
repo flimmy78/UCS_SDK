@@ -56,10 +56,18 @@ UCSMessage UCSVoiceDownloadEvent::message() const
 }
 
 
-UCSMsgSyncEvent::UCSMsgSyncEvent(UCSErrorCode error, QList<UCSMessage *> messages)
+//UCSMsgSyncEvent::UCSMsgSyncEvent(UCSErrorCode error, QList<UCSMessage *> messages)
+//    : QEvent((QEvent::Type)kUCSMsgSyncEvent)
+//    , m_error(error)
+//    , m_messages(messages)
+//{
+
+//}
+
+UCSMsgSyncEvent::UCSMsgSyncEvent(UCSErrorCode error, QMap<QString, qint32> msgCount)
     : QEvent((QEvent::Type)kUCSMsgSyncEvent)
     , m_error(error)
-    , m_messages(messages)
+    , m_msgCount(msgCount)
 {
 
 }
@@ -69,7 +77,12 @@ UCSErrorCode UCSMsgSyncEvent::error() const
     return m_error;
 }
 
-QList<UCSMessage*> UCSMsgSyncEvent::messages() const
+QMap<QString, qint32> UCSMsgSyncEvent::msgCount() const
 {
-    return m_messages;
+    return m_msgCount;
 }
+
+//QList<UCSMessage*> UCSMsgSyncEvent::messages() const
+//{
+//    return m_messages;
+//}

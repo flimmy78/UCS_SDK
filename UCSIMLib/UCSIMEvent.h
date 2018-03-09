@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <qglobal.h>
+#include <QMap>
 #include "UCSDiscussion.h"
 #include "UCSMessage.h"
 #include "ucsimlib_global.h"
@@ -51,15 +52,19 @@ private:
 class UCSIMLIBSHARED_EXPORT UCSMsgSyncEvent : public QEvent
 {
 public:
-    explicit UCSMsgSyncEvent(UCSErrorCode error, QList<UCSMessage*> messages);
+//    explicit UCSMsgSyncEvent(UCSErrorCode error, QList<UCSMessage*> messages);
+    explicit UCSMsgSyncEvent(UCSErrorCode error, QMap<QString, qint32> msgCount);
 
     UCSErrorCode error() const;
 
-    QList<UCSMessage*> messages() const;
+//    QList<UCSMessage*> messages() const;
+
+    QMap<QString, qint32> msgCount() const;
 
 private:
     UCSErrorCode m_error;
-    QList<UCSMessage*> m_messages;
+    //    QList<UCSMessage*> m_messages;
+    QMap<QString, qint32> m_msgCount;
 };
 
 #endif // UCSIMEVENT_H

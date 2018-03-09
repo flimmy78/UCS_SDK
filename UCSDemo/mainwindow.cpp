@@ -96,7 +96,7 @@ void MainWindow::customEvent(QEvent *event)
             UCS_LOG(UCSLogger::kTraceInfo, "MainWindow",
                     QString("login success. userId = ").append(loginEvt->userId()));
 
-            m_pImWidget->conversationListView()->updateConversationList();
+//            m_pImWidget->conversationListView()->updateConversationList();
         }
         else
         {
@@ -149,7 +149,7 @@ void MainWindow::customEvent(QEvent *event)
         UCSMsgSyncEvent *syncEvent = static_cast<UCSMsgSyncEvent*>(event);
         if (syncEvent->error() == ErrorCode_NoError)
         {
-            QList<UCSMessage*> messageList = syncEvent->messages();
+            m_pImWidget->receivedMessages(syncEvent->msgCount());
         }
     }
         break;

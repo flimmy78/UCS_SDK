@@ -83,6 +83,12 @@ IMChatWidget *IMWidget::msgChatWidget() const
     return m_pMsgChatWidget;
 }
 
+void IMWidget::receivedMessages(QMap<QString, qint32> messageCount)
+{
+    m_pConversationListView->updateConversationList();
+    m_pMsgChatWidget->doSyncMessages(messageCount);
+}
+
 ConversationListView *IMWidget::conversationListView() const
 {
     return m_pConversationListView;

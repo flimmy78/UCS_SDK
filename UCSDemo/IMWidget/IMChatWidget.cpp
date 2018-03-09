@@ -7,6 +7,7 @@
 #include <QWebEngineView>
 #include <QWebChannel>
 #include <QWebEnginePage>
+#include "Interface/UCSIMSDKPublic.h"
 #include "Interface/UCSLogger.h"
 
 IMChatWidget::IMChatWidget(QWidget *parent)
@@ -14,6 +15,8 @@ IMChatWidget::IMChatWidget(QWidget *parent)
     , m_txtSending(this)
     , m_btnSend(this)
 {
+    setMouseTracking(true);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setObjectName("IMChatWidget");
 
     initLayout();
@@ -24,6 +27,30 @@ IMChatWidget::IMChatWidget(QWidget *parent)
 
 IMChatWidget::~IMChatWidget()
 {
+
+}
+
+void IMChatWidget::doSyncMessages(QMap<QString, qint32> messageCount)
+{
+    if (!m_conversationId.isEmpty())
+    {
+        return;
+    }
+
+    int count = messageCount[m_conversationId];
+    if (count <= 0)
+    {
+        return;
+    }
+
+    QList<UCSMessage*> messageList;
+    messageList = UCSIMClient::Instance()->getLatestMessages((UCS_IM_ConversationType)m_conversationType, m_conversationId, count);
+
+}
+
+void IMChatWidget::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
 
 }
 
@@ -54,20 +81,14 @@ void IMChatWidget::initLayout()
     m_btnSend.setText(QStringLiteral("发送"));
     m_btnSend.setFixedSize(65, 30);
 
-    m_pWebView = new QWebEngineView(this);
-    QWebEnginePage *page = new QWebEnginePage(this);
-    m_pWebView->setPage(page);
-//    page->setUrl(QUrl("http://www.hao123.com"));
-    page->setUrl(QUrl("qrc:/Resources/Chat/messageBox.html"));
-//    m_pWebView->resize(this->width(), m_pWebView->height());
-
-    pMainLayout->addWidget(m_pWebView);
+    m_pChatWebView = new ChatWebView(this);
+    pMainLayout->addWidget(m_pChatWebView);
 
     pMainLayout->addLayout(pToolsLayout);
     pMainLayout->addWidget(&m_txtSending);
     pMainLayout->addWidget(&m_btnSend, 0, Qt::AlignRight);
     pMainLayout->setSpacing(0);
-    pMainLayout->setContentsMargins(0, 2, 8, 8);
+    pMainLayout->setContentsMargins(2, 2, 2, 2);
 
     setLayout(pMainLayout);
 }
@@ -124,8 +145,35 @@ void IMChatWidget::onChangeConversation(QString targetId, quint32 type)
     UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
             QString("onChangeConversation targetId: %1 type: %2")
             .arg(targetId).arg(type));
-    m_targetId = targetId;
-    m_type = type;
+
+    m_pChatWebView->clearContent();
+
+    m_conversationId = targetId;
+    m_conversationType = type;
+
+    if (m_conversationId.isEmpty())
+    {
+        return;
+    }
+
+    QList<UCSMessage*> messageList;
+    messageList = UCSIMClient::Instance()->getLatestMessages((UCS_IM_ConversationType)m_conversationType, m_conversationId, 20);
+//    foreach (UCSMessage *message, messageList)
+    int msgCount = messageList.size();
+    for (int i = msgCount - 1; i >= 0; i--)
+    {
+        UCSMessage *message = messageList.at(i);
+        ChatMsgModel model = MsgConvert::convert2Model(message);
+        if (model.isSender)
+        {
+            m_pChatWebView->sendMsgShow(model);
+        }
+        else
+        {
+            m_pChatWebView->recvMsgShow(model);
+        }
+    }
+
 }
 
 void IMChatWidget::onConversationDeleted()
@@ -140,8 +188,8 @@ void IMChatWidget::onSendingMsg()
         qDebug() << "sending msg: " << m_txtSending.toPlainText();
         UCSMessage message;
         UCSTextMsg *txtMsg = new UCSTextMsg(m_txtSending.toPlainText().trimmed());
-        message.receivedId = m_targetId;
-        message.conversationType = (UCS_IM_ConversationType)(m_type);
+        message.receivedId = m_conversationId;
+        message.conversationType = (UCS_IM_ConversationType)(m_conversationType);
         message.messageType = UCS_IM_TEXT;
         message.content = txtMsg;
 
@@ -153,11 +201,17 @@ void IMChatWidget::onSendingMsg()
 //                            .arg("'fafsdfasdfa'");
 //        m_pWebView->page()->runJavaScript(html);
 
-        QString MyHead = QString("<img src=qrc:/images/u1183.png width='30px' heigth='30px'/>");
-        QString html = QString("document.getElementById(\"content\").insertAdjacentHTML(\"beforeEnd\",\"<div style='overflow:hidden;'><p class='divotherHead'>%1 </p><p class='triangle-left left'>%2</p></div>\")")
-                                .arg(MyHead)
-                                .arg(m_txtSending.toPlainText().replace("\n", "</br>"));
-        m_pWebView->page()->runJavaScript(html);
+//        QString MyHead = QString("<img src=qrc:/images/u1183.png width='30px' heigth='30px'/>");
+//        QString html = QString("document.getElementById(\"content\").insertAdjacentHTML(\"beforeEnd\",\"<div style='overflow:hidden;'><p class='divotherHead'>%1 </p><p class='triangle-left left'>%2</p></div>\")")
+//                                .arg(MyHead)
+//                                .arg(m_txtSending.toPlainText().replace("\n", "</br>"));
+//        m_pWebView->page()->runJavaScript(html);
+//        m_pChatWebView->page()->runJavaScript(html);
+
+        ChatMsgModel msg;
+        msg.content = m_txtSending.toPlainText();
+        m_pChatWebView->sendMsgShow(msg);
+        m_pChatWebView->recvMsgShow(msg);
 
         m_txtSending.clear();
         emit sendingNewMsg();

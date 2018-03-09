@@ -20,6 +20,8 @@ public:
 
     IMChatWidget *msgChatWidget() const;
 
+    void receivedMessages(QMap<QString, qint32> messageCount);
+
 private:
     void initLayout();
     void initConnections();
