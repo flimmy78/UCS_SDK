@@ -9,7 +9,7 @@
 #include <QLabel>
 //#include <QDialog>
 #include "BaseDialog.h"
-#include "RestManager/UCSRestManager.h"
+#include "UCSRestApi.h"
 #include "absFiles/MyTitleBar.h"
 
 class UCSLogin : public BaseDialog
@@ -51,7 +51,7 @@ private:
     QLineEdit    *m_pLineVerifyCode;
     QLabel       *m_pLblHeaderImg;
 
-    UCSRestManager m_restManager;
+    UCSRestApi m_restApi;
     qint32 m_timerId;
     qint32 m_countDown;
     bool m_isLoggin;

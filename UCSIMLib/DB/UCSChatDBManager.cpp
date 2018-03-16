@@ -44,101 +44,108 @@ bool ChatDBManager::addChat(const QString targetId, const UCS_IM_ConversationTyp
         return false;
     }
 
-    UCSDBScoped scoped;
-    QSqlDatabase db = scoped.db();
-    QSqlQuery sqlQuery(db);
-
-    QString sql = QString("INSERT OR REPLACE INTO %1 ("
-                                "msgId,"
-                                "imsgId,"
-                                "targetId,"
-                                "senderId,"
-                                "senderNickName,"
-                                "categoryId,"
-                                "isFromMySelf,"
-                                "sendTime,"
-                                "receiveTime,"
-                                "msgType,"
-                                "content,"
-                                "readStatus,"
-                                "sendStatus,"
-                                "msgLength,"
-                                "thumbnaiUrl,"
-                                "address,"
-                                "coordType,"
-                                "latitude,"
-                                "longitude,"
-                                "extra1,"
-                                "extra2,"
-                                "extra3,"
-                                "extra4,"
-                                "extra5,"
-                                "extra6"
-                            ") VALUES ("
-                                ":msgId,"
-                                ":imsgId,"
-                                ":targetId,"
-                                ":senderId,"
-                                ":senderNickName,"
-                                ":categoryId,"
-                                ":isFromMySelf,"
-                                ":sendTime,"
-                                ":receiveTime,"
-                                ":msgType,"
-                                ":content,"
-                                ":readStatus,"
-                                ":sendStatus,"
-                                ":msgLength,"
-                                ":thumbnaiUrl,"
-                                ":address,"
-                                ":coordType,"
-                                ":latitude,"
-                                ":longitude,"
-                                ":extra1,"
-                                ":extra2,"
-                                ":extra3,"
-                                ":extra4,"
-                                ":extra5,"
-                                ":extra6);")
-            .arg(tableName(targetId, type));
-
-    sqlQuery.prepare(sql);
-    sqlQuery.bindValue(":msgId", chatEntity.msgId);
-    sqlQuery.bindValue(":imsgId", chatEntity.imsgId);
-    sqlQuery.bindValue(":targetId", chatEntity.targetId);
-    sqlQuery.bindValue(":senderId", chatEntity.senderId);
-    sqlQuery.bindValue(":senderNickName", chatEntity.senderNickName);
-    sqlQuery.bindValue(":categoryId", chatEntity.categoryId);
-    sqlQuery.bindValue(":isFromMySelf", chatEntity.isFromMySelf);
-    sqlQuery.bindValue(":sendTime", chatEntity.sendTime);
-    sqlQuery.bindValue(":receiveTime", chatEntity.receivedTime);
-    sqlQuery.bindValue(":msgType", chatEntity.msgType);
-    sqlQuery.bindValue(":content", chatEntity.content);
-    sqlQuery.bindValue(":readStatus", chatEntity.readStatus);
-    sqlQuery.bindValue(":sendStatus", chatEntity.sendStatus);
-    sqlQuery.bindValue(":msgLength", chatEntity.msgLength);
-    sqlQuery.bindValue(":thumbnaiUrl", chatEntity.thumbnaiUrl);
-    sqlQuery.bindValue(":address", chatEntity.address);
-    sqlQuery.bindValue(":coordType", chatEntity.coordType);
-    sqlQuery.bindValue(":latitude", chatEntity.latitude);
-    sqlQuery.bindValue(":longitude", chatEntity.longitude);
-    sqlQuery.bindValue(":extra1", chatEntity.extra1);
-    sqlQuery.bindValue(":extra2", chatEntity.extra2);
-    sqlQuery.bindValue(":extra3", chatEntity.extra3);
-    sqlQuery.bindValue(":extra4", chatEntity.extra4);
-    sqlQuery.bindValue(":extra5", chatEntity.extra5);
-    sqlQuery.bindValue(":extra6", chatEntity.extra6);
-
-    if (!sqlQuery.exec())
+    if (checkChatExist(targetId, type, chatEntity.imsgId))
     {
-        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
-                QString("failed insert %1 with error(%2)")
-                        .arg(tableName(targetId, type))
-                        .arg(sqlQuery.lastError().text()));
-
-        return false;
+        // do nothing if exist
+        return true;
     }
+    else
+    {
+        UCSDBScoped scoped;
+        QSqlDatabase db = scoped.db();
+        QSqlQuery sqlQuery(db);
 
+        QString sql = QString("INSERT OR REPLACE INTO %1 ("
+                                    "msgId,"
+                                    "imsgId,"
+                                    "targetId,"
+                                    "senderId,"
+                                    "senderNickName,"
+                                    "categoryId,"
+                                    "isFromMySelf,"
+                                    "sendTime,"
+                                    "receiveTime,"
+                                    "msgType,"
+                                    "content,"
+                                    "readStatus,"
+                                    "sendStatus,"
+                                    "msgLength,"
+                                    "thumbnaiUrl,"
+                                    "address,"
+                                    "coordType,"
+                                    "latitude,"
+                                    "longitude,"
+                                    "extra1,"
+                                    "extra2,"
+                                    "extra3,"
+                                    "extra4,"
+                                    "extra5,"
+                                    "extra6"
+                                ") VALUES ("
+                                    ":msgId,"
+                                    ":imsgId,"
+                                    ":targetId,"
+                                    ":senderId,"
+                                    ":senderNickName,"
+                                    ":categoryId,"
+                                    ":isFromMySelf,"
+                                    ":sendTime,"
+                                    ":receiveTime,"
+                                    ":msgType,"
+                                    ":content,"
+                                    ":readStatus,"
+                                    ":sendStatus,"
+                                    ":msgLength,"
+                                    ":thumbnaiUrl,"
+                                    ":address,"
+                                    ":coordType,"
+                                    ":latitude,"
+                                    ":longitude,"
+                                    ":extra1,"
+                                    ":extra2,"
+                                    ":extra3,"
+                                    ":extra4,"
+                                    ":extra5,"
+                                    ":extra6);")
+                .arg(tableName(targetId, type));
+
+        sqlQuery.prepare(sql);
+        sqlQuery.bindValue(":msgId", chatEntity.msgId);
+        sqlQuery.bindValue(":imsgId", chatEntity.imsgId);
+        sqlQuery.bindValue(":targetId", chatEntity.targetId);
+        sqlQuery.bindValue(":senderId", chatEntity.senderId);
+        sqlQuery.bindValue(":senderNickName", chatEntity.senderNickName);
+        sqlQuery.bindValue(":categoryId", chatEntity.categoryId);
+        sqlQuery.bindValue(":isFromMySelf", chatEntity.isFromMySelf);
+        sqlQuery.bindValue(":sendTime", chatEntity.sendTime);
+        sqlQuery.bindValue(":receiveTime", chatEntity.receivedTime);
+        sqlQuery.bindValue(":msgType", chatEntity.msgType);
+        sqlQuery.bindValue(":content", chatEntity.content);
+        sqlQuery.bindValue(":readStatus", chatEntity.readStatus);
+        sqlQuery.bindValue(":sendStatus", chatEntity.sendStatus);
+        sqlQuery.bindValue(":msgLength", chatEntity.msgLength);
+        sqlQuery.bindValue(":thumbnaiUrl", chatEntity.thumbnaiUrl);
+        sqlQuery.bindValue(":address", chatEntity.address);
+        sqlQuery.bindValue(":coordType", chatEntity.coordType);
+        sqlQuery.bindValue(":latitude", chatEntity.latitude);
+        sqlQuery.bindValue(":longitude", chatEntity.longitude);
+        sqlQuery.bindValue(":extra1", chatEntity.extra1);
+        sqlQuery.bindValue(":extra2", chatEntity.extra2);
+        sqlQuery.bindValue(":extra3", chatEntity.extra3);
+        sqlQuery.bindValue(":extra4", chatEntity.extra4);
+        sqlQuery.bindValue(":extra5", chatEntity.extra5);
+        sqlQuery.bindValue(":extra6", chatEntity.extra6);
+
+        if (!sqlQuery.exec())
+        {
+            UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                    QString("failed insert %1 with error(%2)")
+                            .arg(tableName(targetId, type))
+                            .arg(sqlQuery.lastError().text()));
+
+            return false;
+        }
+    }
     return true;
 }
 
@@ -309,6 +316,82 @@ bool ChatDBManager::getChat(const QString targetId,
 
     sqlQuery.prepare(sql);
     sqlQuery.bindValue(":msgId", msgId);
+    if (!sqlQuery.exec())
+    {
+        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                QString("failed get target chat %1 with error(%2)")
+                        .arg(tableName(targetId, type))
+                        .arg(sqlQuery.lastError().text()));
+        return false;
+    }
+
+    if (sqlQuery.next())
+    {
+        query2Entity(&sqlQuery, &chatEntity);
+
+        QString loginTime = UCSIMHelper::readSettings(UCS_LOGIN_TIME_KEY).toString();
+        if (((UCSClock::TimeInMicroseconds() - chatEntity.sendTime.toLongLong() > 30) ||
+            (chatEntity.sendTime.toLongLong() < loginTime.toLongLong()) ) &&
+            (chatEntity.sendStatus.toInt() == SendStatus_sending))
+        {
+            chatEntity.sendStatus = QString::number(SendStatus_fail);
+        }
+    }
+
+    return true;
+}
+
+bool ChatDBManager::checkChatExist(const QString targetId,
+                                   const UCS_IM_ConversationType type,
+                                   const QString iMsgId)
+{
+    if (!checkAndCreateTable(targetId, type))
+    {
+        return false;
+    }
+
+    UCSDBScoped scoped;
+    QSqlDatabase db = scoped.db();
+    QSqlQuery sqlQuery(db);
+
+    QString sql = QString("SELECT * FROM %1 WHERE imsgId = :imsgId")
+                        .arg(tableName(targetId, type));
+
+    sqlQuery.prepare(sql);
+    sqlQuery.bindValue(":imsgId", iMsgId);
+    if (!sqlQuery.exec())
+    {
+        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                QString("failed get target chat %1 with error(%2)")
+                        .arg(tableName(targetId, type))
+                        .arg(sqlQuery.lastError().text()));
+        return false;
+    }
+
+    if (sqlQuery.next())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ChatDBManager::getNewestChat(const QString targetId, const UCS_IM_ConversationType type, ChatEntity &chatEntity)
+{
+    if (!checkAndCreateTable(targetId, type))
+    {
+        return false;
+    }
+
+    UCSDBScoped scoped;
+    QSqlDatabase db = scoped.db();
+    QSqlQuery sqlQuery(db);
+
+    QString sql = QString("SELECT * FROM %1 ORDER BY sendTime DESC LIMIT 1;")
+                        .arg(tableName(targetId, type));
+
+    sqlQuery.prepare(sql);
+
     if (!sqlQuery.exec())
     {
         UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,

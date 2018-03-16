@@ -1,9 +1,11 @@
 ﻿#ifndef UCSLOGGER_H
 #define UCSLOGGER_H
 
+#include <QFile>
 #include <QMutex>
 #include <QObject>
 #include <QSharedPointer>
+#include <QTextStream>
 #include "ucstcpsdk_global.h"
 
 #define UCS_LOG UCSLogger::Instance()->add
@@ -44,6 +46,7 @@ public:
     };
 
     static QSharedPointer<UCSLogger> &Instance();
+    virtual ~UCSLogger();
 
     void add(const UcsLogLevel level,
              const UcsLogModule module,
@@ -72,6 +75,7 @@ private:
     static QSharedPointer<UCSLogger> m_pInstance;
     static QMutex m_Mutex;
     quint32  m_levelFilter;
+    QFile *m_pFile;
 };
 
 #endif // UCSLOGGER_H

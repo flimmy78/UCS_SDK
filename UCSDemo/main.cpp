@@ -4,6 +4,7 @@
 #include <QTranslator>
 #include "singleApplication/qSingleApplication.h"
 #include <login/UCSLogin.h>
+#include "UPlusLogin.h"
 
 int main(int argc, char *argv[])
 {
@@ -44,11 +45,14 @@ int main(int argc, char *argv[])
         MainWindow mainWindow;
         app._wid = &mainWindow;
 
-        UCSLogin login;
-        if (login.exec() != QDialog::Accepted)
+//        UCSLogin login;
+        UPlusLogin *login = new UPlusLogin;
+        if (login->exec() != QDialog::Accepted)
         {
+            delete login;
             return 0;
         }
+        delete login;
 
         mainWindow.show();
         mainWindow.setGeometry((QApplication::desktop()->width() - mainWindow.width()) / 2,

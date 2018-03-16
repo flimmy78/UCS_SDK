@@ -3,6 +3,10 @@
     font-size: 9pt; 
 }
 
+QPushButton:focus {
+    padding: -1;
+}
+
 QWidget#NavigatorBar {
     background: rgb(32, 155, 152);
     width: 94;
@@ -41,6 +45,52 @@ QLabel#emptyBG {
     height: 100px;
     background: url(:/Resources/emptyBG.jpg) center no-repeat;
 }
+
+/* login css begin */
+QDialog#UPlusLogin {
+    background: white;
+    border: 1px solid lightgray;
+}
+QLineEdit#loginUserName, QLineEdit#loginPassword {
+    width: 200px;
+    height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    border: 1px solid gray;
+	border-radius:2px;
+}
+
+QLineEdit#loginUserName:hover, QLineEdit#loginPassword:hover {
+    border: 1px solid rgb(33, 157, 201);
+}
+
+QPushButton#btnLogin
+{
+	background-color: rgb(33, 157, 201);
+	border-radius:15px;
+    height: 40px;
+    width: 100px;
+    font-size: 11pt;
+    color: white;
+}
+
+QPushButton#btnLogin:hover
+{
+	background-color: rgb(33, 157, 201);
+}
+
+QPushButton#btnLogin:pressed
+{
+	padding-left: 3px;
+	padding-top: 3px;
+}
+
+QLabel#lblLoginTip
+{
+    height: 30px;
+}
+/* login css end */
 
 QToolTip {
     border: 1px solid rgb(111, 156, 207);

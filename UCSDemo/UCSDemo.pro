@@ -45,8 +45,8 @@ include(TopWidget/TopWidget.pri)
 #INCLUDEPATH += $$PWD ConferenceWidgets
 #include(ConferenceWidgets/ConferenceWidgets.pri)
 
-INCLUDEPATH += $$PWD RestManager
-include(RestManager/RestManager.pri)
+INCLUDEPATH += $$PWD Http
+include(Http/Http.pri)
 
 INCLUDEPATH += $$PWD Login
 include(Login/Login.pri)

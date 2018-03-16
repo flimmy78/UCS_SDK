@@ -7,7 +7,7 @@
 
 #define BUTTON_HEIGHT   30  ///< 按钮高度 >
 #define BUTTON_WIDTH    30  ///< 按钮宽度 >
-#define TITLE_HEIGHT    30  ///< 标题栏高度 >
+#define TITLE_HEIGHT    60  ///< 标题栏高度 >
 
 MyTitleBar::MyTitleBar(QWidget *parent)
     : BaseWidget(parent)

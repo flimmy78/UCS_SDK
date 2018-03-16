@@ -133,9 +133,9 @@ void UCSLogin::initConnections()
     connect(m_pBtnCodeReq, SIGNAL(clicked(bool)), SLOT(slot_onCodeReqClicked()));
     connect(m_pBtnLoginOn, SIGNAL(clicked(bool)), SLOT(slot_onLoginClicked()));
 
-    connect(&m_restManager, SIGNAL(sig_onAuthSuccessed(int)), SLOT(slot_onAuthSuccess(int)));
-    connect(&m_restManager, SIGNAL(sig_onLoginSuccessed(QString,QString)), SLOT(slot_onLoginSuccess(QString,QString)));
-    connect(&m_restManager, SIGNAL(sig_onFailed(UCSRestError)), SLOT(slot_onRestFailed(UCSRestError)));
+    connect(&m_restApi, SIGNAL(sig_onAuthSuccessed(int)), SLOT(slot_onAuthSuccess(int)));
+    connect(&m_restApi, SIGNAL(sig_onLoginSuccessed(QString,QString)), SLOT(slot_onLoginSuccess(QString,QString)));
+    connect(&m_restApi, SIGNAL(sig_onFailed(UCSRestError)), SLOT(slot_onRestFailed(UCSRestError)));
 }
 
 void UCSLogin::onLoginFailed()
@@ -242,7 +242,7 @@ void UCSLogin::slot_onCodeReqClicked()
         return;
     }
 
-    m_restManager.getAuthCode(username);
+    m_restApi.getAuthCode(username);
 }
 
 void UCSLogin::slot_onLoginClicked()
@@ -258,7 +258,7 @@ void UCSLogin::slot_onLoginClicked()
     m_pBtnLoginOn->setEnabled(false);
     m_pBtnLoginOn->setText(QStringLiteral("登录中..."));
 
-    m_restManager.login(m_pLineUserName->text(),
+    m_restApi.login(m_pLineUserName->text(),
                         m_pLineVerifyCode->text());
 }
 

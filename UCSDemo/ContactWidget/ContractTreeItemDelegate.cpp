@@ -12,7 +12,7 @@ ContractTreeItemDelegate::ContractTreeItemDelegate(QObject *parent)
 
 }
 
-void ContractTreeItemDelegate::setView(ContractsTreeView *treeView)
+void ContractTreeItemDelegate::setView(ContactsTreeView *treeView)
 {
     m_pTreeView = treeView;
 }

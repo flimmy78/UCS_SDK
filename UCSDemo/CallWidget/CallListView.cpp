@@ -69,12 +69,25 @@ void CallListView::contextMenuEvent(QContextMenuEvent *event)
 
         QMenu * pMenu = new QMenu(this);
 
-        QAction *pDelAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("删除"), pMenu);
-        QAction *pDialAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("拨打"), pMenu);
-        connect(pDelAct, SIGNAL(triggered()), this, SLOT(onDeleteItemAction()));
-        connect(pDialAct, SIGNAL(triggered()), this, SLOT(onDialItemAction()));
+        QAction *pDelAct = new QAction(QStringLiteral("删除"), pMenu);
+        QAction *pAudioCallAct = new QAction(QStringLiteral("网络电话"), pMenu);
+        QAction *pVideoCallAct = new QAction(QStringLiteral("视频"), pMenu);
+        QAction *pDirectCallAct = new QAction(QStringLiteral("高清电话"), pMenu);
+        QAction *pIMAct = new QAction(QStringLiteral("消息"), pMenu);
+        QAction *pMeetingAct = new QAction(QStringLiteral("电话会议"), pMenu);
 
-        pMenu->addAction(pDialAct);
+        connect(pDelAct, SIGNAL(triggered()), this, SLOT(onDeleteItemAction()));
+        connect(pAudioCallAct, SIGNAL(triggered()), this, SLOT(onAudioCallItemAction()));
+        connect(pVideoCallAct, SIGNAL(triggered()), this, SLOT(onVideoCallItemAction()));
+        connect(pDirectCallAct, SIGNAL(triggered()), this, SLOT(onDirectCallItemAction()));
+        connect(pIMAct, SIGNAL(triggered()), this, SLOT(onIMMsgItemAction()));
+        connect(pMeetingAct, SIGNAL(triggered()), SLOT(onMeetingItemAction()));
+
+        pMenu->addAction(pAudioCallAct);
+        pMenu->addAction(pVideoCallAct);
+        pMenu->addAction(pDirectCallAct);
+        pMenu->addAction(pIMAct);
+        pMenu->addAction(pMeetingAct);
         pMenu->addAction(pDelAct);
         pMenu->exec(QCursor::pos());
     }
@@ -95,13 +108,33 @@ void CallListView::onDeleteItemAction()
     }
 }
 
-void CallListView::onDialItemAction()
+void CallListView::onAudioCallItemAction()
 {
     QModelIndex index = indexAt(m_eventPos);
     if (index.isValid())
     {
         qDebug() << "onDialItemAction: " << index.data(Qt::UserRole + 1).toString();
     }
+}
+
+void CallListView::onVideoCallItemAction()
+{
+
+}
+
+void CallListView::onDirectCallItemAction()
+{
+
+}
+
+void CallListView::onIMMsgItemAction()
+{
+
+}
+
+void CallListView::onMeetingItemAction()
+{
+
 }
 
 void CallListView::onItemClicked(QModelIndex index)

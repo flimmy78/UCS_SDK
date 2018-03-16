@@ -22,6 +22,11 @@ public:
 
     void setProxyList(const QStringList &proxyList);
 
+    /*!
+     * \brief forceChangeProxy 连接成功，但登录失败，强制切换proxy
+     */
+    void forceChangeProxy();
+
     UcsTcpState state() const;
 
 protected:

@@ -1,5 +1,7 @@
 ﻿#include "mainwindow.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <myPushButton.h>
 #include <QDebug>
@@ -10,6 +12,7 @@
 #include "Interface/UCSTcpSDK.h"
 #include "Interface/UCSIMSDKPublic.h"
 #include "CommonHelper.h"
+#include "UPlusLogin.h"
 
 MainWindow *MainWindow::s_pMainWnd = NULL;
 
@@ -31,6 +34,25 @@ MainWindow::~MainWindow()
     UCSTcpClient::Instance()->unRegisterEventListener(kUCSLoginEvent, this);
 }
 
+bool MainWindow::doLogin()
+{
+    this->hide();
+
+    UPlusLogin login(this);
+    if (login.exec() == QDialog::Accepted)
+    {
+        this->setGeometry((QApplication::desktop()->width() - this->width()) / 2,
+                          (QApplication::desktop()->height() - this->height()) / 2,
+                         this->width(),
+                         this->height());
+        this->show();
+
+        return true;
+    }
+
+    return false;
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : BaseWindow(parent)
 {
@@ -38,6 +60,8 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint | windowFlags());
     setMinimumSize(964, 648);
     installEventFilter(this);
+
+    this->setObjectName("MainWindow");
 
     /* 加载布局 */
     initLayout();
@@ -87,6 +111,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::customEvent(QEvent *event)
 {
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("customEvent: %1").arg((int)event->type()));
+
     switch (event->type()) {
     case kUCSLoginEvent:
     {

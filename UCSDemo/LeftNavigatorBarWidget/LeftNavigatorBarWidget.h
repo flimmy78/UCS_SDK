@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QWidget>
 #include "absFiles/myPushButton.h"
-#include "UCSRestManager.h"
 #include "BaseWidget.h"
 
 class LeftNavigatorBarWidget : public BaseWidget
@@ -34,7 +33,6 @@ public:
 private:
     MyPushButton *m_pBtnInfo;    
     MyPushButton *m_pBtnSetting;
-    UCSRestManager m_restManager;
 };
 
 #endif // LEFTWIDGET_H

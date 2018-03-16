@@ -24,7 +24,7 @@ private:
 
 signals:
     void itemClicked(QString, quint32);
-    void itemDeleted();
+    void itemDeleted(QString, quint32);
 
 public slots:
     void onUpdateData();

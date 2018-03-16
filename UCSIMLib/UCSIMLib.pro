@@ -84,7 +84,7 @@ unix {
 }
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$DESTDIR -lUCSTcpSDK_
+win32:CONFIG(release, debug|release): LIBS += -L$$DESTDIR -lUCSTcpSDK
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$DESTDIR -lUCSTcpSDK_d
 
 INCLUDEPATH += $$PWD/../UCSTcpSDK

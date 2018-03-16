@@ -3,6 +3,9 @@
 #include <QFile>
 #include <QApplication>
 #include <QDateTime>
+#include <QStandardPaths>
+#include <QSettings>
+#include <QDir>
 
 CommonHelper::CommonHelper()
 {
@@ -73,4 +76,103 @@ QString CommonHelper::timeToString(qint64 time, QString format)
 {
     QDateTime dateTime;
     return dateTime.fromTime_t(time).toString(format);
+}
+
+QString CommonHelper::tempDir()
+{
+    QString appName =  QCoreApplication::applicationName();
+    QString sysTempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    QString myTempPath = sysTempPath + "/" + appName;
+
+    QDir dir(myTempPath);
+    if (!dir.exists())
+    {
+        dir.mkpath(myTempPath);
+    }
+
+    return myTempPath;
+}
+
+QString CommonHelper::userTempPath()
+{
+    QString userId = readSetting("Login", "userId", "").toString();
+    if (userId.isEmpty())
+    {
+        return QString("");
+    }
+
+    QString tempPath = tempDir() + "/" + userId;
+    QDir dir(tempPath);
+    if (!dir.exists())
+    {
+        dir.mkpath(tempPath);
+    }
+
+    return tempPath;
+}
+
+QString CommonHelper::dataDir()
+{
+    QString dataPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+
+    QDir dir(dataPath);
+    if (!dir.exists())
+    {
+        dir.mkpath(dataPath);
+    }
+
+    return dataPath;
+}
+
+QString CommonHelper::userDataPath()
+{
+    QString userId = readSetting("Login", "userId", "").toString();
+    if (userId.isEmpty())
+    {
+        return QString();
+    }
+    QString dataPath = dataDir() + "/" + userId;
+    QDir dir(dataPath);
+    if (!dir.exists())
+    {
+        dir.mkpath(dataPath);
+    }
+
+    return dataPath;
+}
+
+void CommonHelper::saveSetting(const QString &group, const QString &key, const QVariant &value)
+{
+    QString iniName = QCoreApplication::applicationName() + ".ini";
+    QSettings settings(dataDir() + "/" + iniName, QSettings::IniFormat);
+    if (!group.isEmpty())
+    {
+        settings.beginGroup(group);
+    }
+
+    settings.setValue(key, value);
+
+    if (!group.isEmpty())
+    {
+        settings.endGroup();
+    }
+}
+
+QVariant CommonHelper::readSetting(const QString &group, const QString &key, const QVariant &defaultVal)
+{
+    QString iniName = QCoreApplication::applicationName() + ".ini";
+    QSettings settings(dataDir() + "/" + iniName, QSettings::IniFormat);
+    if (!group.isEmpty())
+    {
+        settings.beginGroup(group);
+    }
+
+    QVariant value = settings.value(key, defaultVal);
+
+    if (!group.isEmpty())
+    {
+        settings.endGroup();
+    }
+
+    return value;
 }

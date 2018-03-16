@@ -1,14 +1,14 @@
-﻿#include "UCSRestManager.h"
+﻿#include "UCSRestApi.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QDebug>
 
-UCSRestManager::UCSRestManager()
+UCSRestApi::UCSRestApi()
 {
     m_baseUrl = "http://imactivity.ucpaas.com/ottdemoapi/";
 }
 
-void UCSRestManager::getAuthCode(QString phone)
+void UCSRestApi::getAuthCode(QString phone)
 {
     /* 构造Url */
 //    QUrl url("http://imactivity.ucpaas.com/ottdemoapi/getAuthcode.do");
@@ -38,7 +38,7 @@ void UCSRestManager::getAuthCode(QString phone)
     manager->post(request, dataArray);
 }
 
-void UCSRestManager::login(QString phone, QString code)
+void UCSRestApi::login(QString phone, QString code)
 {
     QUrl url(m_baseUrl + "login.do");
 
@@ -67,7 +67,7 @@ void UCSRestManager::login(QString phone, QString code)
     manager->post(request, dataArray);
 }
 
-void UCSRestManager::getNickName(QString phone)
+void UCSRestApi::getNickName(QString phone)
 {
     QUrl url(m_baseUrl + "getNickname.do");
 
@@ -93,7 +93,7 @@ void UCSRestManager::getNickName(QString phone)
     manager->post(request, dataArray);
 }
 
-QString UCSRestManager::errorString(UCSRestError error) const
+QString UCSRestApi::errorString(UCSRestError error) const
 {
     switch (error) {
     case NoError:
@@ -147,7 +147,7 @@ QString UCSRestManager::errorString(UCSRestError error) const
     }
 }
 
-void UCSRestManager::slot_onAuthReply(QNetworkReply *reply)
+void UCSRestApi::slot_onAuthReply(QNetworkReply *reply)
 {
     QVariant variant = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     if (variant.isValid() && variant.toInt() != 200)
@@ -205,7 +205,7 @@ void UCSRestManager::slot_onAuthReply(QNetworkReply *reply)
     }
 }
 
-void UCSRestManager::slot_onLoginReply(QNetworkReply *reply)
+void UCSRestApi::slot_onLoginReply(QNetworkReply *reply)
 {
     QVariant variant = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     if (variant.isValid() && variant.toInt() != 200)
@@ -260,7 +260,7 @@ void UCSRestManager::slot_onLoginReply(QNetworkReply *reply)
     }
 }
 
-void UCSRestManager::slot_onGetNickName(QNetworkReply *reply)
+void UCSRestApi::slot_onGetNickName(QNetworkReply *reply)
 {
     QVariant variant = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     if (variant.isValid() && variant.toInt() != 200)

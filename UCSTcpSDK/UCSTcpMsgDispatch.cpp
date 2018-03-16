@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QtEndian>
 #include <QCoreApplication>
+#include <QDataStream>
 #include "UCSIMStack/ProxyProtocol.h"
 #include "Common/UCSLogger.h"
 #include "UCSEvent.h"
@@ -32,7 +33,35 @@ UCSTcpMsgDispatch::~UCSTcpMsgDispatch()
 void UCSTcpMsgDispatch::receivedPacket(QByteArray dataArray)
 {
     QMutexLocker locker(&m_Mutex);
-    m_packetsVec.append(dataArray);
+//    m_packetsVec.append(dataArray);
+
+    m_buffer.append(dataArray);
+
+    quint32 totalLen = m_buffer.size();
+    while (totalLen)
+    {
+//        QDataStream packet(m_buffer);
+//        packet.setByteOrder(QDataStream::BigEndian);
+
+        if (totalLen < TCP_FRAME_HEADER_LEN)
+        {
+            break;
+        }
+
+        TcpFrameHeader header;
+        parseMsgHeader(m_buffer, &header);
+        if ( totalLen < header.packetLen)
+        {
+            break;
+        }
+
+        QByteArray packet = m_buffer.left(header.packetLen);
+        m_packetsVec.append(packet);
+
+        QByteArray remaining = m_buffer.right(totalLen - header.packetLen);
+        totalLen = remaining.size();
+        m_buffer = remaining;
+    }
 }
 
 void UCSTcpMsgDispatch::parseMsgHeader(QByteArray dataArray, TcpFrameHeader *pHeader)
@@ -47,9 +76,6 @@ void UCSTcpMsgDispatch::parseMsgHeader(QByteArray dataArray, TcpFrameHeader *pHe
     pHeader->protocolVer = qFromBigEndian(pHeader->protocolVer);
     pHeader->cmd = qFromBigEndian(pHeader->cmd);
     pHeader->seq = qFromBigEndian(pHeader->seq);
-
-    UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kMsgDispatch,
-            QString(QStringLiteral("收到数据 cmd: %1")).arg(pHeader->cmd));
 }
 
 void UCSTcpMsgDispatch::slot_msgDispatch()
@@ -74,13 +100,18 @@ void UCSTcpMsgDispatch::slot_msgDispatch()
                 TcpFrameHeader header;
 
                 parseMsgHeader(dataArray, &header);
+                UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kMsgDispatch,
+                        QString(QStringLiteral("收到数据 cmd: %1")).arg(header.cmd));
 
                 emit sig_postMessage(header.cmd, dataArray);
 
                 m_packetsVec.erase(m_packetsVec.begin());
             }
         }
-        QThread::msleep(20);
+        else
+        {
+            QThread::msleep(10);
+        }
     }
 
     emit sig_finished();

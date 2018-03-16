@@ -23,7 +23,12 @@ signals:
 
 public slots:
     void onDeleteItemAction();
-    void onDialItemAction();
+    void onAudioCallItemAction();
+    void onVideoCallItemAction();
+    void onDirectCallItemAction();
+    void onIMMsgItemAction();
+    void onMeetingItemAction();
+
     void onItemClicked(QModelIndex index);
 
 private:

@@ -84,7 +84,7 @@ public:
      * \brief getChat 查询指定的一条消息
      * \param targetId
      * \param type
-     * \param msgId
+     * \param msgId 本地生成维护的消息唯一标识
      * \param chatEntity 查询到的聊天消息实体
      * \return true for success, else false
      */
@@ -92,6 +92,28 @@ public:
                  const UCS_IM_ConversationType type,
                  const QString msgId,
                  ChatEntity &chatEntity);
+
+    /*!
+     * \brief checkChatExist 查询指定的一条接收消息是否存在
+     * \param targetId
+     * \param type
+     * \param iMsgId 服务端生成维护的消息唯一标识
+     * \return true for success, else false
+     */
+    bool checkChatExist(const QString targetId,
+                 const UCS_IM_ConversationType type,
+                 const QString iMsgId);
+
+    /*!
+     * \brief getNewestChat 查询指定会话最近一条消息
+     * \param targetId
+     * \param type
+     * \param chatEntity
+     * \return true for success, else false
+     */
+    bool getNewestChat(const QString targetId,
+                       const UCS_IM_ConversationType type,
+                       ChatEntity &chatEntity);
 
     /*!
      * \brief getChats 获取指定会话的@count条聊天消息

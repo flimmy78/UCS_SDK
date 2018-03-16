@@ -9,30 +9,44 @@
 #include <QWebEnginePage>
 #include "Interface/UCSIMSDKPublic.h"
 #include "Interface/UCSLogger.h"
+#include "WebBridge.h"
 
 IMChatWidget::IMChatWidget(QWidget *parent)
     : BaseWidget(parent)
     , m_txtSending(this)
     , m_btnSend(this)
+    , m_pWebChannel(Q_NULLPTR)
 {
     setMouseTracking(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setObjectName("IMChatWidget");
 
+    m_chatsMap.clear();
+    m_msgIdList.clear();
+
     initLayout();
     initTBtnMenu();
     initConnections();
     readSetting();
+
+    initMisc();
 }
 
 IMChatWidget::~IMChatWidget()
 {
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            "~dtor()");
 
+    m_chatsMap.clear();
+
+    m_msgIdList.clear();
 }
 
 void IMChatWidget::doSyncMessages(QMap<QString, qint32> messageCount)
 {
-    if (!m_conversationId.isEmpty())
+    createChat();
+
+    if (m_conversationId.isEmpty())
     {
         return;
     }
@@ -43,15 +57,23 @@ void IMChatWidget::doSyncMessages(QMap<QString, qint32> messageCount)
         return;
     }
 
-    QList<UCSMessage*> messageList;
-    messageList = UCSIMClient::Instance()->getLatestMessages((UCS_IM_ConversationType)m_conversationType, m_conversationId, count);
-
+    showMessages(count);
 }
 
 void IMChatWidget::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
 
+}
+
+void IMChatWidget::initMisc()
+{
+    if (m_pWebChannel == Q_NULLPTR)
+    {
+        m_pWebChannel = new QWebChannel(this);
+        WebBridge *bridge = new WebBridge(this, this);
+        m_pWebChannel->registerObject(QStringLiteral("bridge"), (QObject*)bridge);
+    }
 }
 
 void IMChatWidget::initLayout()
@@ -81,8 +103,8 @@ void IMChatWidget::initLayout()
     m_btnSend.setText(QStringLiteral("发送"));
     m_btnSend.setFixedSize(65, 30);
 
-    m_pChatWebView = new ChatWebView(this);
-    pMainLayout->addWidget(m_pChatWebView);
+    m_pStackedLayout = new QStackedLayout;
+    pMainLayout->addLayout(m_pStackedLayout);
 
     pMainLayout->addLayout(pToolsLayout);
     pMainLayout->addWidget(&m_txtSending);
@@ -140,13 +162,98 @@ void IMChatWidget::readSetting()
     m_txtSending.setSendingMode((CustomSendingMode)sendingMode);
 }
 
+void IMChatWidget::createChat()
+{
+    QList<UCSConversation*> conversationList =  UCSIMClient::Instance()->getConversationList(allChat);
+    foreach (UCSConversation *conversation, conversationList)
+    {
+        QString conversationId = conversation->targetId();
+        if (m_chatsMap.contains(conversationId))
+        {
+            continue;
+        }
+        else
+        {
+            ChatWebView *webView = new ChatWebView(this);
+            webView->page()->setWebChannel(m_pWebChannel);
+            m_pStackedLayout->addWidget(webView);
+            m_chatsMap.insert(conversationId, webView);
+        }
+    }
+}
+
+void IMChatWidget::changeChat()
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(), "changeChat");
+    if (m_chatsMap.contains(m_conversationId))
+    {
+        ChatWebView *webView = m_chatsMap[m_conversationId];
+        int index = m_pStackedLayout->indexOf(webView);
+        m_pStackedLayout->setCurrentIndex(index);
+
+        showMessages();
+        return;
+    }
+
+#if 0
+    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(), "changeChat before");
+    ChatWebView *webView = new ChatWebView(this);
+    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(), "changeChat after");
+    webView->page()->setWebChannel(m_pWebChannel);
+
+    connect(webView, SIGNAL(sigLoadFinished()), this, SLOT(onLoadFinished()));
+
+    m_pStackedLayout->addWidget(webView);
+
+    // Assume that the last added widget index equal to count() - 1
+    m_pStackedLayout->setCurrentIndex(m_pStackedLayout->count() - 1);
+
+    m_chatsMap.insert(m_conversationId, webView);
+#endif
+}
+
+void IMChatWidget::showMessages(int count)
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(), "showMessages");
+    if (m_conversationId.isEmpty())
+    {
+        return;
+    }
+
+    ChatWebView *webView = m_chatsMap[m_conversationId];
+    if (webView == Q_NULLPTR || !webView->isLoadFinished())
+    {
+        return;
+    }
+
+    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(), "showMessages");
+    QList<UCSMessage*> messageList;
+    messageList = UCSIMClient::Instance()->getLatestMessages((UCS_IM_ConversationType)m_conversationType, m_conversationId, count);
+    int msgCount = messageList.size();
+    for (int i = msgCount - 1; i >= 0; i--)
+    {
+        UCSMessage *message = messageList.at(i);
+        // avoid repeat
+        if (m_msgIdList.contains(message->messageId))
+        {
+            continue;
+        }
+        m_msgIdList.append(message->messageId);
+
+        ChatMsgModel model = MsgConvert::convert2Model(message);
+
+        webView->msgShow(model);
+    }
+
+    qDeleteAll(messageList);
+    messageList.clear();
+}
+
 void IMChatWidget::onChangeConversation(QString targetId, quint32 type)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
             QString("onChangeConversation targetId: %1 type: %2")
             .arg(targetId).arg(type));
-
-    m_pChatWebView->clearContent();
 
     m_conversationId = targetId;
     m_conversationType = type;
@@ -156,29 +263,18 @@ void IMChatWidget::onChangeConversation(QString targetId, quint32 type)
         return;
     }
 
-    QList<UCSMessage*> messageList;
-    messageList = UCSIMClient::Instance()->getLatestMessages((UCS_IM_ConversationType)m_conversationType, m_conversationId, 20);
-//    foreach (UCSMessage *message, messageList)
-    int msgCount = messageList.size();
-    for (int i = msgCount - 1; i >= 0; i--)
-    {
-        UCSMessage *message = messageList.at(i);
-        ChatMsgModel model = MsgConvert::convert2Model(message);
-        if (model.isSender)
-        {
-            m_pChatWebView->sendMsgShow(model);
-        }
-        else
-        {
-            m_pChatWebView->recvMsgShow(model);
-        }
-    }
-
+    changeChat();
+    showMessages();
 }
 
-void IMChatWidget::onConversationDeleted()
+void IMChatWidget::onConversationDeleted(QString targetId, quint32 type)
 {
-
+    if (m_chatsMap.contains(targetId))
+    {
+        ChatWebView *webView = m_chatsMap.take(targetId);
+        m_pStackedLayout->removeWidget(webView);
+        webView->deleteLater();
+    }
 }
 
 void IMChatWidget::onSendingMsg()
@@ -195,23 +291,10 @@ void IMChatWidget::onSendingMsg()
 
         UCSIMClient::Instance()->sendMessage(&message);
 
-
-//        QString html = QString("appendMyMessage(%1, %2);scrollBottom();")
-//                            .arg("'haha'")
-//                            .arg("'fafsdfasdfa'");
-//        m_pWebView->page()->runJavaScript(html);
-
-//        QString MyHead = QString("<img src=qrc:/images/u1183.png width='30px' heigth='30px'/>");
-//        QString html = QString("document.getElementById(\"content\").insertAdjacentHTML(\"beforeEnd\",\"<div style='overflow:hidden;'><p class='divotherHead'>%1 </p><p class='triangle-left left'>%2</p></div>\")")
-//                                .arg(MyHead)
-//                                .arg(m_txtSending.toPlainText().replace("\n", "</br>"));
-//        m_pWebView->page()->runJavaScript(html);
-//        m_pChatWebView->page()->runJavaScript(html);
-
-        ChatMsgModel msg;
-        msg.content = m_txtSending.toPlainText();
-        m_pChatWebView->sendMsgShow(msg);
-        m_pChatWebView->recvMsgShow(msg);
+        ChatMsgModel msg = MsgConvert::convert2Model(&message);
+//        m_pChatWebView->sendMsgShow(msg);
+        ChatWebView *webView = m_chatsMap[m_conversationId];
+        webView->msgShow(msg);
 
         m_txtSending.clear();
         emit sendingNewMsg();
@@ -231,4 +314,17 @@ void IMChatWidget::onUpdateSendAction(QAction *pAction)
     }
 
     saveSetting();
+}
+
+void IMChatWidget::urlChanged(const QUrl &url)
+{
+    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
+            "urlChanged: url = " + url.url());
+}
+
+void IMChatWidget::onLoadFinished()
+{
+    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
+            "onLoadFinished");
+    showMessages();
 }

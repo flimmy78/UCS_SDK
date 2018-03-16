@@ -3,6 +3,8 @@
 #include <QThread>
 #include <QDateTime>
 #include <QDebug>
+#include <QFile>
+#include <QCoreApplication>
 
 QMutex UCSLogger::m_Mutex;
 QSharedPointer<UCSLogger> UCSLogger::m_pInstance = Q_NULLPTR;
@@ -14,6 +16,9 @@ UCSLogger::UCSLogger(QObject *parent) : QObject(parent)
 #else
     m_levelFilter = kTraceDefault | kTraceDebug;
 #endif
+
+    m_pFile = new QFile(QCoreApplication::applicationDirPath() + "/log.txt");
+    m_pFile->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
 }
 
 QString UCSLogger::addLevel(UCSLogger::UcsLogLevel level)
@@ -103,6 +108,14 @@ QSharedPointer<UCSLogger> &UCSLogger::Instance()
     return m_pInstance;
 }
 
+UCSLogger::~UCSLogger()
+{
+    if (m_pFile)
+    {
+        m_pFile->close();
+    }
+}
+
 void UCSLogger::add(const UcsLogLevel level,
                     const UcsLogModule module,
                     const QString &msg)
@@ -120,6 +133,13 @@ void UCSLogger::add(const UcsLogLevel level,
             .arg(msg);
 
     qInfo() << strMessage;
+
+    if (m_pFile)
+    {
+        strMessage.append("\n");
+        m_pFile->write(strMessage.toLocal8Bit());
+        m_pFile->flush();
+    }
 }
 
 void UCSLogger::add(const UCSLogger::UcsLogLevel level,
@@ -154,6 +174,13 @@ void UCSLogger::add(const UCSLogger::UcsLogLevel level,
             .arg(msg);
 
     qInfo() << strMessage;
+
+    if (m_pFile)
+    {
+        strMessage.append("\n");
+        m_pFile->write(strMessage.toLocal8Bit());
+        m_pFile->flush();
+    }
 }
 
 quint32 UCSLogger::levelFilter() const

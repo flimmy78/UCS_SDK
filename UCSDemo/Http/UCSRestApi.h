@@ -1,5 +1,5 @@
-﻿#ifndef UCSRESTMANAGER_H
-#define UCSRESTMANAGER_H
+﻿#ifndef UCSRESTAPI_H
+#define UCSRESTAPI_H
 
 #include <QObject>
 #include <QUrl>
@@ -29,12 +29,12 @@ enum UCSRestError
     UnknownError = 2099
 };
 
-class UCSRestManager : public QObject
+class UCSRestApi : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit UCSRestManager();
+    explicit UCSRestApi();
 
     /* 根据手机号码获取验证码 */
     void getAuthCode(QString phone);
@@ -64,4 +64,4 @@ private:
     QString m_baseUrl;
 };
 
-#endif // UCSRESTMANAGER_H
+#endif // UCSRESTAPI_H

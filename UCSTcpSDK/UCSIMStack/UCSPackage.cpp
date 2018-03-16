@@ -7,6 +7,8 @@
 #include "Common/UCSLogger.h"
 #include "package.h"
 
+#define TAG "UCSPackage"
+
 quint32 UCSPackage::m_iUin = 0;
 QString UCSPackage::m_sessionKey = "";
 QString UCSPackage::m_userName = "";
@@ -14,6 +16,446 @@ quint32 UCSPackage::m_seq = 0;
 
 UCSPackage::UCSPackage()
 {
+}
+
+QString UCSPackage::cmdName(quint32 cmd)
+{
+    switch (cmd) {
+    case ProxyProtocol::RESP_NONE:
+    return QString("RESP_NONE");
+
+    case ProxyProtocol::REQ_AUTH:
+    return QString("REQ_AUTH");
+
+    case ProxyProtocol::RESP_AUTH:
+    return QString("RESP_AUTH");
+
+    case ProxyProtocol::REQ_REAUTH:
+    return QString("REQ_REAUTH");
+
+    case ProxyProtocol::RESP_REAUTH:
+    return QString("RESP_REAUTH");
+
+    case ProxyProtocol::VOIP_CALL_MSG:
+    return QString("VOIP_CALL_MSG");
+
+    case ProxyProtocol::VOIP_CONF_MSG:
+    return QString("VOIP_CONF_MSG");
+
+    case ProxyProtocol::VOIP_CSRV_MSG:
+    return QString("VOIP_CSRV_MSG");
+
+    case ProxyProtocol::REQ_SEND_MSG:
+    return QString("REQ_SEND_MSG");
+
+    case ProxyProtocol::RESP_SEND_MSG:
+    return QString("RESP_SEND_MSG");
+
+    case ProxyProtocol::REQ_NEW_SYNC:
+    return QString("REQ_NEW_SYNC");
+
+    case ProxyProtocol::RESP_NEW_SYNC:
+    return QString("RESP_NEW_SYNC");
+
+    case ProxyProtocol::REQ_NEW_NOTIFY:
+    return QString("REQ_NEW_NOTIFY");
+
+    case ProxyProtocol::REQ_NEW_SYNCCHK:
+    return QString("REQ_NEW_SYNCCHK");
+
+    case ProxyProtocol::RESP_NEW_SYNCCHK:
+    return QString("RESP_NEW_SYNCCHK");
+
+    case ProxyProtocol::REQ_UPLOAD_VOICE:
+    return QString("REQ_UPLOAD_VOICE");
+
+    case ProxyProtocol::RESP_UPLOAD_VOICE:
+    return QString("RESP_UPLOAD_VOICE");
+
+    case ProxyProtocol::REQ_DOWNLOAD_VOICE:
+    return QString("REQ_DOWNLOAD_VOICE");
+
+    case ProxyProtocol::RESP_DOWNLOAD_VOICE:
+    return QString("RESP_DOWNLOAD_VOICE");
+
+    case ProxyProtocol::REQ_UPLOAD_MSGIMG:
+    return QString("REQ_UPLOAD_MSGIMG");
+
+    case ProxyProtocol::RESP_UPLOAD_MSGIMG:
+    return QString("RESP_UPLOAD_MSGIMG");
+
+    case ProxyProtocol::REQ_DOWNLOAD_MSGIMG:
+    return QString("REQ_DOWNLOAD_MSGIMG");
+
+    case ProxyProtocol::RESP_DOWNLOAD_MSGIMG:
+    return QString("RESP_DOWNLOAD_MSGIMG");
+
+    case ProxyProtocol::REQ_UPLOAD_VIDEO:
+    return QString("REQ_UPLOAD_VIDEO");
+
+    case ProxyProtocol::RESP_UPLOAD_VIDEO:
+    return QString("RESP_UPLOAD_VIDEO");
+
+    case ProxyProtocol::REQ_DOWNLOAD_VIDEO:
+    return QString("REQ_DOWNLOAD_VIDEO");
+
+    case ProxyProtocol::RESP_DOWNLOAD_VIDEO:
+    return QString("RESP_DOWNLOAD_VIDEO");
+
+    case ProxyProtocol::REQ_CREATE_GROUP:
+    return QString("REQ_CREATE_GROUP");
+
+    case ProxyProtocol::RESP_CREATE_GROUP:
+    return QString("RESP_CREATE_GROUP");
+
+    case ProxyProtocol::REQ_ADD_GROUP_MEMBER:
+    return QString("REQ_ADD_GROUP_MEMBER");
+
+    case ProxyProtocol::RESP_ADD_GROUP_MEMBER:
+    return QString("RESP_ADD_GROUP_MEMBER");
+
+    case ProxyProtocol::REQ_DEL_GROUP_MEMBER:
+    return QString("REQ_DEL_GROUP_MEMBER");
+
+    case ProxyProtocol::RESP_DEL_GROUP_MEMBER:
+    return QString("RESP_DEL_GROUP_MEMBER");
+
+    case ProxyProtocol::REQ_QUIT_GROUP:
+    return QString("REQ_QUIT_GROUP");
+
+    case ProxyProtocol::RESP_QUIT_GROUP:
+    return QString("RESP_QUIT_GROUP");
+
+    case ProxyProtocol::REQ_SEND_LOCATION:
+    return QString("REQ_SEND_LOCATION");
+
+    case ProxyProtocol::RESP_SEND_LOCATION:
+    return QString("RESP_SEND_LOCATION");
+
+    case ProxyProtocol::REQ_SEND_CUSTOMMSG:
+    return QString("REQ_SEND_CUSTOMMSG");
+
+    case ProxyProtocol::RESP_SEND_CUSTOMMSG:
+    return QString("RESP_SEND_CUSTOMMSG");
+
+    case ProxyProtocol::REQ_REG:
+    return QString("REQ_REG");
+
+    case ProxyProtocol::RESP_REG:
+    return QString("RESP_REG");
+
+    case ProxyProtocol::REQ_INIT:
+    return QString("REQ_INIT");
+
+    case ProxyProtocol::RESP_INIT:
+    return QString("RESP_INIT");
+
+    case ProxyProtocol::REQ_SYNC_FRIEND:
+    return QString("REQ_SYNC_FRIEND");
+
+    case ProxyProtocol::RESP_SYNC_FRIEND:
+    return QString("RESP_SYNC_FRIEND");
+
+    case ProxyProtocol::REQ_USERINFOSET:
+    return QString("REQ_USERINFOSET");
+
+    case ProxyProtocol::RESP_USERINFOSET:
+    return QString("RESP_USERINFOSET");
+
+    case ProxyProtocol::REQ_GETPROFILE:
+    return QString("REQ_GETPROFILE");
+
+    case ProxyProtocol::RESP_GETPROFILE:
+    return QString("RESP_GETPROFILE");
+
+    case ProxyProtocol::REQ_SEARCH_CONTACT:
+    return QString("REQ_SEARCH_CONTACT");
+
+    case ProxyProtocol::RESP_SEARCH_CONTACT:
+    return QString("RESP_SEARCH_CONTACT");
+
+    case ProxyProtocol::REQ_VERIFY_USER:
+    return QString("REQ_VERIFY_USER");
+
+    case ProxyProtocol::RESP_VERIFY_USER:
+    return QString("RESP_VERIFY_USER");
+
+    case ProxyProtocol::REQ_GET_CONTACT:
+    return QString("REQ_GET_CONTACT");
+
+    case ProxyProtocol::RESP_GET_CONTACT:
+    return QString("RESP_GET_CONTACT");
+
+    case ProxyProtocol::REQ_UPLOAD_HEAD_HDIMG:
+    return QString("REQ_UPLOAD_HEAD_HDIMG");
+
+    case ProxyProtocol::RESP_UPLOAD_HEAD_HDIMG:
+    return QString("RESP_UPLOAD_HEAD_HDIMG");
+
+    case ProxyProtocol::REQ_GET_HEAD_HDIMG:
+    return QString("REQ_GET_HEAD_HDIMG");
+
+    case ProxyProtocol::RESP_GET_HEAD_HDIMG:
+    return QString("RESP_GET_HEAD_HDIMG");
+
+    case ProxyProtocol::REQ_GET_HEAD_IMG:
+    return QString("REQ_GET_HEAD_IMG");
+
+    case ProxyProtocol::RESP_GET_HEAD_IMG:
+    return QString("RESP_GET_HEAD_IMG");
+
+    case ProxyProtocol::REQ_UPLOAD_EMOJI:
+    return QString("REQ_UPLOAD_EMOJI");
+
+    case ProxyProtocol::RESP_UPLOAD_EMOJI:
+    return QString("RESP_UPLOAD_EMOJI");
+
+    case ProxyProtocol::REQ_DOWNLOAD_EMOJI:
+    return QString("REQ_DOWNLOAD_EMOJI");
+
+    case ProxyProtocol::RESP_DOWNLOAD_EMOJI:
+    return QString("RESP_DOWNLOAD_EMOJI");
+
+    case ProxyProtocol::REQ_UPLOADCOVERIMG:
+    return QString("RESP_UPLOADCOVERIMG");
+
+    case ProxyProtocol::RESP_UPLOADCOVERIMG:
+    return QString("RESP_UPLOADCOVERIMG");
+
+    case ProxyProtocol::REQ_GETCOVERIMG:
+    return QString("REQ_GETCOVERIMG");
+
+    case ProxyProtocol::RESP_GETCOVERIMG:
+    return QString("RESP_GETCOVERIMG");
+
+    case ProxyProtocol::REQ_LBSFIND:
+    return QString("REQ_LBSFIND");
+
+    case ProxyProtocol::RESP_LBSFIND:
+    return QString("RESP_LBSFIND");
+
+    case ProxyProtocol::REQ_GETLOCATION:
+    return QString("REQ_GETLOCATION");
+
+    case ProxyProtocol::RESP_GETLOCATION:
+    return QString("RESP_GETLOCATION");
+
+    case ProxyProtocol::REQ_LBSMATCH:
+    return QString("REQ_LBSMATCH");
+
+    case ProxyProtocol::RESP_LBSMATCH:
+    return QString("RESP_LBSMATCH");
+
+    case ProxyProtocol::REQ_SYNCLBSMATCH:
+    return QString("REQ_SYNCLBSMATCH");
+
+    case ProxyProtocol::RESP_SYNCLBSMATCH:
+    return QString("RESP_SYNCLBSMATCH");
+
+    case ProxyProtocol::REQ_MOBILE_OPT:
+    return QString("REQ_MOBILE_OPT");
+
+    case ProxyProtocol::RESP_MOBILE_OPT:
+    return QString("RESP_MOBILE_OPT");
+
+    case ProxyProtocol::REQ_EMAIL_OPT:
+    return QString("REQ_EMAIL_OPT");
+
+    case ProxyProtocol::RESP_EMAIL_OPT:
+    return QString("RESP_EMAIL_OPT");
+
+    case ProxyProtocol::REQ_UPLOAD_PLUGFRIENDS:
+    return QString("REQ_UPLOAD_PLUGFRIENDS");
+
+    case ProxyProtocol::RESP_UPLOAD_PLUGFRIENDS:
+    return QString("RESP_UPLOAD_PLUGFRIENDS");
+
+    case ProxyProtocol::REQ_PUSHSETTING:
+    return QString("REQ_PUSHSETTING");
+
+    case ProxyProtocol::RESP_PUSHSETTING:
+    return QString("RESP_PUSHSETTING");
+
+    case ProxyProtocol::REQ_MODUSERNAME:
+    return QString("REQ_MODUSERNAME");
+
+    case ProxyProtocol::RESP_MODUSERNAME:
+    return QString("RESP_MODUSERNAME");
+
+    case ProxyProtocol::REQ_MODPWD:
+    return QString("REQ_MODPWD");
+
+    case ProxyProtocol::RESP_MODPWD:
+    return QString("RESP_MODPWD");
+
+    case ProxyProtocol::REQ_MODPWD_BYMOBILE:
+    return QString("REQ_MODPWD_BYMOBILE");
+
+    case ProxyProtocol::RESP_MODPWD_BYMOBILE:
+    return QString("RESP_MODPWD_BYMOBILE");
+
+    case ProxyProtocol::REQ_GET_DNS:
+    return QString("REQ_GET_DNS");
+
+    case ProxyProtocol::RESP_GET_DNS:
+    return QString("RESP_GET_DNS");
+
+    case ProxyProtocol::REQ_CREATE_CHATROOM:
+    return QString("REQ_CREATE_CHATROOM");
+
+    case ProxyProtocol::RESP_CREATE_CHATROOM:
+    return QString("RESP_CREATE_CHATROOM");
+
+    case ProxyProtocol::REQ_ADD_CHATROOM_MEMBER:
+    return QString("REQ_ADD_CHATROOM_MEMBER");
+
+    case ProxyProtocol::RESP_ADD_CHATROOM_MEMBER:
+    return QString("RESP_ADD_CHATROOM_MEMBER");
+
+    case ProxyProtocol::REQ_DEL_CHATROOM_MEMBER	:
+    return QString("REQ_DEL_CHATROOM_MEMBER");
+
+    case ProxyProtocol::RESP_DEL_CHATROOM_MEMBER:
+    return QString("RESP_DEL_CHATROOM_MEMBER");
+
+    case ProxyProtocol::REQ_QUIT_CHATROOM:
+    return QString("REQ_QUIT_CHATROOM");
+
+    case ProxyProtocol::RESP_QUIT_CHATROOM:
+    return QString("RESP_QUIT_CHATROOM");
+
+    case ProxyProtocol::REQ_SEARCH_CHATROOM	:
+    return QString("REQ_SEARCH_CHATROOM");
+
+    case ProxyProtocol::RESP_SEARCH_CHATROOM :
+    return QString("RESP_SEARCH_CHATROOM");
+
+    case ProxyProtocol::REQ_LBSCHATROOMFIND	:
+    return QString("REQ_LBSCHATROOMFIND");
+
+    case ProxyProtocol::RESP_LBSCHATROOMFIND :
+    return QString("RESP_LBSCHATROOMFIND");
+
+    case ProxyProtocol::REQ_VERIFYCHATROOMMEMBER:
+    return QString("REQ_VERIFYCHATROOMMEMBER");
+
+    case ProxyProtocol::RESP_VERIFYCHATROOMMEMBER:
+    return QString("RESP_VERIFYCHATROOMMEMBER");
+
+    case ProxyProtocol::REQ_INVITECHATROOMMEMBER:
+    return QString("REQ_INVITECHATROOMMEMBER");
+
+    case ProxyProtocol::RESP_INVITECHATROOMMEMBER:
+    return QString("RESP_INVITECHATROOMMEMBER");
+
+    case ProxyProtocol::REQ_CLOSECHATROOM :
+    return QString("REQ_CLOSECHATROOM");
+
+    case ProxyProtocol::RESP_CLOSECHATROOM :
+    return QString("RESP_CLOSECHATROOM");
+
+    case ProxyProtocol::REQ_REPORT_PROFILE:
+    return QString("REQ_REPORT_PROFILE");
+
+    case ProxyProtocol::RESP_REPORT_PROFILE:
+    return QString("RESP_REPORT_PROFILE");
+
+    case ProxyProtocol::REQ_REPORT_GROUP:
+    return QString("REQ_REPORT_GROUP");
+
+    case ProxyProtocol::RESP_REPORT_GROUP:
+    return QString("RESP_REPORT_GROUP");
+
+    case ProxyProtocol::REQ_NOOP:
+    return QString("REQ_NOOP");
+
+    case ProxyProtocol::RESP_NOOP:
+    return QString("RESP_NOOP");
+
+    case ProxyProtocol::REQ_QUIT:
+    return QString("REQ_QUIT");
+
+    case ProxyProtocol::REQ_DIRECT_SEND:
+    return QString("REQ_DIRECT_SEND");
+
+    case ProxyProtocol::REQ_SYNC_CHECK:
+    return QString("REQ_SYNC_CHECK");
+
+    case ProxyProtocol::RESP_SYNC_CHECK:
+    return QString("RESP_SYNC_CHECK");
+
+    case ProxyProtocol::REQ_FIX_SYNCCHK	:
+    return QString("REQ_FIX_SYNCCHK");
+
+    case ProxyProtocol::RESP_FIX_SYNCCHK:
+    return QString("RESP_FIX_SYNCCHK");
+
+    case ProxyProtocol::REQ_BULLETIN :
+    return QString("REQ_BULLETIN");
+
+    case ProxyProtocol::REQ_SPEED_TEST_NOTIFY :
+    return QString("REQ_SPEED_TEST_NOTIFY");
+
+    case ProxyProtocol::REQ_SPEED_TEST :
+    return QString("REQ_SPEED_TEST");
+
+    case ProxyProtocol::RESP_SPEED_TEST:
+    return QString("RESP_SPEED_TEST");
+
+    case ProxyProtocol::REQ_RPT_SPEED_TEST:
+    return QString("REQ_RPT_SPEED_TEST");
+
+    case ProxyProtocol::RESP_RPT_SPEED_TEST:
+    return QString("RESP_RPT_SPEED_TEST");
+
+    case ProxyProtocol::REQ_VOIP_INVITE_NOTIFY :
+    return QString("REQ_VOIP_INVITE_NOTIFY");
+
+    case ProxyProtocol::REQ_NEWSYNC_SYNCWAIT :
+    return QString("REQ_NEWSYNC_SYNCWAIT");
+
+    case ProxyProtocol::RESP_NEWSYNC_SYNCWAIT :
+    return QString("RESP_NEWSYNC_SYNCWAIT");
+
+    case ProxyProtocol::REQ_NEWSYNC_NOTIFYDATA :
+    return QString("REQ_NEWSYNC_NOTIFYDATA");
+
+    case ProxyProtocol::REQ_NEWSYNC_ACK :
+    return QString("REQ_NEWSYNC_ACK");
+
+    case ProxyProtocol::RESP_VOIP_SYNC	:
+    return QString("RESP_VOIP_SYNC");
+
+    case ProxyProtocol::RESP_SNS_SYNC:
+    return QString("RESP_SNS_SYNC");
+
+    case ProxyProtocol::REQ_NOTIFY:
+    return QString("REQ_NOTIFY");
+
+    case ProxyProtocol::REQ_VOIP_NOTIFY:
+    return QString("REQ_VOIP_NOTIFY");
+
+    case ProxyProtocol::REQ_CONN:
+    return QString("REQ_CONN");
+
+    case ProxyProtocol::REQ_DISCONN :
+    return QString("REQ_DISCONN");
+
+    case ProxyProtocol::REQ_ONLINE :
+    return QString("REQ_ONLINE");
+
+    case ProxyProtocol::REQ_OFFLINE :
+    return QString("REQ_OFFLINE");
+
+    case ProxyProtocol::REQ_SWITCH :
+    return QString("REQ_SWITCH");
+
+    case ProxyProtocol::REQ_CLI_NOT_FOUND :
+    return QString("REQ_CLI_NOT_FOUND");
+
+    default:
+        return QString("Unsupported cmd(%1)").arg(cmd);
+    }
 }
 
 void PackBaseRequest(IMBaseRequest_t *pBaseReq)
@@ -41,6 +483,10 @@ void UnPackBaseResponse(const IMBaseResponse_t *pBaseResp, UCSBaseResponse_t *pR
     pResp->iRet = pBaseResp->iRet;
     pResp->iSeq = pBaseResp->iSeq;
     pResp->tErrMsg = charToQString(pBaseResp->tErrMsg.pcBuff);
+
+    UCS_LOG(UCSLogger::kTraceInfo, TAG,
+            QString("UnPackBaseResponse: iRet(%1)")
+                    .arg(pBaseResp->iRet));
 }
 
 void PackBodyHeader(BodyHead_t *pHeader)
@@ -759,7 +1205,7 @@ QByteArray UCSPackage::PackUploadMsgImgRequest(const UCSUploadMsgImgRequest_t *p
     QByteArray data = pRequest->tData.mid(pRequest->iStartPos, pRequest->iDataLen);
     bodyData.tData.pcBuff = strdup(data.data());
     bodyData.tData.iLen = pRequest->tData.size();
-    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Md5);
+    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Md5).toHex();
     bodyData.pcMD5 = strdup(hash.data());
 
 #define IMG_UPLOAD_SIZE (64 * 1024 + 1024)
@@ -1284,7 +1730,7 @@ QByteArray UCSPackage::PackCustomMsgRequest(const UCSCustomMsgRequest_t *pReques
     QByteArray data = pRequest->tData.mid(pRequest->iStartPos, pRequest->iTotalLen);
     bodyData.tData.pcBuff = strdup(data.data());
     bodyData.tData.iLen = pRequest->tData.size();
-    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Md5);
+    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Md5).toHex();
     bodyData.pcMD5 = strdup(hash.data());
 
 #define CUSTOM_MSG_LEN  (512 + 1024 * 16)

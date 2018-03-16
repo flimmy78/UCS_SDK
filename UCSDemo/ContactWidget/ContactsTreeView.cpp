@@ -1,9 +1,9 @@
-﻿#include "ContractsTreeView.h"
+﻿#include "ContactsTreeView.h"
 #include "common/util.h"
 #include "ContractTreeItemDelegate.h"
 #include "treeItem.h"
 
-ContractsTreeView::ContractsTreeView(QWidget *parent)
+ContactsTreeView::ContactsTreeView(QWidget *parent)
     : QTreeView(parent)
 {
     setMouseTracking(true);
@@ -30,7 +30,16 @@ ContractsTreeView::ContractsTreeView(QWidget *parent)
     loadStyleSheet();
 }
 
-void ContractsTreeView::contextMenuEvent(QContextMenuEvent *event)
+ContactsTreeView::~ContactsTreeView()
+{
+    if (m_pRestApi)
+    {
+        delete m_pRestApi;
+        m_pRestApi = Q_NULLPTR;
+    }
+}
+
+void ContactsTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     Q_UNUSED(event);
 
@@ -51,8 +60,10 @@ void ContractsTreeView::contextMenuEvent(QContextMenuEvent *event)
     }
 }
 
-void ContractsTreeView::init()
+void ContactsTreeView::init()
 {
+    m_pRestApi = new UPlusRestApi;
+
     m_pContactModel = new ContactTreeItemModel(this);
     this->setModel(m_pContactModel);
     m_pContactModel->importJSON(Util::appDir() + "/contacts.json");
@@ -61,14 +72,14 @@ void ContractsTreeView::init()
     this->setItemDelegate(delegate);
 }
 
-void ContractsTreeView::initConnection()
+void ContactsTreeView::initConnection()
 {
-    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slot_itemClicked(QModelIndex)));
-    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_doubleClicked(QModelIndex)));
+    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onItemDoubleClicked(QModelIndex)));
     //    connect(this, SIGNAL(pressed(QModelIndex)), this, SLOT(slot_itemPressed(QModelIndex)));
 }
 
-void ContractsTreeView::initMenu()
+void ContactsTreeView::initMenu()
 {
     m_pGroupMenu = new QMenu(this);
     m_pPersonMenu = new QMenu(this);
@@ -80,9 +91,9 @@ void ContractsTreeView::initMenu()
     QAction *pDelGroup = new QAction(QStringLiteral("删除该组"));
     QAction *pAddPerson = new QAction(QStringLiteral("添加联系人"));
 
-    connect(pAddGroup, SIGNAL(triggered(bool)), this, SLOT(slot_addGroup(bool)));
-    connect(pAddPerson, SIGNAL(triggered(bool)), this, SLOT(slot_addPerson(bool)));
-    connect(pDelGroup, SIGNAL(triggered(bool)), this, SLOT(slot_delGroup(bool)));
+    connect(pAddGroup, SIGNAL(triggered(bool)), this, SLOT(onAddGroupAction(bool)));
+    connect(pAddPerson, SIGNAL(triggered(bool)), this, SLOT(onAddContactAction(bool)));
+    connect(pDelGroup, SIGNAL(triggered(bool)), this, SLOT(onDeleteGroupAction(bool)));
 
     m_pGroupMenu->addAction(pAddGroup);
     m_pGroupMenu->addAction(pAddPerson);
@@ -95,10 +106,10 @@ void ContractsTreeView::initMenu()
     QAction *pAudioAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("音频通话"));
     QAction *pVideoAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("视频通话"));
 
-    connect(pDelAct, SIGNAL(triggered(bool)), this, SLOT(slot_removePerson(bool)));
-    connect(pMsgAct, SIGNAL(triggered(bool)), this, SLOT(slot_sendMessage(bool)));
-    connect(pAudioAct, SIGNAL(triggered(bool)), this, SLOT(slot_audioCall(bool)));
-    connect(pVideoAct, SIGNAL(triggered(bool)), this, SLOT(slot_videoCall(bool)));
+    connect(pDelAct, SIGNAL(triggered(bool)), this, SLOT(onRemoveContactAction(bool)));
+    connect(pMsgAct, SIGNAL(triggered(bool)), this, SLOT(onSendMessageAction(bool)));
+    connect(pAudioAct, SIGNAL(triggered(bool)), this, SLOT(onAudioCallAction(bool)));
+    connect(pVideoAct, SIGNAL(triggered(bool)), this, SLOT(onVideoCallAction(bool)));
 
     m_pPersonMenu->addAction(pMsgAct);
     m_pPersonMenu->addAction(pAudioAct);
@@ -107,7 +118,7 @@ void ContractsTreeView::initMenu()
     m_pPersonMenu->addAction(pDelAct);
 }
 
-void ContractsTreeView::loadStyleSheet()
+void ContactsTreeView::loadStyleSheet()
 {
     QFile file(":/Resources/TreeView/TreeView.qss");
     file.open(QFile::ReadOnly);
@@ -120,60 +131,65 @@ void ContractsTreeView::loadStyleSheet()
     }
 }
 
-void ContractsTreeView::slot_itemClicked(QModelIndex index)
+void ContactsTreeView::onItemClicked(QModelIndex index)
 {
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
 
     qDebug() << "sectionid " << item->data(0) << " data " << index.data();
 }
 
-void ContractsTreeView::slot_doubleClicked(QModelIndex index)
+void ContactsTreeView::onItemDoubleClicked(QModelIndex index)
 {
     qDebug() << index.data().toString();
 //    qDebug() << index.parent().data().toString();
 }
 
-void ContractsTreeView::slot_itemPressed(QModelIndex index)
+void ContactsTreeView::onItemPressed(QModelIndex index)
 {
 //    qDebug() << "row " << index.row() << "column " << index.column() << " data " << index.data();
     qDebug() << index.data(Qt::DisplayRole).toString();
 }
 
-void ContractsTreeView::slot_addGroup(bool checked)
+void ContactsTreeView::onAddGroupAction(bool checked)
 {
     Q_UNUSED(checked);
 }
 
-void ContractsTreeView::slot_delGroup(bool checked)
+void ContactsTreeView::onDeleteGroupAction(bool checked)
 {
     Q_UNUSED(checked);
 }
 
-void ContractsTreeView::slot_addPerson(bool checked)
+void ContactsTreeView::onAddContactAction(bool checked)
 {
     Q_UNUSED(checked);
 }
 
-void ContractsTreeView::slot_removePerson(bool checked)
+void ContactsTreeView::onRemoveContactAction(bool checked)
 {
     Q_UNUSED(checked);
     qDebug() << "remove " << currentIndex().data().toString();
 }
 
-void ContractsTreeView::slot_sendMessage(bool checked)
+void ContactsTreeView::onSendMessageAction(bool checked)
 {
     Q_UNUSED(checked);
     qDebug() << "msg " << currentIndex().data().toString();
 }
 
-void ContractsTreeView::slot_audioCall(bool checked)
+void ContactsTreeView::onAudioCallAction(bool checked)
 {
     Q_UNUSED(checked);
     qDebug() << "audio " << currentIndex().data().toString();
 }
 
-void ContractsTreeView::slot_videoCall(bool checked)
+void ContactsTreeView::onVideoCallAction(bool checked)
 {
     Q_UNUSED(checked);
     qDebug() << "video " << currentIndex().data().toString();
+}
+
+void ContactsTreeView::onUpdateContactsReply(QByteArray data, int code)
+{
+
 }

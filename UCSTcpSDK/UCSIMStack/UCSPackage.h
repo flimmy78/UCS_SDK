@@ -18,6 +18,13 @@ public:
     UCSPackage();
 
     /*!
+     * \brief cmdName 获取IM协议命令字名称
+     * \param cmd
+     * \return
+     */
+    static QString cmdName(quint32 cmd);
+
+    /*!
      * \brief 登录请求
     */
     static QByteArray PackAuthRequest(UCSAuthRequest_t *authReq);
@@ -226,6 +233,7 @@ public:
      */
     static void UnpackCustomMsgResponse(const QByteArray dataArray,
                                         UCSCustomMsgResponse_t *pResponse);
+
 public:
     static QString m_sessionKey;
     static quint32 m_iUin;

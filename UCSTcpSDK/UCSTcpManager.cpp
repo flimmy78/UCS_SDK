@@ -6,7 +6,8 @@
 #include <QNetworkAccessManager>
 #include <QJsonArray>
 #include <Common/UCSLogger.h>
-#include "UCSIMStack/ProxyProtocol.h"
+#include "UCSPackage.h"
+#include "ProxyProtocol.h"
 
 UCSTcpManager::UCSTcpManager(QObject* parent)
     : QObject(parent)
@@ -282,7 +283,7 @@ void UCSTcpManager::slot_onTcpStateChanged(UcsTcpState state)
 
 void UCSTcpManager::slot_readReady(QByteArray dataArray)
 {
-    UCS_LOG(UCSLogger::kTraceDebug, UCSLogger::kTcpManager,
+    UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
             QString("slot_readReady size(%1)").arg(dataArray.size()));
 
     m_pMsgDispatch->receivedPacket(dataArray);
@@ -348,6 +349,7 @@ void UCSTcpManager::slot_onLoginStateChanged(UcsLoginState state)
 
         if (m_pTcpSocket)
         {
+            m_pTcpSocket->forceChangeProxy();
             m_pTcpSocket->doReConnect();
         }
     }
@@ -372,7 +374,8 @@ void UCSTcpManager::slot_onLoginStateChanged(UcsLoginState state)
 void UCSTcpManager::slot_onPostMessage(quint32 cmd, QByteArray dataArray)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
-            QString("post message (%1)").arg(cmd));
+            QString("post message (%1)").arg(UCSPackage::cmdName(cmd)));
+
     UCSModule module = UCSIMModule;
 
     if (cmd == ProxyProtocol::RESP_AUTH ||
@@ -382,7 +385,7 @@ void UCSTcpManager::slot_onPostMessage(quint32 cmd, QByteArray dataArray)
         module = UCSLoginModule;
     }
     else if (cmd == ProxyProtocol::VOIP_CALL_MSG ||
-             cmd == ProxyProtocol::VOIP_CALL_MSG ||
+             cmd == ProxyProtocol::VOIP_CONF_MSG ||
              cmd == ProxyProtocol::VOIP_CSRV_MSG)
     {
         module = UCSVoIPModule;

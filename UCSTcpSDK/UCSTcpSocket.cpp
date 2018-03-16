@@ -2,6 +2,7 @@
 #include <QMutexLocker>
 #include "Common/UCSLogger.h"
 #include "UCSEvent.h"
+#include "UCSPackage.h"
 
 #define TRY_CONN_TIMES_PER_PROXY    (3)
 
@@ -209,6 +210,11 @@ void UCSTcpSocket::setState(const UcsTcpState &state)
     emit sig_stateChanged(state);
 }
 
+void UCSTcpSocket::forceChangeProxy()
+{
+    m_proxyIndex++;
+}
+
 UcsTcpState UCSTcpSocket::state() const
 {
     QMutexLocker locker((QMutex*)&m_Mutex);
@@ -241,11 +247,10 @@ void UCSTcpSocket::customEvent(QEvent *event)
     {
         UCSSendDataEvent *sendEvent = (UCSSendDataEvent*)event;
         UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kTcpSocket,
-                QString("send data, cmd(%1)").arg(sendEvent->cmd()));
+                QString("send data, cmd(%1)").arg(UCSPackage::cmdName(sendEvent->cmd())));
 
         if (m_pSocket != Q_NULLPTR)
         {
-    //        qDebug() << "send data";
             qint64 bytes = m_pSocket->write(sendEvent->data());
             UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kTcpSocket,
                     QString("send data bytes(%1) ").arg(bytes));
@@ -304,7 +309,6 @@ void UCSTcpSocket::slot_readFortune()
     if (m_pSocket->bytesAvailable() > 0)
     {
         QByteArray dataArray = m_pSocket->readAll();
-//        qDebug() << "tcp slot_readFortune size " << dataArray.size();
 
         emit sig_readReady(dataArray);
     }

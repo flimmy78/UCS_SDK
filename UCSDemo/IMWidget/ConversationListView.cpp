@@ -48,7 +48,7 @@ void ConversationListView::updateConversationList()
     m_conversationList.clear();
 
     /// test data
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 0; i++)
     {
         ConversationItem item;
 
@@ -84,6 +84,10 @@ void ConversationListView::updateConversationList()
         item.conversationId = conversation->targetId();
         item.conversationType = conversation->conversationType();
         item.conversationTitle = conversation->conversationTitle();
+        if (item.conversationTitle.isEmpty())
+        {
+            item.conversationTitle = item.conversationId;
+        }
         item.unReadCount = conversation->unreadMessageCount();
         item.isTop = conversation->isTop();
         item.headerPath = ":/images/u29.png";
@@ -105,9 +109,6 @@ void ConversationListView::updateConversationList()
         UCSMessage *message = conversation->lastestMessage();
         if (message != Q_NULLPTR)
         {
-//            QDateTime dateTime;
-//            item.lastMsgTime = dateTime.fromTime_t(message->time).toString("MM-dd hh:mm");
-
             item.lastMsgTime = CommonHelper::timeToString(message->time, "MM-dd hh:mm");
             UCS_IM_MsgType msgType = message->messageType;
             switch (msgType) {
@@ -152,6 +153,10 @@ void ConversationListView::updateConversationList()
                 item.lastMsgContent = QStringLiteral("[未知类型消息]");
                 break;
             }
+        }
+        else
+        {
+            item.lastMsgContent = QString("");
         }
 
         m_conversationList.append(item);
@@ -231,15 +236,19 @@ void ConversationListView::onDeleteItemAction()
 
         if (!m_conversationList.isEmpty())
         {
+            QString conversationId = m_conversationList.at(index.row()).conversationId;
+            quint32 conversationType = m_conversationList.at(index.row()).conversationType;
+
             m_conversationList.removeAt(index.row());
+
+
+//        UCSIMClient::Instance()->removeConversation(conversationType,
+//                                                    conversationId);
+
+            m_pModel->refreshModel();
+
+            emit itemDeleted(conversationId, conversationType);
         }
-
-//        UCSIMClient::Instance()->removeConversation(m_conversationList.at(row).conversationType,
-//                                                    m_conversationList.at(row).conversationId);
-
-        m_pModel->refreshModel();
-
-        emit itemDeleted();
     }
 }
 

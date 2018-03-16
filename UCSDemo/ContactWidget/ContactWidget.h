@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <qglobal.h>
 #include "BaseWidget.h"
-#include "ContractsTreeView.h"
+#include "ContactsTreeView.h"
 #include "ContactInfoWidget.h"
 #include "topWidget.h"
 #include "searchLineEdit.h"
@@ -26,7 +26,7 @@ public slots:
 private:
     TopWidget *m_pTitleBar;
     SearchLineEdit *m_pSearchEdit;
-    ContractsTreeView *m_pContactListView;
+    ContactsTreeView *m_pContactListView;
     ContactInfoWidget *m_pContactInfoWidget;
 };
 

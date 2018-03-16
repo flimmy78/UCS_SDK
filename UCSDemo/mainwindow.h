@@ -22,6 +22,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    bool doLogin();
+
 protected:
     static MainWindow* s_pMainWnd;
 

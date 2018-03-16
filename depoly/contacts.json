@@ -1,0 +1,3480 @@
+[{
+		"name": "行业大客销售",
+		"sectionid": "0010",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340015",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340016",
+				"name": "云之讯",
+				"sex": "女"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "物联网卡",
+		"sectionid": "0011",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340250",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "行业方案销售",
+		"sectionid": "001",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "行业大客销售",
+				"sectionid": "0010"
+			}, {
+				"grade": 5,
+				"name": "物联网卡",
+				"sectionid": "0011"
+			}
+		],
+		"person": [],
+		"personNum": 3
+	}, {
+		"name": "mifi及流量转售",
+		"sectionid": "002",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340302",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340304",
+				"name": "云之讯",
+				"sex": "女"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "流量销售",
+		"sectionid": "00",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "行业方案销售",
+				"sectionid": "001"
+			}, {
+				"grade": 4,
+				"name": "mifi及流量转售",
+				"sectionid": "002"
+			}
+		],
+		"person": [{
+				"userid": "15912340001",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "客服",
+		"sectionid": "0100",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340002",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340003",
+				"name": "云之讯",
+				"sex": "女"
+			}, {
+				"userid": "15912340004",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340005",
+				"name": "云之讯",
+				"sex": "女"
+			}, {
+				"userid": "15912340006",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340007",
+				"name": "云之讯",
+				"sex": "女"
+			}, {
+				"userid": "15912340008",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340009",
+				"name": "云之讯",
+				"sex": "女"
+			}
+		],
+		"personNum": 8
+	}, {
+		"name": "云平台",
+		"sectionid": "0101",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340258",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340259",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "物联网卡",
+		"sectionid": "0102",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340260",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340261",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340262",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "运营",
+		"sectionid": "010",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "客服",
+				"sectionid": "0100"
+			}, {
+				"grade": 5,
+				"name": "云平台",
+				"sectionid": "0101"
+			}, {
+				"grade": 5,
+				"name": "物联网卡",
+				"sectionid": "0102"
+			}
+		],
+		"person": [{
+				"userid": "15912340291",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340292",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 15
+	}, {
+		"name": "风控",
+		"sectionid": "012",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340052",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "产品",
+		"sectionid": "013",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340060",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "商务",
+		"sectionid": "015",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340204",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "测试",
+		"sectionid": "0160",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340229",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340230",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340231",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340232",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "流量运营平台",
+		"sectionid": "0163",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340263",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340264",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340265",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340266",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "运维",
+		"sectionid": "0164",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340388",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "mifi平台",
+		"sectionid": "0165",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340389",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340390",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340391",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340392",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "物联网平台",
+		"sectionid": "0166",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340399",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340400",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "技术",
+		"sectionid": "016",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "测试",
+				"sectionid": "0160"
+			}, {
+				"grade": 5,
+				"name": "流量运营平台",
+				"sectionid": "0163"
+			}, {
+				"grade": 5,
+				"name": "运维",
+				"sectionid": "0164"
+			}, {
+				"grade": 5,
+				"name": "mifi平台",
+				"sectionid": "0165"
+			}, {
+				"grade": 5,
+				"name": "物联网平台",
+				"sectionid": "0166"
+			}
+		],
+		"person": [{
+				"userid": "15912340234",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340235",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 17
+	}, {
+		"name": "流量业务",
+		"sectionid": "01",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "运营",
+				"sectionid": "010"
+			}, {
+				"grade": 4,
+				"name": "风控",
+				"sectionid": "012"
+			}, {
+				"grade": 4,
+				"name": "产品",
+				"sectionid": "013"
+			}, {
+				"grade": 4,
+				"name": "商务",
+				"sectionid": "015"
+			}, {
+				"grade": 4,
+				"name": "技术",
+				"sectionid": "016"
+			}
+		],
+		"person": [{
+				"userid": "15912340039",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340203",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 37
+	}, {
+		"name": "流量事业部",
+		"sectionid": "0",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "流量销售",
+				"sectionid": "00"
+			}, {
+				"grade": 2,
+				"name": "流量业务",
+				"sectionid": "01"
+			}
+		],
+		"person": [{
+				"userid": "15912340044",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 44
+	}, {
+		"name": "400",
+		"sectionid": "100",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340010",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340011",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340012",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "测试组",
+		"sectionid": "101",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340029",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340030",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "CaaS",
+		"sectionid": "104",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340278",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340279",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "供应链平台",
+		"sectionid": "105",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340417",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340418",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340419",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340420",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340421",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}, {
+		"name": "技术部",
+		"sectionid": "10",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "400",
+				"sectionid": "100"
+			}, {
+				"grade": 4,
+				"name": "测试组",
+				"sectionid": "101"
+			}, {
+				"grade": 4,
+				"name": "CaaS",
+				"sectionid": "104"
+			}, {
+				"grade": 4,
+				"name": "供应链平台",
+				"sectionid": "105"
+			}
+		],
+		"person": [{
+				"userid": "15912340163",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340164",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 19
+	}, {
+		"name": "客服运营",
+		"sectionid": "121",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340165",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340166",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340167",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340168",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340169",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340170",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340171",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 7
+	}, {
+		"name": "技术服务",
+		"sectionid": "122",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340172",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340173",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340174",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340175",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340176",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}, {
+		"name": "资源运营",
+		"sectionid": "123",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340274",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340275",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "客户运营",
+		"sectionid": "124",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340277",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "运营部",
+		"sectionid": "12",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "客服运营",
+				"sectionid": "121"
+			}, {
+				"grade": 4,
+				"name": "技术服务",
+				"sectionid": "122"
+			}, {
+				"grade": 4,
+				"name": "资源运营",
+				"sectionid": "123"
+			}, {
+				"grade": 4,
+				"name": "客户运营",
+				"sectionid": "124"
+			}
+		],
+		"person": [{
+				"userid": "15912340162",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 23
+	}, {
+		"name": "社会资源拓展",
+		"sectionid": "131",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340287",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340288",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "运营商合作一组",
+		"sectionid": "132",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340289",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340290",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "运营商合作二组",
+		"sectionid": "133",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340310",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "商务部",
+		"sectionid": "13",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "社会资源拓展",
+				"sectionid": "131"
+			}, {
+				"grade": 4,
+				"name": "运营商合作一组",
+				"sectionid": "132"
+			}, {
+				"grade": 4,
+				"name": "运营商合作二组",
+				"sectionid": "133"
+			}
+		],
+		"person": [{
+				"userid": "15912340205",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "技术服务",
+		"sectionid": "14",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340276",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "产品部",
+		"sectionid": "15",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340311",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340312",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340313",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "语音事业部",
+		"sectionid": "1",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "技术部",
+				"sectionid": "10"
+			}, {
+				"grade": 2,
+				"name": "运营部",
+				"sectionid": "12"
+			}, {
+				"grade": 2,
+				"name": "商务部",
+				"sectionid": "13"
+			}, {
+				"grade": 2,
+				"name": "技术服务",
+				"sectionid": "14"
+			}, {
+				"grade": 2,
+				"name": "产品部",
+				"sectionid": "15"
+			}
+		],
+		"person": [{
+				"userid": "15912340161",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 101
+	}, {
+		"name": "行政组",
+		"sectionid": "21",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340027",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340071",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340072",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340073",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340074",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340075",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340076",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 7
+	}, {
+		"name": "HR组",
+		"sectionid": "22",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340144",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340145",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340146",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340147",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340148",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340149",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340150",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340151",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 8
+	}, {
+		"name": "上海分公司",
+		"sectionid": "23",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340233",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "人力资源及行政部",
+		"sectionid": "2",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "行政组",
+				"sectionid": "21"
+			}, {
+				"grade": 2,
+				"name": "HR组",
+				"sectionid": "22"
+			}, {
+				"grade": 2,
+				"name": "上海分公司",
+				"sectionid": "23"
+			}
+		],
+		"person": [{
+				"userid": "15912340013",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 17
+	}, {
+		"name": "董事会事务",
+		"sectionid": "30",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340014",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340028",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "新项目孵化",
+		"sectionid": "33",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340257",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "总经办",
+		"sectionid": "3",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "董事会事务",
+				"sectionid": "30"
+			}, {
+				"grade": 2,
+				"name": "新项目孵化",
+				"sectionid": "33"
+			}
+		],
+		"person": [{
+				"userid": "15912340037",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340083",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}, {
+		"name": "客户运营组",
+		"sectionid": "400",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340017",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340018",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340019",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340020",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340021",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340022",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "信安运营组",
+		"sectionid": "403",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340236",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340237",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "资源调度组",
+		"sectionid": "404",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340333",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340334",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340335",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340336",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340337",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340338",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "运营部",
+		"sectionid": "40",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "客户运营组",
+				"sectionid": "400"
+			}, {
+				"grade": 4,
+				"name": "信安运营组",
+				"sectionid": "403"
+			}, {
+				"grade": 4,
+				"name": "资源调度组",
+				"sectionid": "404"
+			}
+		],
+		"person": [{
+				"userid": "15912340101",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340102",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 16
+	}, {
+		"name": "后台开发",
+		"sectionid": "421",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340103",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340104",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340105",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340106",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340107",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340108",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340109",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340110",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 8
+	}, {
+		"name": "平台架构",
+		"sectionid": "422",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340111",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "运维",
+		"sectionid": "423",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340121",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "生产中心",
+		"sectionid": "4240",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340133",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340403",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340404",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340405",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340406",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340407",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "UE",
+		"sectionid": "4242",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340401",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340402",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "用户中心",
+		"sectionid": "4243",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340408",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340409",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340410",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "运营中心",
+		"sectionid": "4244",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340411",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340412",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340413",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "业务开发",
+		"sectionid": "424",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "生产中心",
+				"sectionid": "4240"
+			}, {
+				"grade": 5,
+				"name": "UE",
+				"sectionid": "4242"
+			}, {
+				"grade": 5,
+				"name": "用户中心",
+				"sectionid": "4243"
+			}, {
+				"grade": 5,
+				"name": "运营中心",
+				"sectionid": "4244"
+			}
+		],
+		"person": [{
+				"userid": "15912340134",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 15
+	}, {
+		"name": "测试",
+		"sectionid": "425",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340206",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340207",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340208",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340209",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340210",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340211",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340212",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340213",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 8
+	}, {
+		"name": "技术部",
+		"sectionid": "42",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "后台开发",
+				"sectionid": "421"
+			}, {
+				"grade": 4,
+				"name": "平台架构",
+				"sectionid": "422"
+			}, {
+				"grade": 4,
+				"name": "运维",
+				"sectionid": "423"
+			}, {
+				"grade": 4,
+				"name": "业务开发",
+				"sectionid": "424"
+			}, {
+				"grade": 4,
+				"name": "测试",
+				"sectionid": "425"
+			}
+		],
+		"person": [{
+				"userid": "15912340040",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 34
+	}, {
+		"name": "咨询",
+		"sectionid": "4300",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340084",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340085",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340086",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340087",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340088",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340089",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340090",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340091",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340092",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340093",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340094",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340095",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 12
+	}, {
+		"name": "在线客服",
+		"sectionid": "4301",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340112",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340113",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340114",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340115",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340116",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340117",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340118",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340119",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340120",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 9
+	}, {
+		"name": "技术支持",
+		"sectionid": "4304",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340327",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340328",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "客户咨询",
+		"sectionid": "430",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "咨询",
+				"sectionid": "4300"
+			}, {
+				"grade": 5,
+				"name": "在线客服",
+				"sectionid": "4301"
+			}, {
+				"grade": 5,
+				"name": "技术支持",
+				"sectionid": "4304"
+			}
+		],
+		"person": [{
+				"userid": "15912340325",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340326",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 25
+	}, {
+		"name": "内容审核",
+		"sectionid": "431",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340314",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340315",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340316",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340317",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340318",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340319",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340320",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340321",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340322",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340323",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340324",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 11
+	}, {
+		"name": "客户服务部",
+		"sectionid": "43",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "客户咨询",
+				"sectionid": "430"
+			}, {
+				"grade": 4,
+				"name": "内容审核",
+				"sectionid": "431"
+			}
+		],
+		"person": [],
+		"personNum": 36
+	}, {
+		"name": "资源拓展部",
+		"sectionid": "44",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340214",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340215",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340216",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340217",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340218",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}, {
+		"name": "产品部",
+		"sectionid": "45",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340219",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340220",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340221",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340222",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340223",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340224",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "特定行业短信项目",
+		"sectionid": "46",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340238",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340239",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340240",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340241",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340242",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340243",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340244",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340245",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340246",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 9
+	}, {
+		"name": "平台开放事业部",
+		"sectionid": "4",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "运营部",
+				"sectionid": "40"
+			}, {
+				"grade": 2,
+				"name": "技术部",
+				"sectionid": "42"
+			}, {
+				"grade": 2,
+				"name": "客户服务部",
+				"sectionid": "43"
+			}, {
+				"grade": 2,
+				"name": "资源拓展部",
+				"sectionid": "44"
+			}, {
+				"grade": 2,
+				"name": "产品部",
+				"sectionid": "45"
+			}, {
+				"grade": 2,
+				"name": "特定行业短信项目",
+				"sectionid": "46"
+			}
+		],
+		"person": [{
+				"userid": "15912340038",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 107
+	}, {
+		"name": "产品",
+		"sectionid": "50",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340023",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340024",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340025",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340026",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "电销一组",
+		"sectionid": "5210",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340177",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340178",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340179",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340180",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340181",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340182",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340183",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340184",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340185",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340186",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340187",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340188",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 12
+	}, {
+		"name": "电销二组",
+		"sectionid": "5211",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340189",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340190",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340191",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340192",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340193",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340194",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340195",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340196",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 8
+	}, {
+		"name": "电销三组",
+		"sectionid": "5212",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340197",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340198",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340199",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340200",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340201",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340202",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "电销",
+		"sectionid": "521",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "电销一组",
+				"sectionid": "5210"
+			}, {
+				"grade": 5,
+				"name": "电销二组",
+				"sectionid": "5211"
+			}, {
+				"grade": 5,
+				"name": "电销三组",
+				"sectionid": "5212"
+			}
+		],
+		"person": [],
+		"personNum": 26
+	}, {
+		"name": "技术支持",
+		"sectionid": "522",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340255",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340256",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "客户服务",
+		"sectionid": "523",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340267",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340268",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340269",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340270",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340271",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340272",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340273",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 7
+	}, {
+		"name": "呼叫中心",
+		"sectionid": "52",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "电销",
+				"sectionid": "521"
+			}, {
+				"grade": 4,
+				"name": "技术支持",
+				"sectionid": "522"
+			}, {
+				"grade": 4,
+				"name": "客户服务",
+				"sectionid": "523"
+			}
+		],
+		"person": [{
+				"userid": "15912340063",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 36
+	}, {
+		"name": "平台运营",
+		"sectionid": "53",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340096",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "市场营销",
+		"sectionid": "54",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340152",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340153",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340154",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340155",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340156",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340157",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "测试",
+		"sectionid": "552",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340227",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340228",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "运维",
+		"sectionid": "553",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340286",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "营销平台",
+		"sectionid": "554",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340393",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340394",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "官网平台",
+		"sectionid": "555",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340395",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340396",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "产品开发平台",
+		"sectionid": "556",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340397",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340398",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "技术",
+		"sectionid": "55",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "测试",
+				"sectionid": "552"
+			}, {
+				"grade": 4,
+				"name": "运维",
+				"sectionid": "553"
+			}, {
+				"grade": 4,
+				"name": "营销平台",
+				"sectionid": "554"
+			}, {
+				"grade": 4,
+				"name": "官网平台",
+				"sectionid": "555"
+			}, {
+				"grade": 4,
+				"name": "产品开发平台",
+				"sectionid": "556"
+			}
+		],
+		"person": [{
+				"userid": "15912340225",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340226",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 11
+	}, {
+		"name": "在线服务事业部",
+		"sectionid": "5",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "产品",
+				"sectionid": "50"
+			}, {
+				"grade": 2,
+				"name": "呼叫中心",
+				"sectionid": "52"
+			}, {
+				"grade": 2,
+				"name": "平台运营",
+				"sectionid": "53"
+			}, {
+				"grade": 2,
+				"name": "市场营销",
+				"sectionid": "54"
+			}, {
+				"grade": 2,
+				"name": "技术",
+				"sectionid": "55"
+			}
+		],
+		"person": [{
+				"userid": "15912340045",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 59
+	}, {
+		"name": "上海办",
+		"sectionid": "60",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340031",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340032",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340033",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340034",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340035",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340036",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "解决方案组",
+		"sectionid": "61",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340064",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340065",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340066",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340067",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340068",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}, {
+		"name": "售前支持",
+		"sectionid": "62",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340069",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340070",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "融合通信组",
+		"sectionid": "65",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340130",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340131",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340132",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "北京办",
+		"sectionid": "66",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340251",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340252",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340253",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340254",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "项目组",
+		"sectionid": "67",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340280",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340281",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340282",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340283",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "大客户拓展与销售部",
+		"sectionid": "6",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "上海办",
+				"sectionid": "60"
+			}, {
+				"grade": 2,
+				"name": "解决方案组",
+				"sectionid": "61"
+			}, {
+				"grade": 2,
+				"name": "售前支持",
+				"sectionid": "62"
+			}, {
+				"grade": 2,
+				"name": "融合通信组",
+				"sectionid": "65"
+			}, {
+				"grade": 2,
+				"name": "北京办",
+				"sectionid": "66"
+			}, {
+				"grade": 2,
+				"name": "项目组",
+				"sectionid": "67"
+			}
+		],
+		"person": [{
+				"userid": "15912340081",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340082",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 26
+	}, {
+		"name": "项目管理",
+		"sectionid": "700",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340041",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "终端开发",
+		"sectionid": "7012",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340077",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340078",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340079",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340080",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "产品",
+		"sectionid": "7013",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340293",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "后台开发",
+		"sectionid": "7014",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340294",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340295",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340296",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340297",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340298",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340299",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "测试",
+		"sectionid": "7015",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340300",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340301",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "研发合作",
+		"sectionid": "701",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "终端开发",
+				"sectionid": "7012"
+			}, {
+				"grade": 5,
+				"name": "产品",
+				"sectionid": "7013"
+			}, {
+				"grade": 5,
+				"name": "后台开发",
+				"sectionid": "7014"
+			}, {
+				"grade": 5,
+				"name": "测试",
+				"sectionid": "7015"
+			}
+		],
+		"person": [{
+				"userid": "15912340042",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340043",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 15
+	}, {
+		"name": "MKT解决方案",
+		"sectionid": "702",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340247",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "融合通信业务部",
+		"sectionid": "70",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "项目管理",
+				"sectionid": "700"
+			}, {
+				"grade": 4,
+				"name": "研发合作",
+				"sectionid": "701"
+			}, {
+				"grade": 4,
+				"name": "MKT解决方案",
+				"sectionid": "702"
+			}
+		],
+		"person": [{
+				"userid": "15912340372",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 18
+	}, {
+		"name": "OTT项目",
+		"sectionid": "721",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340248",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340249",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "销售",
+		"sectionid": "72",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "OTT项目",
+				"sectionid": "721"
+			}
+		],
+		"person": [{
+				"userid": "15912340125",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "解决方案事业部",
+		"sectionid": "7",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "融合通信业务部",
+				"sectionid": "70"
+			}, {
+				"grade": 2,
+				"name": "销售",
+				"sectionid": "72"
+			}
+		],
+		"person": [{
+				"userid": "15912340124",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 22
+	}, {
+		"name": "财务部",
+		"sectionid": "8",
+		"grade": 1,
+		"section": [],
+		"person": [{
+				"userid": "15912340046",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340047",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340048",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340049",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340050",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340051",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340053",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340054",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340055",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340056",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 10
+	}, {
+		"name": "系统运维",
+		"sectionid": "90",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340057",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340058",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340059",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "IT",
+		"sectionid": "92",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340284",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340285",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "技术部",
+		"sectionid": "9",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "系统运维",
+				"sectionid": "90"
+			}, {
+				"grade": 2,
+				"name": "IT",
+				"sectionid": "92"
+			}
+		],
+		"person": [{
+				"userid": "15912340061",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "产品部",
+		"sectionid": "101",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340373",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340374",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340375",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340376",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340377",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}, {
+		"name": "语音组",
+		"sectionid": "1020",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340378",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340379",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340380",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "短信组",
+		"sectionid": "1021",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340381",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340382",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "流量组",
+		"sectionid": "1022",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340383",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340384",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340385",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "测试",
+		"sectionid": "1023",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340386",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340387",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "会议组",
+		"sectionid": "1024",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340414",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340415",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340416",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "技术部",
+		"sectionid": "102",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "语音组",
+				"sectionid": "1020"
+			}, {
+				"grade": 4,
+				"name": "短信组",
+				"sectionid": "1021"
+			}, {
+				"grade": 4,
+				"name": "流量组",
+				"sectionid": "1022"
+			}, {
+				"grade": 4,
+				"name": "测试",
+				"sectionid": "1023"
+			}, {
+				"grade": 4,
+				"name": "会议组",
+				"sectionid": "1024"
+			}
+		],
+		"person": [],
+		"personNum": 13
+	}, {
+		"name": "平台软件业务部",
+		"sectionid": "10",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "产品部",
+				"sectionid": "101"
+			}, {
+				"grade": 2,
+				"name": "技术部",
+				"sectionid": "102"
+			}
+		],
+		"person": [{
+				"userid": "15912340062",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 21
+	}, {
+		"name": "上海办",
+		"sectionid": "1111",
+		"grade": 4,
+		"section": [],
+		"person": [{
+				"userid": "15912340099",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340329",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340330",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340331",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340332",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}, {
+		"name": "拓展一组",
+		"sectionid": "11120",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340339",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340340",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340341",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340342",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340343",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}, {
+		"name": "拓展二组",
+		"sectionid": "11121",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340344",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340345",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340346",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340347",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "深圳办",
+		"sectionid": "1112",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "拓展一组",
+				"sectionid": "11120"
+			}, {
+				"grade": 5,
+				"name": "拓展二组",
+				"sectionid": "11121"
+			}
+		],
+		"person": [],
+		"personNum": 9
+	}, {
+		"name": "同行组",
+		"sectionid": "11130",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340348",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340349",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340350",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "北京办",
+		"sectionid": "1113",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "同行组",
+				"sectionid": "11130"
+			}
+		],
+		"person": [],
+		"personNum": 3
+	}, {
+		"name": "语音销售",
+		"sectionid": "111",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "上海办",
+				"sectionid": "1111"
+			}, {
+				"grade": 4,
+				"name": "深圳办",
+				"sectionid": "1112"
+			}, {
+				"grade": 4,
+				"name": "北京办",
+				"sectionid": "1113"
+			}
+		],
+		"person": [{
+				"userid": "15912340098",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 18
+	}, {
+		"name": "哈尔滨办",
+		"sectionid": "112",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340122",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "拓展一组",
+		"sectionid": "11300",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340135",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340136",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340137",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340138",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340139",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340140",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340141",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340142",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340143",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 9
+	}, {
+		"name": "拓展四组",
+		"sectionid": "11301",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340303",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340358",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340359",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340360",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "拓展二组",
+		"sectionid": "11302",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340351",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340352",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340353",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340354",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 4
+	}, {
+		"name": "拓展三组",
+		"sectionid": "11303",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340355",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340356",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340357",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "深圳办",
+		"sectionid": "1130",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "拓展一组",
+				"sectionid": "11300"
+			}, {
+				"grade": 5,
+				"name": "拓展四组",
+				"sectionid": "11301"
+			}, {
+				"grade": 5,
+				"name": "拓展二组",
+				"sectionid": "11302"
+			}, {
+				"grade": 5,
+				"name": "拓展三组",
+				"sectionid": "11303"
+			}
+		],
+		"person": [],
+		"personNum": 20
+	}, {
+		"name": "拓展二组",
+		"sectionid": "11310",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340158",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340159",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340160",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "拓展一组",
+		"sectionid": "11311",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340361",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340362",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340363",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "上海办",
+		"sectionid": "1131",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "拓展二组",
+				"sectionid": "11310"
+			}, {
+				"grade": 5,
+				"name": "拓展一组",
+				"sectionid": "11311"
+			}
+		],
+		"person": [],
+		"personNum": 6
+	}, {
+		"name": "同行一组",
+		"sectionid": "113220",
+		"grade": 6,
+		"section": [],
+		"person": [{
+				"userid": "15912340364",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340365",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "同行二组",
+		"sectionid": "113221",
+		"grade": 6,
+		"section": [],
+		"person": [{
+				"userid": "15912340366",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340367",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "同行组",
+		"sectionid": "11322",
+		"grade": 5,
+		"section": [{
+				"grade": 6,
+				"name": "同行一组",
+				"sectionid": "113220"
+			}, {
+				"grade": 6,
+				"name": "同行二组",
+				"sectionid": "113221"
+			}
+		],
+		"person": [],
+		"personNum": 4
+	}, {
+		"name": "北京办",
+		"sectionid": "1132",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "同行组",
+				"sectionid": "11322"
+			}
+		],
+		"person": [{
+				"userid": "15912340305",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340306",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 6
+	}, {
+		"name": "短信销售",
+		"sectionid": "113",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "深圳办",
+				"sectionid": "1130"
+			}, {
+				"grade": 4,
+				"name": "上海办",
+				"sectionid": "1131"
+			}, {
+				"grade": 4,
+				"name": "北京办",
+				"sectionid": "1132"
+			}
+		],
+		"person": [],
+		"personNum": 32
+	}, {
+		"name": "成都办",
+		"sectionid": "114",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340307",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340308",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340309",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "销售管理",
+		"sectionid": "115",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340368",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340370",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "平台业务销售部",
+		"sectionid": "11",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "语音销售",
+				"sectionid": "111"
+			}, {
+				"grade": 2,
+				"name": "哈尔滨办",
+				"sectionid": "112"
+			}, {
+				"grade": 2,
+				"name": "短信销售",
+				"sectionid": "113"
+			}, {
+				"grade": 2,
+				"name": "成都办",
+				"sectionid": "114"
+			}, {
+				"grade": 2,
+				"name": "销售管理",
+				"sectionid": "115"
+			}
+		],
+		"person": [{
+				"userid": "15912340097",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 57
+	}, {
+		"name": "销售管理组",
+		"sectionid": "121",
+		"grade": 3,
+		"section": [],
+		"person": [{
+				"userid": "15912340369",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340371",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 2
+	}, {
+		"name": "销售一部",
+		"sectionid": "12200",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340422",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "语音组",
+		"sectionid": "1220",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "销售一部",
+				"sectionid": "12200"
+			}
+		],
+		"person": [],
+		"personNum": 1
+	}, {
+		"name": "销售一部",
+		"sectionid": "12210",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340423",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 1
+	}, {
+		"name": "短信组",
+		"sectionid": "1221",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "销售一部",
+				"sectionid": "12210"
+			}
+		],
+		"person": [],
+		"personNum": 1
+	}, {
+		"name": "北京销售部",
+		"sectionid": "122",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "语音组",
+				"sectionid": "1220"
+			}, {
+				"grade": 4,
+				"name": "短信组",
+				"sectionid": "1221"
+			}
+		],
+		"person": [],
+		"personNum": 2
+	}, {
+		"name": "销售一部",
+		"sectionid": "12300",
+		"grade": 5,
+		"section": [],
+		"person": [{
+				"userid": "15912340424",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340425",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340426",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 3
+	}, {
+		"name": "短信组",
+		"sectionid": "1230",
+		"grade": 4,
+		"section": [{
+				"grade": 5,
+				"name": "销售一部",
+				"sectionid": "12300"
+			}
+		],
+		"person": [],
+		"personNum": 3
+	}, {
+		"name": "上海销售部",
+		"sectionid": "123",
+		"grade": 3,
+		"section": [{
+				"grade": 4,
+				"name": "短信组",
+				"sectionid": "1230"
+			}
+		],
+		"person": [],
+		"personNum": 3
+	}, {
+		"name": "中小直客扩展部",
+		"sectionid": "12",
+		"grade": 1,
+		"section": [{
+				"grade": 2,
+				"name": "销售管理组",
+				"sectionid": "121"
+			}, {
+				"grade": 2,
+				"name": "北京销售部",
+				"sectionid": "122"
+			}, {
+				"grade": 2,
+				"name": "上海销售部",
+				"sectionid": "123"
+			}
+		],
+		"person": [{
+				"userid": "15912340100",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 22
+	}, {
+		"name": "市场部",
+		"sectionid": "13",
+		"grade": 1,
+		"section": [],
+		"person": [{
+				"userid": "15912340123",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340126",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340127",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340128",
+				"name": "云之讯",
+				"sex": "男"
+			}, {
+				"userid": "15912340129",
+				"name": "云之讯",
+				"sex": "男"
+			}
+		],
+		"personNum": 5
+	}
+]

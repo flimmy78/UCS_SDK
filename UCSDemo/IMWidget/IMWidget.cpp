@@ -57,8 +57,8 @@ void IMWidget::initConnections()
 {
     connect(m_pConversationListView, SIGNAL(itemClicked(QString,quint32)), this, SLOT(onConversationItemClicked(QString,quint32)));
     connect(m_pConversationListView, SIGNAL(itemClicked(QString,quint32)), m_pMsgChatWidget, SLOT(onChangeConversation(QString,quint32)));
-//    connect(m_pConversationListView, SIGNAL(itemDeleted()), m_pMsgChatWidget, SLOT(onConversationDeleted()));
-    connect(m_pConversationListView, SIGNAL(itemDeleted()), this, SLOT(onPageSwitch()));
+    connect(m_pConversationListView, SIGNAL(itemDeleted(QString, quint32)), m_pMsgChatWidget, SLOT(onConversationDeleted(QString,quint32)));
+    connect(m_pConversationListView, SIGNAL(itemDeleted(QString, quint32)), this, SLOT(onPageSwitch()));
     connect(m_pMsgChatWidget, SIGNAL(sendingNewMsg()), m_pConversationListView, SLOT(onUpdateData()));
 }
 

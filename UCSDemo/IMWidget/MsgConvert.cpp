@@ -11,7 +11,7 @@ ChatMsgModel MsgConvert::convert2Model(UCSMessage *message)
     if (message->messageType == UCS_IM_TEXT)
     {
         UCSTextMsg *txtMsg = static_cast<UCSTextMsg*>(message->content);
-        model.content = txtMsg->content();
+        model.content = txtMsg->content().replace("\n", "</br>");
     }
     else
     {

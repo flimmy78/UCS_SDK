@@ -512,16 +512,28 @@ bool UCSIMManager::doGetConversationList(UCS_IM_ConversationListType typeList,
         UCSDBEntity::convertConversationFromEntity(entity, conversation);
 
         ///< 取出该会话的最近一条消息记录 >
+#if 0
         QList<UCSMessage*> messageList;
         doGetLastestMessages(conversation->conversationType(),
                              conversation->targetId(),
                              1,
                              messageList);
-
         if (!messageList.isEmpty())
         {
             conversation->setLastestMessage(messageList.first());
         }
+#else
+        ChatEntity chatEntity;
+        bool result = UCSDBCenter::chatMgr()->getNewestChat(conversation->targetId(),
+                                                            conversation->conversationType(),
+                                                            chatEntity);
+        if (result)
+        {
+            UCSMessage *message = new UCSMessage;
+            UCSDBEntity::convertMessageFromChat(chatEntity, message);
+            conversation->setLastestMessage(message);
+        }
+#endif
 
         if (conversation->isTop())
         {
@@ -803,7 +815,8 @@ void UCSIMManager::handleInitSyncResponse(QByteArray recvData)
     if (response.tBaseResponse.iRet != 0)
     {
         UCS_LOG(UCSLogger::kTraceWarning, UCSLogger::kIMManager,
-                QStringLiteral("登录初始化同步失败"));
+                QString(QStringLiteral("登录初始化同步失败(ret: %1)"))
+                    .arg(response.tBaseResponse.iRet));
         return;
     }
 

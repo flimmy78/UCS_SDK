@@ -10,7 +10,8 @@ HEADERS += \
 #    $$PWD/TextMsgWidget.h \
 #    $$PWD/BaseMsgWidget.h
     $$PWD/ChatWebView.h \
-    $$PWD/MsgConvert.h
+    $$PWD/MsgConvert.h \
+    $$PWD/WebBridge.h
 
 SOURCES += \
     $$PWD/IMWidget.cpp \
@@ -24,4 +25,5 @@ SOURCES += \
 #    $$PWD/TextMsgWidget.cpp \
 #    $$PWD/BaseMsgWidget.cpp
     $$PWD/ChatWebView.cpp \
-    $$PWD/MsgConvert.cpp
+    $$PWD/MsgConvert.cpp \
+    $$PWD/WebBridge.cpp

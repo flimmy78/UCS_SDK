@@ -54,6 +54,7 @@ private:
     QMutex m_Mutex;
     bool m_bStopped;
     QVector<QByteArray> m_packetsVec;
+    QByteArray m_buffer;
 };
 
 #endif // UCSTCPMSGDISPATCH_H

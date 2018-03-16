@@ -3,7 +3,7 @@
 
 #include "common/qtheaders.h"
 
-class ContractsTreeView;
+class ContactsTreeView;
 
 class ContractTreeItemDelegate : public QStyledItemDelegate
 {
@@ -12,7 +12,7 @@ class ContractTreeItemDelegate : public QStyledItemDelegate
 public:
     explicit ContractTreeItemDelegate(QObject *parent = 0);
 
-    void setView(ContractsTreeView *treeView);
+    void setView(ContactsTreeView *treeView);
 
 protected:
     // painting
@@ -38,7 +38,7 @@ protected:
                               const QModelIndex &index) const override;
 
 private:
-    ContractsTreeView *m_pTreeView;
+    ContactsTreeView *m_pTreeView;
 
     int m_pixmapWidth;
     int m_pixmapHeight;
