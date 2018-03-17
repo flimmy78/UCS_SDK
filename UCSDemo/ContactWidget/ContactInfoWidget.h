@@ -2,10 +2,9 @@
 #define ADDRESSDETAILSTACKWIDGET_H
 
 #include "common/qtheaders.h"
-#include "absFiles/myPushButton.h"
-#include "absFiles/myToolButton.h"
 #include "absFiles/myLabel.h"
 #include "BaseWidget.h"
+#include "ContactDefine.h"
 
 class ContactInfoWidget : public BaseWidget
 {
@@ -22,20 +21,35 @@ private:
     void initLayout();
     void initConnection();
 
+    void contactShow();
 signals:
 
 public slots:
+    void onContactItemClicked(ContactItem contact);
+
+private slots:
+    void onDirectAudioClick(bool);
+    void onFreeAudioClick(bool);
+    void onFreeVideoClick(bool);
+    void onConfCallClick(bool);
+    void onImClick(bool);
 
 private:
-    QLabel m_lblHeader;
-    MyLabel m_lblName;
-    QLabel m_lblSex;
+    QLabel *m_pLblHeaderImg;
+    QLabel *m_pLblUserName;
+    QLabel *m_pLblUserSex;
+    QLabel *m_pLblUserPhone;
+    QLabel *m_pLblSectionName;
+    QLabel *m_pLblPhoneTitle;
+    QLabel *m_pLblSectionTitle;
 
-    QTableWidget m_tableWid;
+    QToolButton *m_pBtnDirectAudio;
+    QToolButton *m_pBtnFreeAudio;
+    QToolButton *m_pBtnFreeVideo;
+    QToolButton *m_pBtnConfCall;
+    QToolButton *m_pBtnIM;
 
-    MyToolButton m_btnDial;
-    MyToolButton m_btnConfCall;
-    MyToolButton m_btnIM;
+    ContactItem m_contact;
 };
 
 #endif // ADDRESSDETAILSTACKWIDGET_H

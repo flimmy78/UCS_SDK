@@ -3,94 +3,10 @@
     font-size: 9pt; 
 }
 
+/* common style begin */
 QPushButton:focus {
     padding: -1;
 }
-
-QWidget#NavigatorBar {
-    background: rgb(32, 155, 152);
-    width: 94;
-}
-
-QWidget#CallWidget, QWidget#ContactWidget, QWidget#IMWidget {
-    background: rgb(242, 242, 242);
-}
-
-QWidget#DialWidget, QWidget#ContactStackWidget, QWidget#IMChatWidget {
-    background: white;
-}
-
-QListView#ConversationListView, QListView#CallListView, QTreeView#ContractsTreeView {
-    background: rgb(242, 242, 242);
-    width: 250px;
-}
-
-QLineEdit#SearchLineEdit {
-    border-radius:5px;
-    background:rgb(221, 231, 231);
-}
-
-QWidget#TopWidget {
-    background: white;
-    height: 48px;
-}
-
-QWidget#EmptyWidget {
-    background-color: white;
-/*    background: url(:/Resources/emptyBG.jpg) center no-repeat;*/
-}
-
-QLabel#emptyBG {
-    width: 100px;
-    height: 100px;
-    background: url(:/Resources/emptyBG.jpg) center no-repeat;
-}
-
-/* login css begin */
-QDialog#UPlusLogin {
-    background: white;
-    border: 1px solid lightgray;
-}
-QLineEdit#loginUserName, QLineEdit#loginPassword {
-    width: 200px;
-    height: 30px;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 2px;
-    border: 1px solid gray;
-	border-radius:2px;
-}
-
-QLineEdit#loginUserName:hover, QLineEdit#loginPassword:hover {
-    border: 1px solid rgb(33, 157, 201);
-}
-
-QPushButton#btnLogin
-{
-	background-color: rgb(33, 157, 201);
-	border-radius:15px;
-    height: 40px;
-    width: 100px;
-    font-size: 11pt;
-    color: white;
-}
-
-QPushButton#btnLogin:hover
-{
-	background-color: rgb(33, 157, 201);
-}
-
-QPushButton#btnLogin:pressed
-{
-	padding-left: 3px;
-	padding-top: 3px;
-}
-
-QLabel#lblLoginTip
-{
-    height: 30px;
-}
-/* login css end */
 
 QToolTip {
     border: 1px solid rgb(111, 156, 207);
@@ -142,16 +58,6 @@ QMenu::icon {
 /*    padding: 0px 0px 0px 0px;*/
 }
 
-QMenu#TrayIconMenu {
-    width: 200px;
-    margin: 2px;
-}
-
-QMenu#TrayIconMenu::item {
-    padding-left: 30px;
-    padding-right: 25px;
-}
-
 /*QTableView {
     border: none;
     background: rgb(224, 238, 255);
@@ -171,17 +77,6 @@ QTableView::item:selected {
 QTableView::item:selected:!active {
     color: rgb(65, 65, 65);
 }*/
-
-QTableView#ChatMsgTableView {
-/*    background: skyblue;*/
-}
-
-QTableView#ChatMsgTableView::item {
-    padding-left: 5px;
-    padding-right: 5px;
-    border: none;
-/*    background: green;*/
-}
 
 QScrollBar:horizontal {
     height: 20px;
@@ -270,4 +165,170 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
 QScrollBar#verticalScrollBar:vertical {
     margin-top: 30px;
+}
+
+QTreeView {
+	border: none;
+	background: rgb(242, 242, 242);
+	font-size: 10pt;
+	show-decoration-selected: 1;
+}
+
+QTreeView::item {
+	height: 30px;
+	border: none;
+	background: transparent;
+	color: black;
+}
+
+QTreeView::item:hover, QTreeView::branch:hover {
+	background-color: rgb(216, 244, 240);
+}
+
+QTreeView::item:selected, QTreeView::branch:selected {
+	background-color: rgb(193, 243, 230);
+}
+
+QTreeView::branch:open:has-children {
+	image: url(:/Resources/TreeView/arrowBottom.png);
+}
+
+QTreeView::branch:closed:has-children {
+	image: url(:/Resources/TreeView/arrowRight.png);
+}
+/* common style end */
+
+/* left navigator bar begin */
+QWidget#NavigatorBar {
+    background: rgb(32, 155, 152);
+    width: 94;
+}
+/* left navigator bar end */
+
+/*  */
+QWidget#CallWidget, QWidget#ContactWidget, QWidget#IMWidget {
+    background: rgb(242, 242, 242);
+}
+
+QWidget#DialWidget, QWidget#ContactInfoWidget, QWidget#IMChatWidget {
+    background: white;
+}
+
+QListView#ConversationListView, QListView#CallListView, QTreeView#ContractsTreeView {
+    background: rgb(242, 242, 242);
+    width: 250px;
+}
+
+QLineEdit#SearchLineEdit {
+    border-radius:5px;
+    background:rgb(221, 231, 231);
+}
+
+QWidget#TopWidget {
+    background: white;
+    height: 48px;
+}
+
+QWidget#EmptyWidget {
+    background-color: white;
+/*    background: url(:/Resources/emptyBG.jpg) center no-repeat;*/
+}
+
+QLabel#emptyBG {
+    width: 100px;
+    height: 100px;
+    background: url(:/Resources/emptyBG.jpg) center no-repeat;
+}
+
+/* login css begin */
+QDialog#UPlusLogin {
+    background: white;
+    border: 1px solid lightgray;
+}
+QLineEdit#loginUserName, QLineEdit#loginPassword {
+    width: 200px;
+    height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    border: 1px solid gray;
+	border-radius:2px;
+}
+
+QLineEdit#loginUserName:hover, QLineEdit#loginPassword:hover {
+    border: 1px solid rgb(33, 157, 201);
+}
+
+QPushButton#btnLogin
+{
+	background-color: rgb(33, 157, 201);
+	border-radius:15px;
+    height: 40px;
+    width: 100px;
+    font-size: 11pt;
+    color: white;
+}
+
+QPushButton#btnLogin:hover
+{
+	background-color: rgb(33, 157, 201);
+}
+
+QPushButton#btnLogin:pressed
+{
+	padding-left: 3px;
+	padding-top: 3px;
+}
+
+QLabel#lblLoginTip
+{
+    height: 30px;
+}
+/* login css end */
+
+/* tray menu begin */
+QMenu#TrayIconMenu {
+    width: 200px;
+    margin: 2px;
+}
+
+QMenu#TrayIconMenu::item {
+    padding-left: 30px;
+    padding-right: 25px;
+}
+/* tray menu end */
+
+/* contact info begin */
+QLabel#contactHead {
+    width: 100px;
+    height: 100px;
+}
+
+QLabel#contactUser {
+    font-size: 13pt;
+    height: 30px;
+}
+
+QLabel#contactPhoneTitle, QLabel#contactSectionTitle {
+    height: 30px;
+    color: gray;
+}
+
+QToolButton#btnDirectAudio, QToolButton#btnFreeAudio, QToolButton#btnFreeVideo, QToolButton#btnConfCall, QToolButton#btnIM {
+    width: 80px;
+    height: 80px;
+    border-image: url(:/images/midright/u3921.png);
+    border: none;
+}
+/* contact info end */
+
+QTableView#ChatMsgTableView {
+/*    background: skyblue;*/
+}
+
+QTableView#ChatMsgTableView::item {
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+/*    background: green;*/
 }

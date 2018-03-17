@@ -27,6 +27,7 @@ private:
     void parseContactData();
 
 signals:
+    void sigItemClicked(ContactItem);
 
 public slots:
     ///< item slot >

@@ -125,6 +125,7 @@ void UCSLogger::add(const UcsLogLevel level,
         return;
     }
 
+    QMutexLocker locker(&m_Mutex);
     QString strDateTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     QString strMessage = QString("%1 [%2] - [%3] %4")
             .arg(strDateTime)
@@ -136,13 +137,9 @@ void UCSLogger::add(const UcsLogLevel level,
 
     if (m_pFile)
     {
-//        strMessage.append("\n");
-//        m_pFile->write(strMessage.toLocal8Bit());
-//        m_pFile->flush();
-
-//        QTextStream out(m_pFile);
-//        out << strMessage <<endl;
-//        out.flush();
+        QTextStream out(m_pFile);
+        out << strMessage <<"\r\n";
+        m_pFile->flush();
     }
 }
 
@@ -154,6 +151,8 @@ void UCSLogger::add(const UCSLogger::UcsLogLevel level,
     {
         return;
     }
+
+    QMutexLocker locker(&m_Mutex);
 
     QString moduleTmp;
     if (module.size() > 12)
@@ -181,8 +180,8 @@ void UCSLogger::add(const UCSLogger::UcsLogLevel level,
 
     if (m_pFile)
     {
-        strMessage.append("\n");
-        m_pFile->write(strMessage.toLocal8Bit());
+        QTextStream out(m_pFile);
+        out << strMessage <<"\r\n";
         m_pFile->flush();
     }
 }

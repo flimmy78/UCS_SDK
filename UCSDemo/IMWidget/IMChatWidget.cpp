@@ -37,7 +37,7 @@ IMChatWidget::~IMChatWidget()
     UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
             "~dtor()");
 
-    m_chatsMap.clear();
+//    m_chatsMap.clear();
 
     m_msgIdList.clear();
 }
@@ -195,7 +195,7 @@ void IMChatWidget::changeChat()
         return;
     }
 
-#if 0
+#if 1
     UCS_LOG(UCSLogger::kTraceInfo, this->objectName(), "changeChat before");
     ChatWebView *webView = new ChatWebView(this);
     UCS_LOG(UCSLogger::kTraceInfo, this->objectName(), "changeChat after");

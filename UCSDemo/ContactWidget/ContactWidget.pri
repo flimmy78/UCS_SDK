@@ -4,7 +4,8 @@ HEADERS += \
     $$PWD/treeItem.h \
     $$PWD/ContactTreeItemModel.h \
     $$PWD/ContactInfoWidget.h \
-    $$PWD/ContactsTreeView.h
+    $$PWD/ContactsTreeView.h \
+    $$PWD/ContactDefine.h
 
 SOURCES += \
     $$PWD/ContactWidget.cpp \

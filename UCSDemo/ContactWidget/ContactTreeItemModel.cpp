@@ -119,7 +119,7 @@ QVariant ContactTreeItemModel::data(const QModelIndex &index, int role) const
         for (int i = 0; i < m_organizationList->count(); i++)
         {
             contact = m_organizationList->at(i);
-            if (contact.sectionId == item->data(0))
+            if (contact.contactId == item->data(1))
             {
                 break;
             }
@@ -150,6 +150,10 @@ QVariant ContactTreeItemModel::data(const QModelIndex &index, int role) const
             return QIcon(":/images/u1183.png");
         }
     }
+    else if (role == ContactIdRole)
+    {
+        return contact.contactId;
+    }
     else if (role == SectionNameRole)
     {
         return contact.sectionName;
@@ -157,6 +161,10 @@ QVariant ContactTreeItemModel::data(const QModelIndex &index, int role) const
     else if (role == parentIdRole)
     {
         return contact.parentId;
+    }
+    else if (role == parentNameRole)
+    {
+        return contact.parentName;
     }
     else if (role == userNumRole)
     {
@@ -263,7 +271,7 @@ void ContactTreeItemModel::setupModelData(TreeItem *parent)
     {
         ContactItem contact = m_organizationList->at(i);
         QList<QVariant> columnData;
-        columnData << contact.sectionId;
+        columnData << contact.sectionId << contact.contactId;
 
         for (int j = 0; j < parents.count(); j++)
         {

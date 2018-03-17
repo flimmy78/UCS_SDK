@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QBoxLayout>
+#include <QStackedLayout>
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QPushButton>

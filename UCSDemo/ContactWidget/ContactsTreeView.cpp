@@ -34,7 +34,7 @@ ContactsTreeView::ContactsTreeView(QWidget *parent)
     init();
     initConnection();
     initMenu();
-    loadStyleSheet();
+//    loadStyleSheet();
 }
 
 ContactsTreeView::~ContactsTreeView()
@@ -81,7 +81,6 @@ void ContactsTreeView::init()
 
     m_pContactModel = new ContactTreeItemModel(this);
     this->setModel(m_pContactModel);
-//    m_pContactModel->importJSON(Util::appDir() + "/contacts.json");
 
     ContractTreeItemDelegate *delegate = new ContractTreeItemDelegate(this);
     this->setItemDelegate(delegate);
@@ -91,7 +90,6 @@ void ContactsTreeView::initConnection()
 {
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onItemDoubleClicked(QModelIndex)));
-    //    connect(this, SIGNAL(pressed(QModelIndex)), this, SLOT(slot_itemPressed(QModelIndex)));
     connect(m_pRestApi, SIGNAL(sigOnGetContactsReply(QByteArray,int)),
             this, SLOT(onUpdateContactsReply(QByteArray,int)));
 }
@@ -251,6 +249,8 @@ void ContactsTreeView::parseContactData()
                         isExist = true;
                         section.contactId = sectionList.at(idx).contactId;
                         section.parentId = sectionList.at(idx).parentId;
+                        section.parentName = sectionList.at(idx).parentName;
+
                         sectionList.replace(idx, section);
                     }
                 }
@@ -268,13 +268,14 @@ void ContactsTreeView::parseContactData()
                        person.contactId = contactId++;
 //                       person.sectionId = section.sectionId;
                        person.parentId = section.sectionId;
+                       person.parentName = section.sectionName;
                        person.grade = section.grade;
 
                        QJsonObject personObj = persons.at(index).toObject();
                        if (personObj.contains("userid"))
                        {
                            person.userId = personObj["userid"].toString();
-                           person.sectionId = person.userId;
+//                           person.sectionId = person.userId;
                        }
                        if (personObj.contains("name"))
                        {
@@ -300,8 +301,10 @@ void ContactsTreeView::parseContactData()
                         QJsonObject childObj = childArray.at(index).toObject();
                         ContactItem childSection;
 
-                        childSection.parentId = section.sectionId;
                         childSection.contactId = contactId++;
+                        childSection.parentId = section.sectionId;
+                        childSection.parentName = section.sectionName;
+
                         if (childObj.contains("name"))
                         {
                             childSection.sectionName = childObj["name"].toString();
@@ -328,21 +331,63 @@ void ContactsTreeView::parseContactData()
 
 void ContactsTreeView::onItemClicked(QModelIndex index)
 {
-    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+    int contactId = index.data(ContactIdRole).toInt();
+    QString userId = index.data(userIdRole).toString();
 
-    qDebug() << "sectionid " << item->data(0) << " data " << index.data();
+    UCS_LOG(UCSLogger::kTraceDebug, this->objectName(),
+            QString("onItemClicked() contactId: %1 userId: %2")
+                    .arg(contactId).arg(userId));
+
+    if (!userId.isEmpty())
+    {
+        for (int idx = 0; idx < m_contactList.size(); ++idx)
+        {
+            ContactItem contact = m_contactList.at(idx);
+            if (contactId == contact.contactId)
+            {
+                QString parentName = index.data(parentNameRole).toString();
+                if (!parentName.isEmpty())
+                {
+                    QModelIndex parent = index.parent();
+                    while(parent.isValid())
+                    {
+                        QString name = parent.data(parentNameRole).toString();
+                        if (!name.isEmpty())
+                        {
+                            parentName.insert(0, QString("%1/").arg(name));
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        parent = parent.parent();
+                    }
+                }
+                contact.parentName = parentName;
+                sigItemClicked(contact);
+            }
+        }
+    }
 }
 
 void ContactsTreeView::onItemDoubleClicked(QModelIndex index)
 {
-    qDebug() << index.data().toString();
-//    qDebug() << index.parent().data().toString();
+    int contactId = index.data(ContactIdRole).toInt();
+    QString userId = index.data(userIdRole).toString();
+
+    UCS_LOG(UCSLogger::kTraceDebug, this->objectName(),
+            QString("onItemDoubleClicked() contactId: %1 userId: %2")
+                    .arg(contactId).arg(userId));
 }
 
 void ContactsTreeView::onItemPressed(QModelIndex index)
 {
-//    qDebug() << "row " << index.row() << "column " << index.column() << " data " << index.data();
-    qDebug() << index.data(Qt::DisplayRole).toString();
+    int contactId = index.data(ContactIdRole).toInt();
+    QString userId = index.data(userIdRole).toString();
+
+    UCS_LOG(UCSLogger::kTraceDebug, this->objectName(),
+            QString("onItemDoubleClicked() contactId: %1 userId: %2")
+                    .arg(contactId).arg(userId));
 }
 
 void ContactsTreeView::onAddGroupAction(bool checked)

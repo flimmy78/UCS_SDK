@@ -1,181 +1,193 @@
 ﻿#include "ContactInfoWidget.h"
 #include <QHeaderView>
+#include "UCSLogger.h"
 
 ContactInfoWidget::ContactInfoWidget(QWidget *parent)
     : BaseWidget(parent)
-    , m_lblHeader(this)
-    , m_lblName(this)
-    , m_lblSex(this)
-    , m_tableWid(this)
-    , m_btnDial(this)
-    , m_btnConfCall(this)
-    , m_btnIM(this)
 {
     setMouseTracking(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setCursor(Qt::ArrowCursor);
 
-    setObjectName("ContactStackWidget");
+    setObjectName("ContactInfoWidget");
 
     initLayout();
     initConnection();
-    updateData();
-}
-
-void ContactInfoWidget::updateData()
-{
-    m_tableWid.clear();
-
-    for (int row = 0; row < 4; row++)
-    {
-        m_tableWid.insertRow(row);
-//        m_tableWid.setRowHeight(row, 52);
-        for (int col = 0; col < m_tableWid.columnCount(); col++)
-        {
-            if (col % 2 == 0)
-            {
-//                QTableWidgetItem *item = new QTableWidgetItem();
-//                item->setFlags(item->flags() & (~Qt::ItemIsEditable));
-//                item->setTextColor(Qt::gray);
-//                item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-                QLabel *lbl = new QLabel(this);
-                lbl->setStyleSheet("QLabel{color:gray;}");
-                lbl->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-                lbl->setContentsMargins(8, 0, 8, 0);
-                m_tableWid.setCellWidget(row, col, lbl);
-            }
-            else
-            {
-                MyLabel *lblDept = new MyLabel(this);
-                m_tableWid.setCellWidget(row, col, lblDept);
-            }
-        }
-    }
-
-#if 0
-    m_tableWid.item(0, 0)->setText(QStringLiteral("部门"));
-    m_tableWid.item(0, 1)->setText(QStringLiteral("技术部"));
-    m_tableWid.item(0, 2)->setText(QStringLiteral("职位"));
-    m_tableWid.item(0, 3)->setText(QStringLiteral("软件工程师"));
-
-    m_tableWid.item(1, 0)->setText(QStringLiteral("座机"));
-    m_tableWid.item(1, 1)->setText(QStringLiteral("0755-5555555"));
-    m_tableWid.item(1, 2)->setText(QStringLiteral("邮箱"));
-    m_tableWid.item(1, 3)->setText(QStringLiteral("11111@ucpaas.com"));
-
-    m_tableWid.item(2, 0)->setText(QStringLiteral("工作手机"));
-    m_tableWid.item(2, 1)->setText(QStringLiteral("13666666666"));
-    m_tableWid.item(2, 2)->setText(QStringLiteral("手机"));
-    m_tableWid.item(2, 3)->setText(QStringLiteral("18111111111"));
-#else
-    ((QLabel*)m_tableWid.cellWidget(0, 0))->setText(QStringLiteral("部门"));
-    ((QLabel*)m_tableWid.cellWidget(0, 1))->setText(QStringLiteral("技术部"));
-    ((QLabel*)m_tableWid.cellWidget(0, 2))->setText(QStringLiteral("职位"));
-    ((QLabel*)m_tableWid.cellWidget(0, 3))->setText(QStringLiteral("软件工程师"));
-
-    ((QLabel*)m_tableWid.cellWidget(1, 0))->setText(QStringLiteral("座机"));
-    ((QLabel*)m_tableWid.cellWidget(1, 1))->setText(QStringLiteral("0755-5555555"));
-    ((QLabel*)m_tableWid.cellWidget(1, 2))->setText(QStringLiteral("邮箱"));
-    ((QLabel*)m_tableWid.cellWidget(1, 3))->setText(QStringLiteral("11111@ucpaas.com"));
-
-    ((QLabel*)m_tableWid.cellWidget(2, 0))->setText(QStringLiteral("工作手机"));
-    ((QLabel*)m_tableWid.cellWidget(2, 1))->setText(QStringLiteral("13666666666"));
-    ((QLabel*)m_tableWid.cellWidget(2, 2))->setText(QStringLiteral("手机"));
-    ((QLabel*)m_tableWid.cellWidget(2, 3))->setText(QStringLiteral("18111111111"));
-#endif
 }
 
 void ContactInfoWidget::initLayout()
 {
-    QVBoxLayout *pMainLayout = new QVBoxLayout;
-    QHBoxLayout *pNameLayout = new QHBoxLayout;
-    QHBoxLayout *pOptLayout = new QHBoxLayout;
+    QVBoxLayout *pMainLayout = new QVBoxLayout(this);
+    QHBoxLayout *pDetailLayout = new QHBoxLayout;
+    QHBoxLayout *pBtnLayout = new QHBoxLayout;
 
-    m_lblHeader.setPixmap(QPixmap(":/images/midright/u3901.png"));
-    m_lblHeader.setFixedSize(100, 100);
+    m_pLblHeaderImg = new QLabel(this);
+    m_pLblUserName = new QLabel(this);
+    m_pLblUserSex = new QLabel(this);
+    m_pLblUserPhone = new QLabel(this);
+    m_pLblSectionName = new QLabel(this);
+    m_pLblPhoneTitle = new QLabel(this);
+    m_pLblSectionTitle = new QLabel(this);
 
-    m_lblName.setText(QStringLiteral("小薇"));
-    m_lblName.setFont(QFont(QStringLiteral("微软雅黑"), 13, QFont::Normal, false));
-    m_lblName.adjustSize();
+    m_pBtnDirectAudio = new QToolButton(this);
+    m_pBtnFreeAudio = new QToolButton(this);
+    m_pBtnFreeVideo = new QToolButton(this);
+    m_pBtnConfCall = new QToolButton(this);
+    m_pBtnIM = new QToolButton(this);
 
-    /* 旋转45° */
-    QMatrix mrix;
-    mrix.rotate(45);
-    m_lblSex.setPixmap(QPixmap(":/images/midright/u3903.png").transformed(mrix, Qt::SmoothTransformation));
+    m_pLblHeaderImg->setObjectName("contactHead");
+    m_pLblUserName->setObjectName("contactUser");
+    m_pLblUserSex->setObjectName("contactSex");
+    m_pLblUserPhone->setObjectName("contactPhone");
+    m_pLblSectionName->setObjectName("contactSection");
+    m_pLblSectionTitle->setObjectName("contactSectionTitle");
+    m_pLblPhoneTitle->setObjectName("contactPhoneTitle");
 
-    pNameLayout->addStretch();
-    pNameLayout->addWidget(&m_lblName);
-    pNameLayout->addWidget(&m_lblSex);
-    pNameLayout->setSpacing(8);
-    pNameLayout->addStretch();
+    m_pBtnDirectAudio->setObjectName("btnDirectAudio");
+    m_pBtnFreeAudio->setObjectName("btnFreeAudio");
+    m_pBtnFreeVideo->setObjectName("btnFreeVideo");
+    m_pBtnConfCall->setObjectName("btnConfCall");
+    m_pBtnIM->setObjectName(("btnIM"));
 
-    m_tableWid.setFrameShadow(QFrame::Plain);
-    m_tableWid.setColumnCount(4);
-    m_tableWid.setFrameShape(QFrame::NoFrame);
-    m_tableWid.setShowGrid(false);
-    m_tableWid.setFocusPolicy(Qt::NoFocus);
-    m_tableWid.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_tableWid.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_tableWid.horizontalHeader()->hide();
-    m_tableWid.verticalHeader()->hide();
-    m_tableWid.horizontalHeader()->resizeSection(0, 90);
-    m_tableWid.horizontalHeader()->resizeSection(1, 220);
-    m_tableWid.horizontalHeader()->resizeSection(2, 90);
-    m_tableWid.horizontalHeader()->resizeSection(3, 220);
-    m_tableWid.horizontalHeader()->setStretchLastSection(true);
-    m_tableWid.horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    m_tableWid.verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-//    m_tableWid.verticalHeader()->setStretchLastSection(true);
-    m_tableWid.verticalHeader()->setDefaultSectionSize(52);
-    m_tableWid.setMinimumWidth(625);
-    m_tableWid.setEditTriggers(QTableWidget::NoEditTriggers);
-    m_tableWid.setSelectionMode(QAbstractItemView::NoSelection);
-    m_tableWid.setFont(QFont(QStringLiteral("微软雅黑"), 11, QFont::Normal, false));
+//    m_pLblHeaderImg->setFixedSize(100, 100);
+    m_pLblHeaderImg->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pLblUserName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_pLblUserSex->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pLblUserPhone->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_pLblSectionName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    m_pBtnDirectAudio->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnFreeAudio->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnFreeVideo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnConfCall->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnIM->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    m_pLblPhoneTitle->setText(QStringLiteral("手机"));
+    m_pLblSectionTitle->setText(QStringLiteral("部门"));
+    m_pLblHeaderImg->setPixmap(QPixmap(":/images/midright/u3901.png"));
+
+    pDetailLayout->addStretch();
+    pDetailLayout->addWidget(m_pLblPhoneTitle);
+    pDetailLayout->addWidget(m_pLblUserPhone);
+    pDetailLayout->addSpacing(36);
+    pDetailLayout->addWidget(m_pLblSectionTitle);
+    pDetailLayout->addWidget(m_pLblSectionName);
+    pDetailLayout->setSpacing(8);
+    pDetailLayout->addStretch();
+    pDetailLayout->setContentsMargins(0, 0, 0, 0);
+
+    m_pBtnDirectAudio->setIcon(QIcon(":/images/midright/u3923.png"));
+    m_pBtnDirectAudio->setIconSize(QSize(32, 32));
+    m_pBtnDirectAudio->setText(QStringLiteral("高清电话"));
+    m_pBtnDirectAudio->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    m_pBtnFreeAudio->setIcon(QIcon(":/images/midright/u2344.png"));
+    m_pBtnFreeAudio->setIconSize(QSize(32, 32));
+    m_pBtnFreeAudio->setText(QStringLiteral("网络电话"));
+    m_pBtnFreeAudio->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    m_pBtnFreeVideo->setIcon(QIcon(":/images/midright/u2358.png"));
+    m_pBtnFreeVideo->setIconSize(QSize(32, 32));
+    m_pBtnFreeVideo->setText(QStringLiteral("视频"));
+    m_pBtnFreeVideo->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    m_pBtnConfCall->setIcon(QIcon(":/images/midright/u3941.png"));
+    m_pBtnConfCall->setIconSize(QSize(32, 32));
+    m_pBtnConfCall->setText(QStringLiteral("电话会议"));
+    m_pBtnConfCall->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    m_pBtnIM->setIcon(QIcon(":/images/midright/u3931.png"));
+    m_pBtnIM->setIconSize(QSize(32, 32));
+    m_pBtnIM->setText(QStringLiteral("消息"));
+    m_pBtnIM->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
 
-    m_btnDial.setStyleSheet("QToolButton{border-image: url(:/images/midright/u3921.png); border:none; color: rgb(32, 155, 152);}");
-    m_btnConfCall.setStyleSheet("QToolButton{border-image: url(:/images/midright/u3921.png); border:none; color: rgb(32, 155, 152);}");
-    m_btnIM.setStyleSheet("QToolButton{border-image: url(:/images/midright/u3921.png); border:none; color: rgb(32, 155, 152);}");
-
-    m_btnDial.setIcon(QIcon(":/images/midright/u3923.png"));
-    m_btnDial.setIconSize(QSize(32, 32));
-    m_btnDial.setText(QStringLiteral("拨打"));
-    m_btnDial.setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-
-    m_btnConfCall.setIcon(QIcon(":/images/midright/u3941.png"));
-    m_btnConfCall.setIconSize(QSize(32, 32));
-    m_btnConfCall.setText(QStringLiteral("电话会议"));
-    m_btnConfCall.setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-
-    m_btnIM.setIcon(QIcon(":/images/midright/u3931.png"));
-    m_btnIM.setIconSize(QSize(32, 32));
-    m_btnIM.setText(QStringLiteral("消息"));
-    m_btnIM.setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-
-    m_btnDial.setFixedSize(80, 80);
-    m_btnConfCall.setFixedSize(80, 80);
-    m_btnIM.setFixedSize(80, 80);
-
-    pOptLayout->addStretch();
-    pOptLayout->addWidget(&m_btnDial);
-    pOptLayout->addWidget(&m_btnConfCall);
-    pOptLayout->addWidget(&m_btnIM);
-    pOptLayout->addStretch();
-    pOptLayout->setSpacing(16);
+    pBtnLayout->addStretch();
+    pBtnLayout->addWidget(m_pBtnDirectAudio);
+    pBtnLayout->addStretch();
+    pBtnLayout->addWidget(m_pBtnFreeAudio);
+    pBtnLayout->addStretch();
+    pBtnLayout->addWidget(m_pBtnFreeVideo);
+    pBtnLayout->addStretch();
+    pBtnLayout->addWidget(m_pBtnConfCall);
+    pBtnLayout->addStretch();
+    pBtnLayout->addWidget(m_pBtnIM);
+    pBtnLayout->addStretch();
 
     pMainLayout->addStretch();
-    pMainLayout->addWidget(&m_lblHeader, 0, Qt::AlignHCenter);
-    pMainLayout->addLayout(pNameLayout);
-    pMainLayout->addWidget(&m_tableWid, 0, Qt::AlignHCenter);
-    pMainLayout->addLayout(pOptLayout);
-    pMainLayout->setSpacing(16);
+    pMainLayout->addWidget(m_pLblHeaderImg, 0, Qt::AlignHCenter);
+    pMainLayout->addWidget(m_pLblUserName, 0, Qt::AlignHCenter);
     pMainLayout->addStretch();
-    pMainLayout->setContentsMargins(0, 0, 0, 0);
+    pMainLayout->addSpacing(16);
+    pMainLayout->addLayout(pDetailLayout);
+    pMainLayout->addStretch();
+    pMainLayout->addLayout(pBtnLayout);
+    pMainLayout->addStretch();
+    pMainLayout->setContentsMargins(20, 0, 20, 0);
 
-    setLayout(pMainLayout);
+//    setLayout(pMainLayout);
 }
 
 void ContactInfoWidget::initConnection()
+{
+    connect(m_pBtnDirectAudio, SIGNAL(clicked(bool)), this, SLOT(onDirectAudioClick(bool)));
+    connect(m_pBtnFreeAudio, SIGNAL(clicked(bool)), this, SLOT(onFreeAudioClick(bool)));
+    connect(m_pBtnFreeVideo, SIGNAL(clicked(bool)), this, SLOT(onFreeVideoClick(bool)));
+    connect(m_pBtnConfCall, SIGNAL(clicked(bool)), this, SLOT(onConfCallClick(bool)));
+    connect(m_pBtnIM, SIGNAL(clicked(bool)), this, SLOT(onImClick(bool)));
+}
+
+void ContactInfoWidget::contactShow()
+{
+    m_pLblUserName->setText(m_contact.userName);
+
+    if (m_contact.headPath.size())
+    {
+        QSize headSize = m_pLblHeaderImg->size();
+        m_pLblHeaderImg->setPixmap(QPixmap(m_contact.headPath).scaled(headSize, Qt::KeepAspectRatio));
+    }
+
+    /* 旋转45° */
+//    QMatrix mrix;
+//    mrix.rotate(45);
+//    m_pLblUserSex->setPixmap(QPixmap(":/images/midright/u3903.png").transformed(mrix, Qt::SmoothTransformation));
+
+    m_pLblUserPhone->setText(m_contact.userId);
+    m_pLblSectionName->setText(m_contact.parentName);
+}
+
+void ContactInfoWidget::onContactItemClicked(ContactItem contact)
+{
+    UCS_LOG(UCSLogger::kTraceDebug, this->objectName(),
+            QString("onContactItemClicked() contactId: %1 userId: %2 sectionName: %3")
+                    .arg(contact.contactId).arg(contact.userId).arg(contact.parentName));
+
+    m_contact = contact;
+
+    contactShow();
+}
+
+void ContactInfoWidget::onDirectAudioClick(bool)
+{
+
+}
+
+void ContactInfoWidget::onFreeAudioClick(bool)
+{
+
+}
+
+void ContactInfoWidget::onFreeVideoClick(bool)
+{
+
+}
+
+void ContactInfoWidget::onConfCallClick(bool)
+{
+
+}
+
+void ContactInfoWidget::onImClick(bool)
 {
 
 }

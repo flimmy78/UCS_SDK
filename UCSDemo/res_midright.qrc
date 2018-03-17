@@ -16,5 +16,7 @@
         <file>images/midright/u4383.png</file>
         <file>images/midright/radiobutton_checked.png</file>
         <file>images/midright/radiobutton_unchecked.png</file>
+        <file>images/midright/u2344.png</file>
+        <file>images/midright/u2358.png</file>
     </qresource>
 </RCC>

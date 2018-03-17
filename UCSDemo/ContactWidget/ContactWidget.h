@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <qglobal.h>
+#include <QStackedLayout>
 #include "BaseWidget.h"
 #include "ContactsTreeView.h"
 #include "ContactInfoWidget.h"
@@ -24,12 +25,14 @@ private:
 signals:
 
 public slots:
+    void onContactViewClicked(ContactItem contact);
 
 private:
     TopWidget *m_pTitleBar;
     SearchLineEdit *m_pSearchEdit;
     ContactsTreeView *m_pContactListView;
     ContactInfoWidget *m_pContactInfoWidget;
+    QStackedLayout *m_pStackedLayout;
 };
 
 #endif // CONTACTWIDGET_H

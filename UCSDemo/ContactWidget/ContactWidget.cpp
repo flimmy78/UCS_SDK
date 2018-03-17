@@ -1,4 +1,5 @@
 ﻿#include "ContactWidget.h"
+#include "EmptyWidget.h"
 
 ContactWidget::ContactWidget(QWidget *parent)
     : BaseWidget(parent)
@@ -22,6 +23,7 @@ void ContactWidget::initLayout()
     QVBoxLayout *pLeftLayout = new QVBoxLayout;
     QVBoxLayout *pRightLayout = new QVBoxLayout;
     QHBoxLayout *pSearchLayout = new QHBoxLayout;
+    m_pStackedLayout = new QStackedLayout;
 
     pSearchLayout->addWidget(m_pSearchEdit);
     pSearchLayout->setContentsMargins(15, 20, 15, 10);
@@ -31,8 +33,15 @@ void ContactWidget::initLayout()
     pLeftLayout->setSpacing(0);
     pLeftLayout->setContentsMargins(0, 0, 0, 0);
 
+    EmptyWidget *emptyWidget = new EmptyWidget(this);
+    m_pStackedLayout->addWidget(emptyWidget);
+    m_pStackedLayout->addWidget(m_pContactInfoWidget);
+    m_pStackedLayout->setSpacing(0);
+    m_pStackedLayout->setContentsMargins(0, 0, 0, 0);
+
     pRightLayout->addWidget(m_pTitleBar);
-    pRightLayout->addWidget(m_pContactInfoWidget);
+//    pRightLayout->addWidget(m_pContactInfoWidget);
+    pRightLayout->addLayout(m_pStackedLayout);
     pRightLayout->setSpacing(0);
     pRightLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -44,7 +53,18 @@ void ContactWidget::initLayout()
 
 void ContactWidget::initConnections()
 {
+    connect(m_pContactListView, SIGNAL(sigItemClicked(ContactItem)),
+            m_pContactInfoWidget, SLOT(onContactItemClicked(ContactItem)));
 
+    connect(m_pContactListView, SIGNAL(sigItemClicked(ContactItem)),
+            this, SLOT(onContactViewClicked(ContactItem)));
+}
+
+void ContactWidget::onContactViewClicked(ContactItem contact)
+{
+    Q_UNUSED(contact);
+
+    m_pStackedLayout->setCurrentIndex(1);
 }
 
 ContactsTreeView *ContactWidget::contactListView() const
