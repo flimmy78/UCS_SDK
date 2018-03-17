@@ -136,9 +136,13 @@ void UCSLogger::add(const UcsLogLevel level,
 
     if (m_pFile)
     {
-        strMessage.append("\n");
-        m_pFile->write(strMessage.toLocal8Bit());
-        m_pFile->flush();
+//        strMessage.append("\n");
+//        m_pFile->write(strMessage.toLocal8Bit());
+//        m_pFile->flush();
+
+//        QTextStream out(m_pFile);
+//        out << strMessage <<endl;
+//        out.flush();
     }
 }
 

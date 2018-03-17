@@ -16,12 +16,12 @@ public:
     int columnCount() const;
     QVariant data(int column) const;
     int row() const;
-    TreeItem *parent();
+    TreeItem *parentItem();
 
 private:
     QList<TreeItem *> m_childItems;
     QList<QVariant> m_itemData;
-    TreeItem *m_pParentItem;
+    TreeItem *m_parentItem;
 };
 
 #endif // TREEITEM_H

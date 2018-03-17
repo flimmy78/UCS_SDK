@@ -161,8 +161,7 @@ void UPlusLogin::initConnections()
 void UPlusLogin::readSettings()
 {
     QString userId = CommonHelper::readSetting("Login", "userId", "").toString();
-    QString pwdBase64 = CommonHelper::readSetting("Login", "pwd", "").toString();
-    QString pwd = QString(QByteArray::fromBase64(pwdBase64.toLocal8Bit()));
+    QString pwd = CommonHelper::readUserPwd("pwd");
 
 //    QString name = CommonHelper::readSetting("Login", "name", "").toString();
 //    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
@@ -192,9 +191,7 @@ void UPlusLogin::onLoginSuccess()
 void UPlusLogin::uploadHeaderImg()
 {
     QString userId = CommonHelper::readSetting("Login", "userId", "").toString();
-    QString pwdBase64 = CommonHelper::readSetting("Login", "pwd", "").toString();
-    QString pwd = QString(QByteArray::fromBase64(pwdBase64.toLocal8Bit()));
-
+    QString pwd = CommonHelper::readUserPwd("pwd");
     QFile file(":/Resources/emptyBG.jpg");
     if (!file.open(QIODevice::ReadOnly) || file.size() == 0)
     {
@@ -259,7 +256,7 @@ void UPlusLogin::onBtnLogin()
         }
 
         CommonHelper::saveSetting("Login", "userId", userId);
-        CommonHelper::saveSetting("Login", "pwd", QString(pwd.toLocal8Bit().toBase64()));
+        CommonHelper::saveUserPwd("pwd", pwd);
     }
 }
 
@@ -323,7 +320,7 @@ void UPlusLogin::onLoginReply(QByteArray replyData, int code)
                 CommonHelper::saveSetting("Login", "name", name);
                 CommonHelper::saveSetting("Login", "token", token);
                 CommonHelper::saveSetting("Login", "sex", sex);
-                CommonHelper::saveSetting("Login", "summitpwd", submitPwd);
+                CommonHelper::saveUserPwd("summitpwd", submitPwd);
                 CommonHelper::saveSetting("Login", "headUrl", headImg);
                 CommonHelper::saveSetting("Login", "time", QDateTime::currentSecsSinceEpoch());
 

@@ -3,7 +3,7 @@
 
 TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent)
 {
-    m_pParentItem = parent;
+    m_parentItem = parent;
     m_itemData = data;
 }
 
@@ -39,15 +39,15 @@ QVariant TreeItem::data(int column) const
 
 int TreeItem::row() const
 {
-    if (m_pParentItem)
+    if (m_parentItem)
     {
-        return m_pParentItem->m_childItems.indexOf(const_cast<TreeItem*>(this));
+        return m_parentItem->m_childItems.indexOf(const_cast<TreeItem*>(this));
     }
 
     return 0;
 }
 
-TreeItem *TreeItem::parent()
+TreeItem *TreeItem::parentItem()
 {
-    return m_pParentItem;
+    return m_parentItem;
 }

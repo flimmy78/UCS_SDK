@@ -15,6 +15,8 @@ class ContactWidget : public BaseWidget
 public:
     explicit ContactWidget(QWidget *parent = 0);
 
+    ContactsTreeView *contactListView() const;
+
 private:
     void initLayout();
     void initConnections();

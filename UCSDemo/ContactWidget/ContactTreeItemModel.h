@@ -4,16 +4,53 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
-#include "common/util.h"
 
 class TreeItem;
 
-enum CustomRole
+enum ContactRole
 {
-    MyRole = Qt::UserRole,
-    GroupRole = MyRole + 1,
-    SexRole = MyRole + 2,
+    SectionNameRole = Qt::UserRole,
+    SectionIdRole,
+    parentIdRole,
+    gradeRole,
+    userNumRole,
+    userIdRole,
+    userNameRole,
+    userSexRole,
+    headUrlRole,
+    headPathRole,
 };
+
+typedef struct ContactItem
+{
+    ContactItem() {
+        sectionName = "";
+        sectionId = "";
+        parentId = "";
+        grade = 0;
+        sortNum = 0;
+        userNum = 0;
+        userId = "";
+        userName = "";
+        userSex = 0;
+        headUrl = "";
+        headPath = "";
+    }
+
+    int     contactId;  ///< 唯一标识 >
+    QString sectionName;   ///< 直属部门 >
+    QString sectionId;  ///< 部门Id >
+    QString parentId;   ///< 上一级部门 >
+    int     grade;      ///< 部门层级 >
+    int     sortNum;    ///< 顶级部门排序 >
+    int     userNum;    ///< 本部门人员数 >
+    QString userId;     ///< 人员Id >
+    QString userName;   ///< 人员名称 >
+    int     userSex;    ///< 人员性别 >
+    QString headUrl;    ///< 头像地址 >
+    QString headPath;   ///< 头像本地路径 >
+} ContactItem;
+typedef QList<ContactItem> ContactList;
 
 class ContactTreeItemModel : public QAbstractItemModel
 {
@@ -44,15 +81,16 @@ public:
     // custom functionality:
     void importJSON(QString jsonFile);
 
+    void refreshModel();
+    void setOrganizationList(ContactList *organizationList);
+
 private:
     void setupModelData(TreeItem *parent);
-    TreeItem *item(TreeItem *item, ContactUtil contract);
-
-public:
+    TreeItem *item(TreeItem *item, ContactItem contract);
 
 private:
-    QList<ContactUtil> m_organizationList;
-    QList<ContactUtil> m_privateList;
+    ContactList *m_organizationList;
+    QList<ContactItem> m_privateList;
 //    QMap<QString, QList> m_listMap;
     TreeItem *m_pRootItem;
 };

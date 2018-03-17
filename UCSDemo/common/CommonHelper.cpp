@@ -176,3 +176,16 @@ QVariant CommonHelper::readSetting(const QString &group, const QString &key, con
 
     return value;
 }
+
+void CommonHelper::saveUserPwd(QString key, QString pwd)
+{
+    CommonHelper::saveSetting("Login", key, QString(pwd.toLocal8Bit().toBase64()));
+}
+
+QString CommonHelper::readUserPwd(QString key)
+{
+    QString pwdBase64 = CommonHelper::readSetting("Login", key, "").toString();
+    QString pwd = QString(QByteArray::fromBase64(pwdBase64.toLocal8Bit()));
+
+    return pwd;
+}

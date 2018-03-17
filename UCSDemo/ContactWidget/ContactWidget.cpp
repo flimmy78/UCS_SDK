@@ -46,3 +46,8 @@ void ContactWidget::initConnections()
 {
 
 }
+
+ContactsTreeView *ContactWidget::contactListView() const
+{
+    return m_pContactListView;
+}

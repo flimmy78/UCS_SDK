@@ -6,7 +6,7 @@
 #include "Interface/UCSTcpClient.h"
 #include <QMovie>
 #include <QPainter>
-#include <util.h>
+#include "CommonHelper.h"
 
 UCSLogin::UCSLogin(QWidget *parent)
     : BaseDialog(parent)
@@ -176,7 +176,8 @@ void UCSLogin::customEvent(QEvent *event)
 
             UCSTcpClient::Instance()->unRegisterEventListener(kUCSLoginEvent, this);
 
-            Util::writeSetting("loginId", loginEvt->userId());
+            CommonHelper::saveSetting("Login", "userId", loginEvt->userId());
+
             if (m_timerId)
             {
                 killTimer(m_timerId);

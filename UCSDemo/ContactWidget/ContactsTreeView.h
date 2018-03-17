@@ -13,6 +13,8 @@ public:
     explicit ContactsTreeView(QWidget *parent = 0);
     virtual ~ContactsTreeView();
 
+    void doUpdateContacts();
+
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
 
@@ -21,6 +23,8 @@ private:
     void initConnection();
     void initMenu();
     void loadStyleSheet();
+
+    void parseContactData();
 
 signals:
 
@@ -48,6 +52,10 @@ private:
     QMenu *m_pPersonMenu;
 
     UPlusRestApi *m_pRestApi;
+    QByteArray m_contactData;
+
+    ContactList m_contactList;
+    QString m_contactVer;
 };
 
 #endif // MIDLEFTCONTRACTSTREEVIEW_H

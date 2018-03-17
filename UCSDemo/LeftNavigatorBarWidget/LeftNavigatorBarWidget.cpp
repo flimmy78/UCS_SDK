@@ -5,7 +5,7 @@
 #include <QPainter>
 #include "Interface/UCSTcpClient.h"
 #include "Interface/UCSIMClient.h"
-#include <util.h>
+#include "CommonHelper.h"
 
 LeftNavigatorBarWidget::LeftNavigatorBarWidget(QWidget *parent)
     : BaseWidget(parent)
@@ -37,8 +37,9 @@ void LeftNavigatorBarWidget::initLayout()
                                "QPushButton::hover{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}"
                                "QPushButton::pressed{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}");
 
-    QString loginId = Util::readSetting(QString("loginId")).toString();
-    m_pBtnInfo->setToolTip(loginId);
+
+    QString userId = CommonHelper::readSetting("Login", "userId", "").toString();
+    m_pBtnInfo->setToolTip(userId);
 
     m_pBtn[0] = new StackButton(0,
                                 ":/images/mainleft/u80.png",

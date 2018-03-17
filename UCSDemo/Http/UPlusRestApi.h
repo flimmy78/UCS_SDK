@@ -81,7 +81,7 @@ public:
      * \param userId
      * \param pwd
      */
-    void doGetContracts(QString userId, QString pwd);
+    void doGetContacts(QString userId, QString pwd);
 
     /*!
      * \brief doCheckVersion 检查版本更新
@@ -121,7 +121,7 @@ signals:
     void sigOnReLoginReply(QByteArray, int);
     void sigOnResetPwdReply(QByteArray, int);
     void sigOnUploadHeaderImgReply(QByteArray, int);
-    void sigOnGetContractsReply(QByteArray, int);
+    void sigOnGetContactsReply(QByteArray, int);
     void sigOnCheckVersionReply(QByteArray, int);
     void sigOnQueryFriendInfoReply(QByteArray, int);
     void sigOnUploadFeedBackReply(QByteArray, int);
@@ -131,7 +131,7 @@ private slots:
     void onReLoginReply(QNetworkReply *reply);
     void onResetPwdReply(QNetworkReply *reply);
     void onUploadHeaderImgReply(QNetworkReply *reply);
-    void onGetContractsReply(QNetworkReply *reply);
+    void onGetContactsReply(QNetworkReply *reply);
     void onCheckVersionReply(QNetworkReply *reply);
     void onQueryFriendInfoReply(QNetworkReply *reply);
     void onUploadFeedBackReply(QNetworkReply *reply);

@@ -124,6 +124,7 @@ void MainWindow::customEvent(QEvent *event)
                     QString("login success. userId = ").append(loginEvt->userId()));
 
 //            m_pImWidget->conversationListView()->updateConversationList();
+            m_pContactWidget->contactListView()->doUpdateContacts();
         }
         else
         {

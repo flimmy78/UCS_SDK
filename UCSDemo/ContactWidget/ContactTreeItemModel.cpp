@@ -63,7 +63,7 @@ QModelIndex ContactTreeItemModel::parent(const QModelIndex &index) const
     }
 
     TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
-    TreeItem *parentItem = childItem->parent();
+    TreeItem *parentItem = childItem->parentItem();
 
     if (parentItem == m_pRootItem)
     {
@@ -109,17 +109,17 @@ QVariant ContactTreeItemModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
-    ContactUtil contactUtil;
+    ContactItem contact;
     if (item->data(0) == "pri")
     {
-        contactUtil = m_privateList.at(0);
+        contact = m_privateList.at(0);
     }
     else
     {
-        for (int i = 0; i < m_organizationList.count(); i++)
+        for (int i = 0; i < m_organizationList->count(); i++)
         {
-            contactUtil = m_organizationList.at(i);
-            if (contactUtil.sectionId == item->data(0))
+            contact = m_organizationList->at(i);
+            if (contact.sectionId == item->data(0))
             {
                 break;
             }
@@ -128,30 +128,55 @@ QVariant ContactTreeItemModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole)
     {
-        return contactUtil.name;
+        if (contact.userId.isEmpty())
+        {
+            QString name = QString("%1 [%2]").arg(contact.sectionName)
+                                            .arg(contact.userNum);
+            return name;
+        }
+        else
+        {
+            return contact.userName;
+        }
     }
     else if (role == Qt::DecorationRole && index.column() == 0)
     {
-        if (contactUtil.sex == 0)
+        if (contact.userSex == 1)
         {
             return QIcon(":/images/u1185.png");
         }
-        else if (contactUtil.sex == 1)
+        else if (contact.userSex == 2)
         {
             return QIcon(":/images/u1183.png");
         }
     }
-//    else if (role == Qt::FontRole)
-//    {
-//        return QFont("微软雅黑", 10, QFont::Normal, false);
-//    }
-    else if (role == GroupRole)
+    else if (role == SectionNameRole)
     {
-        return contactUtil.sex < 0;
+        return contact.sectionName;
     }
-    else if (role == SexRole)
+    else if (role == parentIdRole)
     {
-        return contactUtil.sex;
+        return contact.parentId;
+    }
+    else if (role == userNumRole)
+    {
+        return contact.userNum;
+    }
+    else if (role == userIdRole)
+    {
+        return contact.userId;
+    }
+    else if (role == userSexRole)
+    {
+        return contact.userSex;
+    }
+    else if (role == headUrlRole)
+    {
+        return contact.headUrl;
+    }
+    else if (role == headPathRole)
+    {
+        return contact.headPath;
     }
 
     return QVariant();
@@ -171,14 +196,14 @@ bool ContactTreeItemModel::setData(const QModelIndex &index, const QVariant &val
     if (index.isValid() && role == Qt::EditRole)
     {
         TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
-        ContactUtil *contactUtil;
-        for (int i = 0; i < m_organizationList.count(); i++)
+        ContactItem *contact;
+        for (int i = 0; i < m_organizationList->count(); i++)
         {
-            contactUtil = (ContactUtil*)(&(m_organizationList.at(i)));
-            if (contactUtil->sectionId == item->data(0))
+            contact = (ContactItem*)(&(m_organizationList->at(i)));
+            if (contact->sectionId == item->data(0))
             {
                 QString text = value.toString();
-                contactUtil->name = value.toString();
+                contact->sectionName = value.toString();
 
                 qDebug() << "setData " << text;
                 break;
@@ -193,23 +218,26 @@ bool ContactTreeItemModel::setData(const QModelIndex &index, const QVariant &val
 
 void ContactTreeItemModel::importJSON(QString jsonFile)
 {
-    ContactUtil contact;
+    ContactItem contact;
     contact.sectionId = "top";
-    contact.name = QStringLiteral("组织架构");
-    contact.sex = -1;
-    contact.grade = 0;
+    contact.sectionName = QStringLiteral("组织架构");
 
-    m_organizationList = Util::parseJson(jsonFile);
-    m_organizationList.insert(0, contact);
 
-    ContactUtil priContact;
+//    m_organizationList = Util::parseJson(jsonFile);
+    m_organizationList->insert(0, contact);
+
+    ContactItem priContact;
     priContact.sectionId = "pri";
-    priContact.name = QStringLiteral("常用联系人");
-    priContact.sex = -1;
-    priContact.grade = 0;
+    priContact.sectionName = QStringLiteral("常用联系人");
     m_privateList.append(priContact);
 
     setupModelData(m_pRootItem);
+}
+
+void ContactTreeItemModel::refreshModel()
+{
+    beginResetModel();
+    endResetModel();
 }
 
 void ContactTreeItemModel::setupModelData(TreeItem *parent)
@@ -224,16 +252,16 @@ void ContactTreeItemModel::setupModelData(TreeItem *parent)
 
     parents << parent;
 
-    ContactUtil priContact = m_privateList.at(0);
-    QList<QVariant> columnData1;
-    columnData1 << priContact.sectionId;
-    priParent = new TreeItem(columnData1, parents.last());
-    parents.last()->appendChild(priParent);
+//    ContactItem priContact = m_privateList.at(0);
+//    QList<QVariant> columnData1;
+//    columnData1 << priContact.sectionId;
+//    priParent = new TreeItem(columnData1, parents.last());
+//    parents.last()->appendChild(priParent);
 
 
-    for (int i = 0; i < m_organizationList.count(); i++)
+    for (int i = 0; i < m_organizationList->count(); i++)
     {
-        ContactUtil contact = m_organizationList.at(i);
+        ContactItem contact = m_organizationList->at(i);
         QList<QVariant> columnData;
         columnData << contact.sectionId;
 
@@ -253,7 +281,7 @@ void ContactTreeItemModel::setupModelData(TreeItem *parent)
 
 }
 
-TreeItem *ContactTreeItemModel::item(TreeItem *item, ContactUtil contact)
+TreeItem *ContactTreeItemModel::item(TreeItem *item, ContactItem contact)
 {
     TreeItem *treeItem = NULL;
     if (item == NULL)
@@ -261,8 +289,10 @@ TreeItem *ContactTreeItemModel::item(TreeItem *item, ContactUtil contact)
         return treeItem;
     }
 
-    QString parentSecId = contact.parentSecId;
-    if (!QString::compare(item->data(0).toString(), parentSecId, Qt::CaseSensitive))
+    QString parentId = contact.parentId;
+    QString ItemId = item->data(0).toString();
+    ///< 查找父节点 >
+    if (!QString::compare(ItemId, parentId, Qt::CaseSensitive))
     {
         treeItem = item;
     }
@@ -281,4 +311,11 @@ TreeItem *ContactTreeItemModel::item(TreeItem *item, ContactUtil contact)
     }
 
     return treeItem;
+}
+
+void ContactTreeItemModel::setOrganizationList(QList<ContactItem> *organizationList)
+{
+    m_organizationList = organizationList;
+    setupModelData(m_pRootItem);
+    refreshModel();
 }

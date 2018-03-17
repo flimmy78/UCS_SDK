@@ -107,8 +107,12 @@ void UPlusRestApi::doUploadHeaderImg(QString userId, QString pwd,
     manager->post(httpRequest.request(), data);
 }
 
-void UPlusRestApi::doGetContracts(QString userId, QString pwd)
+void UPlusRestApi::doGetContacts(QString userId, QString pwd)
 {
+    if (userId.isEmpty() || pwd.isEmpty())
+    {
+        return;
+    }
     QUrl url(m_uplusUrl + "service/getcontacts");
 
     QByteArray pwdHash = QCryptographicHash::hash(pwd.toLocal8Bit(), QCryptographicHash::Md5);
@@ -124,7 +128,7 @@ void UPlusRestApi::doGetContracts(QString userId, QString pwd)
     httpRequest.setContentLength(data.length());
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onGetContractsReply(QNetworkReply*)));
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onGetContactsReply(QNetworkReply*)));
     manager->post(httpRequest.request(), data);
 }
 
@@ -233,10 +237,10 @@ void UPlusRestApi::onUploadHeaderImgReply(QNetworkReply *reply)
     reply->deleteLater();
 }
 
-void UPlusRestApi::onGetContractsReply(QNetworkReply *reply)
+void UPlusRestApi::onGetContactsReply(QNetworkReply *reply)
 {
     HttpReply httpReply(reply);
-    emit sigOnGetContractsReply(httpReply.data(), httpReply.code());
+    emit sigOnGetContactsReply(httpReply.data(), httpReply.code());
 
     reply->deleteLater();
 }

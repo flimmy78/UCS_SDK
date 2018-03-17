@@ -75,6 +75,14 @@ public:
     static QVariant readSetting(const QString &group,
                                 const QString &key,
                                 const QVariant &defaultVal);
+
+    /*!
+     * \brief saveUserPwd 用户密码需要加密，单独函数保存
+     * \param key 密码对应的key
+     * \param pwd
+     */
+    static void saveUserPwd(QString key, QString pwd);
+    static QString readUserPwd(QString key);
 };
 
 #endif // COMMONHELPER_H
