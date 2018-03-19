@@ -195,7 +195,7 @@ void UCSTcpSocket::doReConnect()
     doConnect();
 }
 
-void UCSTcpSocket::slot_sendData(QByteArray dataArray)
+void UCSTcpSocket::onSendData(QByteArray dataArray)
 {
     if (m_pSocket != Q_NULLPTR)
     {
@@ -207,7 +207,7 @@ void UCSTcpSocket::slot_sendData(QByteArray dataArray)
 void UCSTcpSocket::setState(const UcsTcpState &state)
 {
     m_state = state;
-    emit sig_stateChanged(state);
+    emit sigStateChanged(state);
 }
 
 void UCSTcpSocket::forceChangeProxy()
@@ -266,13 +266,13 @@ void UCSTcpSocket::setProxyList(const QStringList &proxyList)
 
 void UCSTcpSocket::initConnections()
 {
-    connect(m_pSocket, SIGNAL(connected()), this, SLOT(slot_connected()));
-    connect(m_pSocket, SIGNAL(disconnected()), this, SLOT(slot_disconnected()));
-    connect(m_pSocket, SIGNAL(readyRead()), this, SLOT(slot_readFortune()));
-    connect(m_pSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(slot_displayError(QAbstractSocket::SocketError)));
+    connect(m_pSocket, SIGNAL(connected()), this, SLOT(onConnected()));
+    connect(m_pSocket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+    connect(m_pSocket, SIGNAL(readyRead()), this, SLOT(onReadFortune()));
+    connect(m_pSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onSocketError(QAbstractSocket::SocketError)));
 }
 
-void UCSTcpSocket::slot_connected()
+void UCSTcpSocket::onConnected()
 {
     if ((m_preState == TcpConnected && m_state != TcpConnected) ||
         (m_preState == TcpReConnected && m_state != TcpReConnected))
@@ -296,7 +296,7 @@ void UCSTcpSocket::slot_connected()
     m_curProxyIndex = m_proxyIndex;
 }
 
-void UCSTcpSocket::slot_disconnected()
+void UCSTcpSocket::onDisconnected()
 {
     UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kTcpSocket,
             QStringLiteral("TCP 连接断开..."));
@@ -304,17 +304,17 @@ void UCSTcpSocket::slot_disconnected()
     setState(TcpDisconnected);
 }
 
-void UCSTcpSocket::slot_readFortune()
+void UCSTcpSocket::onReadFortune()
 {
     if (m_pSocket->bytesAvailable() > 0)
     {
         QByteArray dataArray = m_pSocket->readAll();
 
-        emit sig_readReady(dataArray);
+        emit sigReadReady(dataArray);
     }
 }
 
-void UCSTcpSocket::slot_displayError(QAbstractSocket::SocketError socketError)
+void UCSTcpSocket::onSocketError(QAbstractSocket::SocketError socketError)
 {
     UCS_LOG(UCSLogger::kTraceError, UCSLogger::kTcpSocket,
             m_pSocket->errorString());

@@ -5,6 +5,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QDateTime>
+#include <QtConcurrent>
 #include "UCSLogger.h"
 #include "UCSTcpSDK.h"
 #include "CommonHelper.h"
@@ -21,7 +22,6 @@ UPlusLogin::UPlusLogin(QWidget *parent)
     setObjectName("UPlusLogin");
 
     m_pRestApi = new UPlusRestApi;
-    m_pDownloadPic = new HttpDownloadPicture(this);
 
     initLayout();
     initConnections();
@@ -66,15 +66,18 @@ void UPlusLogin::customEvent(QEvent *event)
 
             this->accept();
         }
+        else
+        {
+            m_pBtnLoginOn->setEnabled(true);
+            m_pLoginTip->setText(QString(QStringLiteral("登录失败(%1)")).arg(loginEvt->error()));
+        }
     }
 }
 
 void UPlusLogin::initLayout()
 {
     QVBoxLayout *pMainLayout = new QVBoxLayout(this);
-    QVBoxLayout *pLoginLayout = new QVBoxLayout;
-    QHBoxLayout *pHLayout = new QHBoxLayout;
-    QHBoxLayout *pBtnLayout = new QHBoxLayout;
+    QHBoxLayout *pChkLayout = new QHBoxLayout;
 
     m_titleBar = new MyTitleBar(this);
     m_titleBar->setButtonType(MIN_BUTTON);
@@ -83,7 +86,6 @@ void UPlusLogin::initLayout()
     m_titleBar->setTitleContentFontSize(11);
     m_titleBar->setTitleContent("U+");
 //    m_titleBar->setTitleContentFontSize(12);
-    pMainLayout->addWidget(m_titleBar);
 
     m_pLineUserName = new QLineEdit(this);
     m_pLineUserName->setObjectName("loginUserName");
@@ -108,37 +110,37 @@ void UPlusLogin::initLayout()
     pPwdValidator->setRegExp(pwdReg);
     m_pLinePassword->setValidator(pPwdValidator);
 
-    m_pLoginTip = new QLabel(this);
-    m_pLoginTip->setObjectName("lblLoginTip");
-    m_pLoginTip->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pChkKeepPwd = new QCheckBox(QStringLiteral("记住密码"), this);
+    m_pChkOnLine = new QCheckBox(QStringLiteral("测试环境"), this);
+    m_pChkKeepPwd->setObjectName("ChkPwd");
+    m_pChkOnLine->setObjectName("ChkOnLine");
+    pChkLayout->addWidget(m_pChkKeepPwd, 0, Qt::AlignHCenter);
+    pChkLayout->addWidget(m_pChkOnLine, 0, Qt::AlignHCenter);
+    pChkLayout->setSpacing(16);
 
     m_pBtnLoginOn = new QPushButton(this);
     m_pBtnLoginOn->setObjectName("btnLogin");
     m_pBtnLoginOn->setText(QStringLiteral("登录"));
     m_pBtnLoginOn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_pBtnLoginOn->setFlat(true);
-    pBtnLayout->addStretch();
-    pBtnLayout->addWidget(m_pBtnLoginOn);
-    pBtnLayout->addStretch();
-    pBtnLayout->setSpacing(0);
 
-    pLoginLayout->addStretch(0.2);
-    pLoginLayout->addWidget(m_pLineUserName, Qt::AlignHCenter);
-    pLoginLayout->addSpacing(8);
-    pLoginLayout->addWidget(m_pLinePassword, Qt::AlignHCenter);
-    pLoginLayout->addSpacing(8);
-    pLoginLayout->addWidget(m_pLoginTip, Qt::AlignHCenter);
-    pLoginLayout->addStretch(0.3);
-    pLoginLayout->addLayout(pBtnLayout);
-    pLoginLayout->addStretch(0.2);
-    pLoginLayout->setSpacing(0);
-    pLoginLayout->setContentsMargins(0, 0, 0, 0);
+    m_pLoginTip = new QLabel(this);
+    m_pLoginTip->setObjectName("lblLoginTip");
+    m_pLoginTip->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+//    m_pLoginTip->setText("test");
 
-    pHLayout->addStretch();
-    pHLayout->addLayout(pLoginLayout);
-    pHLayout->addStretch();
-
-    pMainLayout->addLayout(pHLayout);
+    pMainLayout->addWidget(m_titleBar);
+    pMainLayout->addStretch(0.2);
+    pMainLayout->addWidget(m_pLineUserName, 0, Qt::AlignHCenter);
+    pMainLayout->addSpacing(8);
+    pMainLayout->addWidget(m_pLinePassword, 0, Qt::AlignHCenter);
+    pMainLayout->addSpacing(8);
+    pMainLayout->addLayout(pChkLayout);
+    pMainLayout->addStretch(0.3);
+    pMainLayout->addWidget(m_pBtnLoginOn, 0, Qt::AlignHCenter);
+    pMainLayout->addStretch(0.2);
+    pMainLayout->addWidget(m_pLoginTip, 0, Qt::AlignHCenter);
+    pMainLayout->addStretch(0.2);
     pMainLayout->setSpacing(0);
     pMainLayout->setContentsMargins(0, 0, 0, 0);
 }
@@ -147,12 +149,12 @@ void UPlusLogin::initConnections()
 {
     connect(m_titleBar, SIGNAL(signalBtnCloseClicked()), this, SLOT(onBtnClosed()));
     connect(m_titleBar, SIGNAL(signalBtnMinClicked()), this, SLOT(onBtnMin()));
-
+    connect(m_pChkKeepPwd, SIGNAL(clicked()), this, SLOT(onCheckedChanged()));
+    connect(m_pChkOnLine, SIGNAL(clicked()), this, SLOT(onCheckedChanged()));
     connect(m_pBtnLoginOn, SIGNAL(clicked()), this, SLOT(onBtnLogin()));
 
     connect(m_pRestApi, SIGNAL(sigOnLoginReply(QByteArray,int)), this, SLOT(onLoginReply(QByteArray,int)));
     connect(m_pRestApi, SIGNAL(sigOnReLoginReply(QByteArray,int)), this, SLOT(onReLoginReply(QByteArray,int)));
-    connect(m_pDownloadPic, SIGNAL(sigDownloadFinished(QString)), this, SLOT(onDownloadHeadImg(QString)));
 
     // test
     connect(m_pRestApi, SIGNAL(sigOnUploadHeaderImgReply(QByteArray,int)), this, SLOT(onUploadHeaderImgReply(QByteArray,int)));
@@ -168,7 +170,15 @@ void UPlusLogin::readSettings()
 //            QString("readSettings: userId(%1) pwd(%2) name(%3)")
 //                    .arg(userId).arg(pwd).arg(name));
 
+    int chkState = CommonHelper::readSetting("Login", "KeepPwd", 0).toInt();
+    m_pChkKeepPwd->setChecked(chkState > 0);
+
     m_doReLogin = false;
+    if (m_pChkKeepPwd->checkState() == Qt::Unchecked)
+    {
+        pwd.clear();
+    }
+
     if (!pwd.isEmpty())
     {
         m_doReLogin = true;
@@ -176,6 +186,9 @@ void UPlusLogin::readSettings()
 
     m_pLineUserName->setText(userId);
     m_pLinePassword->setText(pwd);
+
+    m_pChkOnLine->setChecked(true);
+    UCSTcpClient::Instance()->DoUseOnLineEnv(false);
 }
 
 void UPlusLogin::onLoginSuccess()
@@ -184,8 +197,11 @@ void UPlusLogin::onLoginSuccess()
     QString token = CommonHelper::readSetting("Login", "token", "").toString();
     UCSTcpClient::Instance()->doLogin(token);
 
-    ///< 下载个人头像 >
-    downloadHeadImg();
+    ///< 异步下载个人头像 >
+    QString headUrl = CommonHelper::readSetting("Login", "headUrl", "").toString();
+    QStringList headList;
+    headList.append(headUrl);
+    QtConcurrent::mapped(headList, UPlusLogin::downloadHeadImg);
 }
 
 void UPlusLogin::uploadHeaderImg()
@@ -209,15 +225,10 @@ void UPlusLogin::uploadHeaderImg()
     m_pRestApi->doUploadHeaderImg(userId, pwd, imgData, "jpg");
 }
 
-void UPlusLogin::downloadHeadImg()
+QString UPlusLogin::downloadHeadImg(const QString &headUrl)
 {
-#if 1
-    QString headUrl = CommonHelper::readSetting("Login", "headUrl", "").toString();
-    m_pDownloadPic->execute(headUrl, CommonHelper::userTempPath());
-#else
-    DownloadNetworkManager *download = new DownloadNetworkManager(this);
-    download->downloadTest();
-#endif
+    QString filepath = HttpDownloadPicture::downloadBlock(headUrl, CommonHelper::userTempPath());
+    return filepath;
 }
 
 void UPlusLogin::onBtnClosed()
@@ -246,6 +257,8 @@ void UPlusLogin::onBtnLogin()
 //                QString("doLogin: userId[%1] pwd[%2]")
 //                    .arg(userId).arg(pwd));
 
+        m_pBtnLoginOn->setEnabled(false);
+
         if (m_doReLogin)
         {
             m_pRestApi->doReLogin(userId, pwd);
@@ -257,6 +270,28 @@ void UPlusLogin::onBtnLogin()
 
         CommonHelper::saveSetting("Login", "userId", userId);
         CommonHelper::saveUserPwd("pwd", pwd);
+        CommonHelper::saveSetting("Login", "KeepPwd", m_pChkKeepPwd->checkState());
+    }
+}
+
+void UPlusLogin::onCheckedChanged()
+{
+    QCheckBox *chkBox = qobject_cast<QCheckBox*>(sender());
+    if (chkBox->objectName().contains("ChkPwd"))
+    {
+
+    }
+
+    if (chkBox->objectName().contains("ChkOnLine"))
+    {
+        if (chkBox->checkState())
+        {
+            UCSTcpClient::Instance()->DoUseOnLineEnv(false);
+        }
+        else
+        {
+            UCSTcpClient::Instance()->DoUseOnLineEnv(true);
+        }
     }
 }
 
@@ -326,12 +361,15 @@ void UPlusLogin::onLoginReply(QByteArray replyData, int code)
 
                 onLoginSuccess();
             }
-
-            m_pLoginTip->setText(retMsg);
+            else
+            {
+                m_pLoginTip->setText(retMsg);
+            }
         }
         else
         {
             m_pLoginTip->setText(QStringLiteral("登录响应格式错误"));
+            m_pBtnLoginOn->setEnabled(true);
         }
     }
     else
@@ -339,7 +377,8 @@ void UPlusLogin::onLoginReply(QByteArray replyData, int code)
         UCS_LOG(UCSLogger::kTraceError, this->objectName(),
                 QString("login request failed(%1).").arg(code));
 
-        m_pLoginTip->setText(QStringLiteral("登录请求响应失败"));
+        m_pLoginTip->setText(QString(QStringLiteral("登录请求响应失败(%1)")).arg(code));
+        m_pBtnLoginOn->setEnabled(true);
     }
 }
 
@@ -378,11 +417,15 @@ void UPlusLogin::onReLoginReply(QByteArray replyData, int code)
                 }
             }
 
-            m_pLoginTip->setText(retMsg);
+            if (ret != 0)
+            {
+                m_pLoginTip->setText(retMsg);
+            }
         }
         else
         {
             m_pLoginTip->setText(QStringLiteral("登录响应格式错误"));
+            m_pBtnLoginOn->setEnabled(true);
         }
     }
     else
@@ -391,6 +434,7 @@ void UPlusLogin::onReLoginReply(QByteArray replyData, int code)
                 QString("login request failed(%1).").arg(code));
 
         m_pLoginTip->setText(QStringLiteral("登录请求响应失败"));
+        m_pBtnLoginOn->setEnabled(true);
     }
 }
 
@@ -432,19 +476,5 @@ void UPlusLogin::onUploadHeaderImgReply(QByteArray replyData, int code)
                 CommonHelper::saveSetting("Login", "headUrl", headimgurl);
             }
         }
-    }
-}
-
-void UPlusLogin::onDownloadHeadImg(QString filename)
-{
-    if (filename.isEmpty())
-    {
-        UCS_LOG(UCSLogger::kTraceError, this->objectName(),
-                QStringLiteral("图片下载失败"));
-    }
-    else
-    {
-        UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
-                QStringLiteral("图片下载完成"));
     }
 }

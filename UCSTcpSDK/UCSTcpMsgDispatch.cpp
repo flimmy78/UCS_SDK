@@ -27,7 +27,7 @@ UCSTcpMsgDispatch::~UCSTcpMsgDispatch()
 
     m_bStopped = true;
 
-    emit sig_finished();
+    emit sigFinished();
 }
 
 void UCSTcpMsgDispatch::receivedPacket(QByteArray dataArray)
@@ -86,7 +86,7 @@ void UCSTcpMsgDispatch::slot_msgDispatch()
         {
             if (m_bStopped)
             {
-                emit sig_finished();
+                emit sigFinished();
                 break;
             }
         }
@@ -103,7 +103,7 @@ void UCSTcpMsgDispatch::slot_msgDispatch()
                 UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kMsgDispatch,
                         QString(QStringLiteral("收到数据 cmd: %1")).arg(header.cmd));
 
-                emit sig_postMessage(header.cmd, dataArray);
+                emit sigPostMessage(header.cmd, dataArray);
 
                 m_packetsVec.erase(m_packetsVec.begin());
             }
@@ -114,5 +114,5 @@ void UCSTcpMsgDispatch::slot_msgDispatch()
         }
     }
 
-    emit sig_finished();
+    emit sigFinished();
 }

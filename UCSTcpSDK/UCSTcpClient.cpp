@@ -42,9 +42,14 @@ UCSTcpClient::~UCSTcpClient()
     }
 }
 
-void UCSTcpClient::init()
+void UCSTcpClient::doInit()
 {
 
+}
+
+void UCSTcpClient::DoUseOnLineEnv(bool onLine)
+{
+    m_pConnManager->DoUseOnLineEnv(onLine);
 }
 
 void UCSTcpClient::doLogin(QString imToken)

@@ -364,7 +364,7 @@ void UCSLoginManager::setState(UcsLoginState state)
         timerStop(kLoginTimer);
 
         m_lastState = state;
-        emit sig_stateChanged(state);
+        emit sigStateChanged(state);
     }
         break;
 
@@ -373,7 +373,7 @@ void UCSLoginManager::setState(UcsLoginState state)
     {
         /* 登录失败，停止心跳 */
         timerStop(kNoopTimer);
-        emit sig_stateChanged(state);
+        emit sigStateChanged(state);
     }
         break;
 
@@ -381,7 +381,7 @@ void UCSLoginManager::setState(UcsLoginState state)
     {
         /* 心跳无响应，默认为登录失败 */
         m_state = LoginFailed;
-        emit sig_stateChanged(state);
+        emit sigStateChanged(state);
     }
         break;
 

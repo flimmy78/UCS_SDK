@@ -72,6 +72,11 @@ UCSTcpManager::~UCSTcpManager()
     }
 }
 
+void UCSTcpManager::DoUseOnLineEnv(bool isOnLine)
+{
+    m_pProxyThread->setIsOnLine(isOnLine);
+}
+
 void UCSTcpManager::doLogin(QString imToken)
 {
     if (m_pProxyThread->setImToken(imToken) == NoError)
@@ -85,7 +90,14 @@ void UCSTcpManager::doLogin(QString imToken)
     }
     else
     {
-        emit sig_onError(InvalidToken);
+//        emit sig_onError(InvalidToken);
+
+        QList<QObject*> receivers = m_cusListenMap.values(kUCSLoginEvent);
+        foreach (QObject *receiver, receivers)
+        {
+            UCSEvent::postEvent(receiver,
+                                new UCSLoginEvent(ErrorCode_InvalidToken, m_tokenData.userId));
+        }
     }
 }
 
@@ -176,36 +188,41 @@ void UCSTcpManager::init()
 
 void UCSTcpManager::initConnections()
 {
-    connect(m_pProxyThread, SIGNAL(sig_onSuccess()), this, SLOT(slot_onProxySuccess()));
-    connect(m_pProxyThread, SIGNAL(sig_onFail(UcsTcpError)), this, SLOT(slot_onError(UcsTcpError)));
+    connect(m_pProxyThread, SIGNAL(sigFinished(int)), this, SLOT(onUpdateProxyFinished(int)));
 
-    connect(m_pTcpSocket, SIGNAL(sig_stateChanged(UcsTcpState)), this, SLOT(slot_onTcpStateChanged(UcsTcpState)));
-    connect(m_pTcpSocket, SIGNAL(sig_readReady(QByteArray)), this, SLOT(slot_readReady(QByteArray)));
+    connect(m_pTcpSocket, SIGNAL(sigStateChanged(UcsTcpState)), this, SLOT(onTcpStateChanged(UcsTcpState)));
+    connect(m_pTcpSocket, SIGNAL(sigReadReady(QByteArray)), this, SLOT(onReadReady(QByteArray)));
 
-    connect(m_pLoginManager, SIGNAL(sig_stateChanged(UcsLoginState)), this, SLOT(slot_onLoginStateChanged(UcsLoginState)));
+    connect(m_pLoginManager, SIGNAL(sigStateChanged(UcsLoginState)), this, SLOT(onLoginStateChanged(UcsLoginState)));
 
     connect(m_pDispatchThread, SIGNAL(started()), m_pMsgDispatch, SLOT(slot_msgDispatch()));
-    connect(m_pMsgDispatch, SIGNAL(sig_finished()), m_pDispatchThread, SLOT(quit()));
-    connect(m_pMsgDispatch, SIGNAL(sig_postMessage(quint32,QByteArray)), this, SLOT(slot_onPostMessage(quint32,QByteArray)));
+    connect(m_pMsgDispatch, SIGNAL(sigFinished()), m_pDispatchThread, SLOT(quit()));
+    connect(m_pMsgDispatch, SIGNAL(sigPostMessage(quint32,QByteArray)), this, SLOT(onPostMessage(quint32,QByteArray)));
 }
 
-void UCSTcpManager::slot_onError(UcsTcpError error)
+void UCSTcpManager::onUpdateProxyFinished(int error)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
-            QString("slot_onError(%1)").arg(error));
+            QString("onUpdateProxyFinished(%1)").arg(error));
 
+    if (error == NoError)
+    {
+        m_ProxyList = m_pProxyThread->proxyList();
+        m_pTcpSocket->setProxyList(m_pProxyThread->proxyList());
+        m_pTcpSocket->doConnect();
+    }
+    else
+    {
+        QList<QObject*> receivers = m_cusListenMap.values(kUCSLoginEvent);
+        foreach (QObject *receiver, receivers)
+        {
+            UCSEvent::postEvent(receiver,
+                                new UCSLoginEvent(ErrorCode_ConnectServerFail, m_tokenData.userId));
+        }
+    }
 }
 
-void UCSTcpManager::slot_onProxySuccess()
-{
-    UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager, __FUNCTION__);
-
-    m_ProxyList = m_pProxyThread->proxyList();
-    m_pTcpSocket->setProxyList(m_pProxyThread->proxyList());
-    m_pTcpSocket->doConnect();
-}
-
-void UCSTcpManager::slot_onTcpStateChanged(UcsTcpState state)
+void UCSTcpManager::onTcpStateChanged(UcsTcpState state)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
             QString("slot_onTcpStateChanged state(%1)").arg(state));
@@ -281,7 +298,7 @@ void UCSTcpManager::slot_onTcpStateChanged(UcsTcpState state)
     }
 }
 
-void UCSTcpManager::slot_readReady(QByteArray dataArray)
+void UCSTcpManager::onReadReady(QByteArray dataArray)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
             QString("slot_readReady size(%1)").arg(dataArray.size()));
@@ -289,7 +306,7 @@ void UCSTcpManager::slot_readReady(QByteArray dataArray)
     m_pMsgDispatch->receivedPacket(dataArray);
 }
 
-void UCSTcpManager::slot_onLoginStateChanged(UcsLoginState state)
+void UCSTcpManager::onLoginStateChanged(UcsLoginState state)
 {
     switch (state) {
     case LoginSuccessed:
@@ -371,7 +388,7 @@ void UCSTcpManager::slot_onLoginStateChanged(UcsLoginState state)
     }
 }
 
-void UCSTcpManager::slot_onPostMessage(quint32 cmd, QByteArray dataArray)
+void UCSTcpManager::onPostMessage(quint32 cmd, QByteArray dataArray)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
             QString("post message (%1)").arg(UCSPackage::cmdName(cmd)));

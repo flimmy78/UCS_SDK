@@ -3,7 +3,9 @@
 
 #include <qglobal.h>
 #include <QObject>
+#include <QFutureWatcher>
 #include <QLineEdit>
+#include <QCheckBox>
 #include "BaseDialog.h"
 #include "MyTitleBar.h"
 #include "UPlusRestApi.h"
@@ -30,31 +32,32 @@ private:
 
     // test begin
     void uploadHeaderImg();
-    void downloadHeadImg();
+    static QString downloadHeadImg(const QString &headUrl);
     // test end
 
 private slots:
     void onBtnClosed();
     void onBtnMin();
     void onBtnLogin();
+    void onCheckedChange();
 
     void onLoginReply(QByteArray replyData, int code);
     void onReLoginReply(QByteArray replyData, int code);
 
     // test
     void onUploadHeaderImgReply(QByteArray replyData, int code);
-    void onDownloadHeadImg(QString filename);
 
 private:
     MyTitleBar  *m_titleBar;
     QPushButton *m_pBtnLoginOn;
-    QLineEdit *m_pLineUserName;
-    QLineEdit *m_pLinePassword;
-    QLabel *m_pLoginTip;
+    QLineEdit   *m_pLineUserName;
+    QLineEdit   *m_pLinePassword;
+    QLabel      *m_pLoginTip;
+    QCheckBox   *m_pChkKeepPwd;
+    QCheckBox   *m_pChkOnLine;
+
     UPlusRestApi *m_pRestApi;
     bool m_doReLogin;
-
-    HttpDownloadPicture *m_pDownloadPic;
 };
 
 #endif // UPLUSLOGIN_H

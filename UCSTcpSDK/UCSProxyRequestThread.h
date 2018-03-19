@@ -33,6 +33,9 @@ public:
 
     TokenData tokenData() const;
 
+    bool isOnLine() const;
+    void setIsOnLine(bool isOnLine);
+
 protected:
     void run() override;
 
@@ -43,13 +46,13 @@ private:
     UcsTcpError parseReply(QByteArray dataArray);
 
 signals:
-    void sig_onSuccess();
-    void sig_onFail(UcsTcpError error);
+    void sigFinished(int errCode);
 
 private slots:
 
 
 private:
+    bool m_isOnLine;
     QString m_imToken;
     QStringList m_baseUrlList;
     QStringList m_proxyList;

@@ -10,6 +10,18 @@ UPlusRestApi::UPlusRestApi()
     m_uplusUrl = "https://uplus.uc.ucpaas.com/";
 }
 
+void UPlusRestApi::doInit(bool isOnLine)
+{
+    if (isOnLine)
+    {
+        m_uplusUrl = "https://uplus.uc.ucpaas.com/";
+    }
+    else
+    {
+        m_uplusUrl = "http://106.15.37.221:8666/";
+    }
+}
+
 void UPlusRestApi::doLogin(QString userId, QString pwd)
 {
     QUrl url(m_uplusUrl + "user/login");
@@ -23,13 +35,6 @@ void UPlusRestApi::doLogin(QString userId, QString pwd)
     document.setObject(jsonObj);
 
     QByteArray data = document.toJson(QJsonDocument::Compact);
-
-#if 0
-    QNetworkRequest request;
-    request.setUrl(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/text");
-    request.setHeader(QNetworkRequest::ContentLengthHeader, data.length());
-#endif
 
     HttpRequest httpRequest(url);
     httpRequest.setContentLength(data.length());
@@ -302,10 +307,13 @@ HttpRequest::HttpRequest(QUrl url)
     m_request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     m_request.setRawHeader("Accept", "application/json");
 
-    QSslConfiguration config;
-    config.setPeerVerifyMode(QSslSocket::VerifyNone);
-    config.setProtocol(QSsl::TlsV1_0);
-    m_request.setSslConfiguration(config);
+    if (url.url().startsWith("https"))
+    {
+        QSslConfiguration config;
+        config.setPeerVerifyMode(QSslSocket::VerifyNone);
+        config.setProtocol(QSsl::TlsV1_0);
+        m_request.setSslConfiguration(config);
+    }
 }
 
 void HttpRequest::setContentLength(qint32 length)

@@ -43,8 +43,8 @@ private:
     void parseMsgHeader(QByteArray dataArray, TcpFrameHeader *pHeader);
 
 signals:
-    void sig_finished();
-    void sig_postMessage(quint32 cmd, QByteArray dataArray);
+    void sigFinished();
+    void sigPostMessage(quint32 cmd, QByteArray dataArray);
 
 public slots:
 //    void slot_receivedPacket(QByteArray dataArray);

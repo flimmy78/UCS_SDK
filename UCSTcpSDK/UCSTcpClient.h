@@ -20,7 +20,13 @@ public:
     /*!
      * 初始化
     */
-    void init();
+    void doInit();
+
+    /*!
+     * \brief DoUseOnLineEnv 切换生产环境和测试环境
+     * \param online true for 生产环境
+     */
+    void DoUseOnLineEnv(bool onLine);
 
     /*!
      * \brief 用户使用token方式登录

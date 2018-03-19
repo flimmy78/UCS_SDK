@@ -61,15 +61,15 @@ private:
     void setState(const UcsTcpState &state);
 
 signals:
-    void sig_stateChanged(UcsTcpState state);
-    void sig_readReady(QByteArray dataArray);
+    void sigStateChanged(UcsTcpState state);
+    void sigReadReady(QByteArray dataArray);
 
 public slots:
-    void slot_connected();
-    void slot_disconnected();
-    void slot_readFortune();
-    void slot_displayError(QAbstractSocket::SocketError socketError);
-    void slot_sendData(QByteArray dataArray);
+    void onConnected();
+    void onDisconnected();
+    void onReadFortune();
+    void onSocketError(QAbstractSocket::SocketError socketError);
+    void onSendData(QByteArray dataArray);
 
 private:
     QMutex m_Mutex;

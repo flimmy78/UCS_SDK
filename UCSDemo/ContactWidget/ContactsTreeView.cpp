@@ -9,6 +9,7 @@
 #include "treeItem.h"
 #include "CommonHelper.h"
 #include "UCSLogger.h"
+#include "HttpDownloadPicture.h"
 
 ContactsTreeView::ContactsTreeView(QWidget *parent)
     : QTreeView(parent)
@@ -44,6 +45,12 @@ ContactsTreeView::~ContactsTreeView()
         delete m_pRestApi;
         m_pRestApi = Q_NULLPTR;
     }
+
+    if (m_pDownloadWatcher)
+    {
+        m_pDownloadWatcher->cancel();
+        m_pDownloadWatcher->waitForFinished();
+    }
 }
 
 void ContactsTreeView::doUpdateContacts()
@@ -52,6 +59,20 @@ void ContactsTreeView::doUpdateContacts()
     QString pwd = CommonHelper::readUserPwd("pwd");
 
     m_pRestApi->doGetContacts(userId, pwd);
+}
+
+ContactItem ContactsTreeView::downloadHeader(const ContactItem &contact)
+{
+    if (contact.headUrl.isEmpty())
+    {
+        return contact;
+    }
+
+    ContactItem newContact = contact;
+    QString saveDir = CommonHelper::userTempPath();
+    newContact.headPath = HttpDownloadPicture::downloadBlock(contact.headUrl, saveDir);
+
+    return newContact;
 }
 
 void ContactsTreeView::contextMenuEvent(QContextMenuEvent *event)
@@ -78,6 +99,7 @@ void ContactsTreeView::contextMenuEvent(QContextMenuEvent *event)
 void ContactsTreeView::init()
 {
     m_pRestApi = new UPlusRestApi;
+    m_pDownloadWatcher = new QFutureWatcher<ContactItem>(this);
 
     m_pContactModel = new ContactTreeItemModel(this);
     this->setModel(m_pContactModel);
@@ -92,6 +114,8 @@ void ContactsTreeView::initConnection()
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onItemDoubleClicked(QModelIndex)));
     connect(m_pRestApi, SIGNAL(sigOnGetContactsReply(QByteArray,int)),
             this, SLOT(onUpdateContactsReply(QByteArray,int)));
+
+    connect(m_pDownloadWatcher, SIGNAL(resultReadyAt(int)), this, SLOT(onHeaderReady(int)));
 }
 
 void ContactsTreeView::initMenu()
@@ -325,8 +349,14 @@ void ContactsTreeView::parseContactData()
             m_contactList.append(topItem);
             m_contactList.append(sectionList);
             m_pContactModel->setOrganizationList(&m_contactList);
+            startDownloadHeader();
         }
     }
+}
+
+void ContactsTreeView::startDownloadHeader()
+{
+    m_pDownloadWatcher->setFuture(QtConcurrent::mapped(m_contactList, ContactsTreeView::downloadHeader));
 }
 
 void ContactsTreeView::onItemClicked(QModelIndex index)
@@ -364,7 +394,7 @@ void ContactsTreeView::onItemClicked(QModelIndex index)
                     }
                 }
                 contact.parentName = parentName;
-                sigItemClicked(contact);
+                emit sigItemClicked(contact);
             }
         }
     }
@@ -458,4 +488,9 @@ void ContactsTreeView::onUpdateContactsReply(QByteArray data, int code)
         UCS_LOG(UCSLogger::kTraceError, this->objectName(),
                 QString(QStringLiteral("拉取通讯录失败(%1)")).arg(code));
     }
+}
+
+void ContactsTreeView::onHeaderReady(int index)
+{
+    m_contactList.replace(index, m_pDownloadWatcher->resultAt(index));
 }

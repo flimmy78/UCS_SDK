@@ -8,7 +8,8 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
-#include "Common/UCSLogger.h"
+#include "UCSLogger.h"
+#include "UCSCommonTypes.h"
 
 UCSProxyRequestThread::UCSProxyRequestThread(QObject *parent)
     : QThread(parent)
@@ -53,7 +54,7 @@ void UCSProxyRequestThread::run()
 {
     if (m_imToken.isEmpty())
     {
-        sig_onFail(TokenEmpty);
+        emit sigFinished(TokenEmpty);
         return;
     }
     m_requestTimes = 0;
@@ -66,7 +67,7 @@ void UCSProxyRequestThread::run()
             res = doRequest(m_baseUrlList.at(0));
             if (res == NoError)
             {
-                emit sig_onSuccess();
+                emit sigFinished(NoError);
                 break;
             }
             ++m_requestTimes;
@@ -78,19 +79,13 @@ void UCSProxyRequestThread::run()
         {
             if (m_baseUrlList.size() < 2)
             {
-                emit sig_onFail(res);
+                emit sigFinished(res);
                 break;
             }
 
-            res = doRequest(m_baseUrlList.at(1));
-            if (res == 0)
-            {
-                emit sig_onSuccess();
-            }
-            else
-            {
-                emit sig_onFail(res);
-            }
+            res = doRequest(m_baseUrlList.at(1));            
+            emit sigFinished(NoError);
+
             break;
         }
     }
@@ -193,7 +188,7 @@ UcsTcpError UCSProxyRequestThread::doRequest(QString baseUrl)
     if (variant.isValid() && variant.toInt() != 200)
     {
         UCS_LOG(UCSLogger::kTraceError, UCSLogger::kProxyUpdate,
-                QString(QStringLiteral("proxy列表请求错误")).append(" status code(%1)").arg(variant.toInt()));
+                QString(QStringLiteral("Proxy URL响应错误(code=%1)")).arg(variant.toInt()));
         return ResponseError;
     }
 
@@ -201,12 +196,11 @@ UcsTcpError UCSProxyRequestThread::doRequest(QString baseUrl)
         reply->error() != QNetworkReply::NoError)
     {
         UCS_LOG(UCSLogger::kTraceError, UCSLogger::kProxyUpdate,
-                QString(QStringLiteral("Proxy URL请求错误 ")).append(reply->errorString()));
+                QString(QStringLiteral("response data empty. ")).append(reply->errorString()));
 
-        return RequestUrlError;
+        return ResponseError;
     }
     QByteArray dataArray = reply->readAll();
-//    qDebug() << "doRequest: " << dataArray;
 
     return parseReply(dataArray);
 }
@@ -260,6 +254,26 @@ UcsTcpError UCSProxyRequestThread::parseReply(QByteArray dataArray)
     }
 
     return JsonFormatError;
+}
+
+bool UCSProxyRequestThread::isOnLine() const
+{
+    return m_isOnLine;
+}
+
+void UCSProxyRequestThread::setIsOnLine(bool isOnLine)
+{
+    m_isOnLine = isOnLine;
+    m_baseUrlList.clear();
+    if (isOnLine)
+    {
+        m_baseUrlList.append("http://cps.ucpaas.com:9997/v2/getproxylist");
+        m_baseUrlList.append("http://47.94.42.238:9997/v2/getproxylist");
+    }
+    else
+    {
+        m_baseUrlList.append("http://106.15.37.221:9997/v2/getproxylist");
+    }
 }
 
 TokenData UCSProxyRequestThread::tokenData() const

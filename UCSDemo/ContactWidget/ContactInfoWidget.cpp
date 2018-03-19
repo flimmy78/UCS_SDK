@@ -22,12 +22,12 @@ void ContactInfoWidget::initLayout()
     QHBoxLayout *pBtnLayout = new QHBoxLayout;
 
     m_pLblHeaderImg = new QLabel(this);
-    m_pLblUserName = new QLabel(this);
+    m_pLblUserName = new MyLabel(this);
     m_pLblUserSex = new QLabel(this);
-    m_pLblUserPhone = new QLabel(this);
-    m_pLblSectionName = new QLabel(this);
-    m_pLblPhoneTitle = new QLabel(this);
-    m_pLblSectionTitle = new QLabel(this);
+    m_pLblUserPhone = new MyLabel(this);
+    m_pLblSectionName = new MyLabel(this);
+    m_pLblPhoneTitle = new MyLabel(this);
+    m_pLblSectionTitle = new MyLabel(this);
 
     m_pBtnDirectAudio = new QToolButton(this);
     m_pBtnFreeAudio = new QToolButton(this);
@@ -49,7 +49,7 @@ void ContactInfoWidget::initLayout()
     m_pBtnConfCall->setObjectName("btnConfCall");
     m_pBtnIM->setObjectName(("btnIM"));
 
-//    m_pLblHeaderImg->setFixedSize(100, 100);
+    m_pLblHeaderImg->setFixedSize(100, 100);
     m_pLblHeaderImg->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_pLblUserName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_pLblUserSex->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -104,28 +104,28 @@ void ContactInfoWidget::initLayout()
 
     pBtnLayout->addStretch();
     pBtnLayout->addWidget(m_pBtnDirectAudio);
-    pBtnLayout->addStretch();
+//    pBtnLayout->addStretch();
     pBtnLayout->addWidget(m_pBtnFreeAudio);
-    pBtnLayout->addStretch();
+//    pBtnLayout->addStretch();
     pBtnLayout->addWidget(m_pBtnFreeVideo);
-    pBtnLayout->addStretch();
+//    pBtnLayout->addStretch();
     pBtnLayout->addWidget(m_pBtnConfCall);
-    pBtnLayout->addStretch();
+//    pBtnLayout->addStretch();
     pBtnLayout->addWidget(m_pBtnIM);
     pBtnLayout->addStretch();
+    pBtnLayout->setSpacing(16);
+    pBtnLayout->setContentsMargins(0, 0, 0, 0);
 
     pMainLayout->addStretch();
     pMainLayout->addWidget(m_pLblHeaderImg, 0, Qt::AlignHCenter);
     pMainLayout->addWidget(m_pLblUserName, 0, Qt::AlignHCenter);
-    pMainLayout->addStretch();
+//    pMainLayout->addStretch();
     pMainLayout->addSpacing(16);
     pMainLayout->addLayout(pDetailLayout);
     pMainLayout->addStretch();
     pMainLayout->addLayout(pBtnLayout);
     pMainLayout->addStretch();
     pMainLayout->setContentsMargins(20, 0, 20, 0);
-
-//    setLayout(pMainLayout);
 }
 
 void ContactInfoWidget::initConnection()
@@ -144,7 +144,11 @@ void ContactInfoWidget::contactShow()
     if (m_contact.headPath.size())
     {
         QSize headSize = m_pLblHeaderImg->size();
-        m_pLblHeaderImg->setPixmap(QPixmap(m_contact.headPath).scaled(headSize, Qt::KeepAspectRatio));
+        m_pLblHeaderImg->setPixmap(QPixmap(m_contact.headPath).scaled(headSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
+    else
+    {
+        m_pLblHeaderImg->setPixmap(QPixmap(":/images/midright/u3901.png"));
     }
 
     /* 旋转45° */

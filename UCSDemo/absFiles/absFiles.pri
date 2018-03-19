@@ -11,7 +11,8 @@ HEADERS += \
     $$PWD/MyTitleBar.h \
     $$PWD/BaseWidget.h \
     $$PWD/BaseDialog.h \
-    $$PWD/EmptyWidget.h
+    $$PWD/EmptyWidget.h \
+    $$PWD/ToggleButton.h
 
 SOURCES += \
     $$PWD/absFramelessAutoSize.cpp \
@@ -26,4 +27,5 @@ SOURCES += \
     $$PWD/MyTitleBar.cpp \
     $$PWD/BaseWidget.cpp \
     $$PWD/BaseDialog.cpp \
-    $$PWD/EmptyWidget.cpp
+    $$PWD/EmptyWidget.cpp \
+    $$PWD/ToggleButton.cpp

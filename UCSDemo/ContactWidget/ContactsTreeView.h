@@ -1,6 +1,8 @@
 ﻿#ifndef CONTRACTS_TREE_VIEW_H
 #define CONTRACTS_TREE_VIEW_H
 
+#include <QFutureWatcher>
+#include <QtConcurrent>
 #include "common/qtheaders.h"
 #include "ContactTreeItemModel.h"
 #include "UPlusRestApi.h"
@@ -15,6 +17,8 @@ public:
 
     void doUpdateContacts();
 
+    static ContactItem downloadHeader(const ContactItem &contact);
+
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
 
@@ -25,6 +29,7 @@ private:
     void loadStyleSheet();
 
     void parseContactData();
+    void startDownloadHeader();
 
 signals:
     void sigItemClicked(ContactItem);
@@ -47,6 +52,9 @@ public slots:
     ///< contact update action >
     void onUpdateContactsReply(QByteArray data, int code);
 
+    ///< contact header download finish >
+    void onHeaderReady(int index);
+
 private:
     ContactTreeItemModel *m_pContactModel;
     QMenu *m_pGroupMenu;
@@ -57,6 +65,8 @@ private:
 
     ContactList m_contactList;
     QString m_contactVer;
+
+    QFutureWatcher<ContactItem> *m_pDownloadWatcher;
 };
 
 #endif // MIDLEFTCONTRACTSTREEVIEW_H

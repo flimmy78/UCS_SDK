@@ -23,6 +23,14 @@ public:
      */
     void execute(QString url, QString saveDir);
 
+    /*!
+     * \brief downloadBlock 阻塞式下载，下载成功返回保存绝对路径
+     * \param url
+     * \param saveDir
+     * \return 成功返回绝对路径，失败返回空
+     */
+    static QString downloadBlock(QString url, QString saveDir);
+
 signals:
     void sigDownloadFinished(QString filepath);
 

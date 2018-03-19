@@ -36,12 +36,12 @@ private slots:
 
 private:
     QLabel *m_pLblHeaderImg;
-    QLabel *m_pLblUserName;
+    MyLabel *m_pLblUserName;
     QLabel *m_pLblUserSex;
-    QLabel *m_pLblUserPhone;
-    QLabel *m_pLblSectionName;
-    QLabel *m_pLblPhoneTitle;
-    QLabel *m_pLblSectionTitle;
+    MyLabel *m_pLblUserPhone;
+    MyLabel *m_pLblSectionName;
+    MyLabel *m_pLblPhoneTitle;
+    MyLabel *m_pLblSectionTitle;
 
     QToolButton *m_pBtnDirectAudio;
     QToolButton *m_pBtnFreeAudio;

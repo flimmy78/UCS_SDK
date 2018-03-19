@@ -24,6 +24,12 @@ public:
     ~UCSTcpManager();
 
     /*!
+     * \brief toggleEnvironment 切换生产环境和测试环境
+     * \param isOnLine true for 生产环境
+     */
+    void DoUseOnLineEnv(bool isOnLine);
+
+    /*!
      * \brief 用户登录
     */
     void doLogin(QString imToken);
@@ -68,28 +74,34 @@ signals:
     void sig_onError(UcsTcpError error);
 
 public slots:
-    void slot_onError(UcsTcpError error);
+
     /*!
-     * \brief 更新proxy列表成功
-    */
-    void slot_onProxySuccess();
+     * \brief onUpdateProxyFinished 更新proxy列表完成
+     * \param error
+     */
+    void onUpdateProxyFinished(int error);
 
     /*!
      * \brief TCP状态变换通知
     */
-    void slot_onTcpStateChanged(UcsTcpState state);
+    void onTcpStateChanged(UcsTcpState state);
 
     /*!
     * \brief socket 接收到TCP 消息
     */
-    void slot_readReady(QByteArray dataArray);
+    void onReadReady(QByteArray dataArray);
 
     /*!
      * \brief 登录状态变换通知
     */
-    void slot_onLoginStateChanged(UcsLoginState state);
+    void onLoginStateChanged(UcsLoginState state);
 
-    void slot_onPostMessage(quint32 cmd, QByteArray dataArray);
+    /*!
+     * \brief onPostMessage 分发消息到各对应模块
+     * \param cmd
+     * \param dataArray
+     */
+    void onPostMessage(quint32 cmd, QByteArray dataArray);
 
 private:
     QThread *m_pDispatchThread;

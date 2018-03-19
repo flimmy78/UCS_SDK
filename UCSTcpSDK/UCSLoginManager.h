@@ -57,7 +57,7 @@ private:
     void setState(UcsLoginState state);
 
 signals:
-    void sig_stateChanged(UcsLoginState state);
+    void sigStateChanged(UcsLoginState state);
 
 public slots:
 

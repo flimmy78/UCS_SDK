@@ -300,8 +300,8 @@ QMenu#TrayIconMenu::item {
 
 /* contact info begin */
 QLabel#contactHead {
-    width: 100px;
-    height: 100px;
+    /*width: 100px;
+    height: 100px;*/
 }
 
 QLabel#contactUser {
