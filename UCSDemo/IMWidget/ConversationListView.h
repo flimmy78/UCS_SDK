@@ -16,6 +16,7 @@ public:
     ~ConversationListView();
 
     void updateConversationList();
+    void enterConversation(QString targetId, QString name);
 
 private:
     void initConnections();
@@ -23,8 +24,8 @@ private:
     void contextMenuEvent(QContextMenuEvent *event) override;
 
 signals:
-    void itemClicked(QString, quint32);
-    void itemDeleted(QString, quint32);
+    void itemClicked(ConversationItem);
+    void itemDeleted(ConversationItem);
 
 public slots:
     void onUpdateData();

@@ -37,6 +37,7 @@ void ConversationItemDelegate::paint(QPainter *painter, const QStyleOptionViewIt
     painter->setPen(QColor(Qt::lightGray));
     QFontMetrics fm(painter->font());
 
+    ///< time >
     QSize timeSize = QSize(fm.width(time), fm.height());
     QRect timeRect = QRect(option.rect.topRight() + QPoint(-(timeSize.width() + scroll_width), padding), timeSize);
     painter->drawText(timeRect, time);
@@ -48,7 +49,7 @@ void ConversationItemDelegate::paint(QPainter *painter, const QStyleOptionViewIt
                                           contentSize.width(),
                                           Qt::TextShowMnemonic);
 
-    QRect contentRect = QRect(headerRect.bottomRight() + QPoint(padding, -fm.height()), contentSize);
+    QRect contentRect = QRect(option.rect.bottomLeft() + QPoint(itemSize.height(), -(fm.height() + padding)), contentSize);
     painter->drawText(contentRect, contentElided);
 
     painter->restore();
@@ -66,7 +67,7 @@ void ConversationItemDelegate::paint(QPainter *painter, const QStyleOptionViewIt
     QString titleElided = fm1.elidedText(title, Qt::ElideRight,
                                        titleSize.width(),
                                        Qt::TextShowMnemonic);
-    QRect titleRect = QRect(headerRect.topRight() + QPoint(padding, 0), titleSize);
+    QRect titleRect = QRect(option.rect.topLeft() + QPoint(itemSize.height(), padding), titleSize);
     painter->drawText(titleRect, titleElided);
 
     // done

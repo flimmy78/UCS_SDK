@@ -4,8 +4,7 @@ HEADERS += \
     $$PWD/CallListItemDelegate.h \
     $$PWD/CallListView.h \
     $$PWD/DialWidget.h \
-    $$PWD/KeypadWidget.h \
-    $$PWD/ConferenceStackWidget.h
+    $$PWD/KeypadWidget.h
 
 SOURCES += \
     $$PWD/CallWidget.cpp \
@@ -13,5 +12,4 @@ SOURCES += \
     $$PWD/CallListItemDelegate.cpp \
     $$PWD/CallListView.cpp \
     $$PWD/DialWidget.cpp \
-    $$PWD/KeypadWidget.cpp \
-    $$PWD/ConferenceStackWidget.cpp
+    $$PWD/KeypadWidget.cpp

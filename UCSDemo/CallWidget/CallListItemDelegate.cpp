@@ -27,7 +27,7 @@ void CallListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     int padding = (itemSize.height() - header.height()) / 2;
     int scroll_width = 0;
 
-    // header
+    // header    
     QRect headerRect = QRect(viewOption.rect.topLeft() + QPoint(padding, padding), header.size());
     painter->drawPixmap(headerRect, header);
 
@@ -47,10 +47,10 @@ void CallListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     // type
     QSize typeTextSize = QSize(fm.width(callType), fm.height());
-    QRect typeTextRect = QRect(headerRect.bottomRight() + QPoint(padding, (-typeTextSize.height())), typeTextSize);
+    QRect typeTextRect = QRect(viewOption.rect.bottomLeft() + QPoint(itemSize.height(), (-(typeTextSize.height() + padding))), typeTextSize);
     painter->drawText(typeTextRect, callType);
 
-    QRect typeIconRect = QRect(headerRect.bottomRight() + QPoint(80, (-typeIcon.size().height())), typeIcon.size());
+    QRect typeIconRect = QRect(viewOption.rect.bottomLeft() + QPoint((itemSize.height() + 50), (-(typeIcon.size().height() + padding))), typeIcon.size());
     painter->drawPixmap(typeIconRect, typeIcon);
 
     painter->restore();
@@ -67,7 +67,7 @@ void CallListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QString nameElided = fm1.elidedText(nickname, Qt::ElideRight,
                                         nameSize.width(), Qt::TextShowMnemonic);
 
-    QRect nameRect = QRect(headerRect.topRight() + QPoint(padding, 0), nameSize);
+    QRect nameRect = QRect(viewOption.rect.topLeft() + QPoint(itemSize.height(), padding), nameSize);
     painter->drawText(nameRect, nameElided);
 
     // done

@@ -14,10 +14,10 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 signals:
-    void sig_FocusChanged(bool);
+    void sigFocusChanged(bool);
 
 public slots:
-    void slot_clearText();
+    void onClearText();
 
 private:
     void initLayout();

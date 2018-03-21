@@ -123,7 +123,7 @@ void MainWindow::customEvent(QEvent *event)
             UCS_LOG(UCSLogger::kTraceInfo, "MainWindow",
                     QString("login success. userId = ").append(loginEvt->userId()));
 
-//            m_pImWidget->conversationListView()->updateConversationList();
+            m_pImWidget->conversationListView()->updateConversationList();
             m_pContactWidget->contactListView()->doUpdateContacts();
         }
         else
@@ -219,12 +219,12 @@ void MainWindow::initTrayMenu()
     connect(&m_system_tray,
             SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this,
-            SLOT(slot_iconIsActived(QSystemTrayIcon::ActivationReason)));
+            SLOT(onTrayIconActived(QSystemTrayIcon::ActivationReason)));
 
     connect(&m_traymenu,
             SIGNAL(sig_close()),
             this,
-            SLOT(slot_quitApp()));
+            SLOT(onQuitClient()));
 }
 
 void MainWindow::initConnections()
@@ -233,6 +233,11 @@ void MainWindow::initConnections()
     {
         connect(m_pLeftNavBar->m_pBtn[i], SIGNAL(pressed()), this, SLOT(onSwitchPage()));
     }
+
+    connect(m_pContactWidget->contactInfoWidget(), SIGNAL(sigOpenIMPage(ContactItem)),
+            this, SLOT(onSwitchIMPage(ContactItem)));
+    connect(m_pContactWidget->contactInfoWidget(), SIGNAL(sigOpenIMPage(ContactItem)),
+            m_pImWidget, SLOT(onOpenConversation(ContactItem)));
 }
 
 void MainWindow::initMisc()
@@ -265,7 +270,7 @@ void MainWindow::saveSetting()
 
 }
 
-void MainWindow::slot_iconIsActived(QSystemTrayIcon::ActivationReason reason)
+void MainWindow::onTrayIconActived(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason) {
     case QSystemTrayIcon::Trigger:
@@ -280,7 +285,7 @@ void MainWindow::slot_iconIsActived(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void MainWindow::slot_quitApp()
+void MainWindow::onQuitClient()
 {
     m_system_tray.hide();
     close();
@@ -291,6 +296,12 @@ void MainWindow::onSwitchPage()
     StackButton *stackBtn = (StackButton*)sender();
     m_pStackedLayout->setCurrentIndex(stackBtn->index());
     m_pLeftNavBar->onChangeButtonSelected(stackBtn->index());
+}
+
+void MainWindow::onSwitchIMPage(ContactItem contact)
+{
+    m_pStackedLayout->setCurrentIndex(2);
+    m_pLeftNavBar->onChangeButtonSelected(2);
 }
 
 

@@ -159,6 +159,15 @@ public:
                                   const UCS_IM_ConversationType type,
                                   const QString keyWord);
 
+    /*!
+     * \brief dropTable 删除聊天记录表
+     * \param targetId
+     * \param type
+     * \return
+     */
+    bool dropTable(const QString &targetId,
+                   const UCS_IM_ConversationType &type);
+
 private:
     QString tableName(const QString targetId,
                       const UCS_IM_ConversationType type);

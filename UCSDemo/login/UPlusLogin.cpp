@@ -162,16 +162,16 @@ void UPlusLogin::initConnections()
 
 void UPlusLogin::readSettings()
 {
-    QString userId = CommonHelper::readSetting("Login", "userId", "").toString();
-    QString pwd = CommonHelper::readUserPwd("pwd");
+    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+    QString pwd = CommonHelper::readSetting(kSettingLoginPwd).toString();
 
 //    QString name = CommonHelper::readSetting("Login", "name", "").toString();
 //    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
 //            QString("readSettings: userId(%1) pwd(%2) name(%3)")
 //                    .arg(userId).arg(pwd).arg(name));
 
-    int chkState = CommonHelper::readSetting("Login", "KeepPwd", 0).toInt();
-    m_pChkKeepPwd->setChecked(chkState > 0);
+    bool chkState = CommonHelper::readSetting(kSettingLoginKeepPwd).toBool();
+    m_pChkKeepPwd->setChecked(chkState);
 
     m_doReLogin = false;
     if (m_pChkKeepPwd->checkState() == Qt::Unchecked)
@@ -184,21 +184,31 @@ void UPlusLogin::readSettings()
         m_doReLogin = true;
     }
 
+    chkState = CommonHelper::readSetting(kSettingLoginEnv).toBool();
+    m_pChkOnLine->setChecked(chkState);
+    if (chkState)
+    {
+        UCSTcpClient::Instance()->DoUseOnLineEnv(false);
+        m_pRestApi->doSwitchEnv(false);
+    }
+    else
+    {
+        UCSTcpClient::Instance()->DoUseOnLineEnv(true);
+        m_pRestApi->doSwitchEnv(true);
+    }
+
     m_pLineUserName->setText(userId);
     m_pLinePassword->setText(pwd);
-
-    m_pChkOnLine->setChecked(true);
-    UCSTcpClient::Instance()->DoUseOnLineEnv(false);
 }
 
 void UPlusLogin::onLoginSuccess()
 {
     ///< 登录 Paas >
-    QString token = CommonHelper::readSetting("Login", "token", "").toString();
+    QString token = CommonHelper::readSetting(kSettingLoginToken).toString();
     UCSTcpClient::Instance()->doLogin(token);
 
     ///< 异步下载个人头像 >
-    QString headUrl = CommonHelper::readSetting("Login", "headUrl", "").toString();
+    QString headUrl = CommonHelper::readSetting(kSettingLoginHeadUrl).toString();
     QStringList headList;
     headList.append(headUrl);
     QtConcurrent::mapped(headList, UPlusLogin::downloadHeadImg);
@@ -206,8 +216,8 @@ void UPlusLogin::onLoginSuccess()
 
 void UPlusLogin::uploadHeaderImg()
 {
-    QString userId = CommonHelper::readSetting("Login", "userId", "").toString();
-    QString pwd = CommonHelper::readUserPwd("pwd");
+    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+    QString pwd = CommonHelper::readSetting(kSettingLoginPwd).toString();
     QFile file(":/Resources/emptyBG.jpg");
     if (!file.open(QIODevice::ReadOnly) || file.size() == 0)
     {
@@ -268,9 +278,10 @@ void UPlusLogin::onBtnLogin()
             m_pRestApi->doLogin(userId, pwd);
         }
 
-        CommonHelper::saveSetting("Login", "userId", userId);
-        CommonHelper::saveUserPwd("pwd", pwd);
-        CommonHelper::saveSetting("Login", "KeepPwd", m_pChkKeepPwd->checkState());
+        CommonHelper::saveSetting(kSettingLoginUserId, userId);
+        CommonHelper::saveSetting(kSettingLoginPwd, pwd);
+        CommonHelper::saveSetting(kSettingLoginKeepPwd, m_pChkKeepPwd->isChecked());
+        CommonHelper::saveSetting(kSettingLoginEnv, m_pChkOnLine->isChecked());
     }
 }
 
@@ -284,12 +295,16 @@ void UPlusLogin::onCheckedChanged()
 
     if (chkBox->objectName().contains("ChkOnLine"))
     {
+        m_doReLogin = false;
+
         if (chkBox->checkState())
         {
-            UCSTcpClient::Instance()->DoUseOnLineEnv(false);
+            m_pRestApi->doSwitchEnv(false);
+            UCSTcpClient::Instance()->DoUseOnLineEnv(false);            
         }
         else
         {
+            m_pRestApi->doSwitchEnv(true);
             UCSTcpClient::Instance()->DoUseOnLineEnv(true);
         }
     }
@@ -352,12 +367,11 @@ void UPlusLogin::onLoginReply(QByteArray replyData, int code)
 
             if (ret == 0)
             {
-                CommonHelper::saveSetting("Login", "name", name);
-                CommonHelper::saveSetting("Login", "token", token);
-                CommonHelper::saveSetting("Login", "sex", sex);
-                CommonHelper::saveUserPwd("summitpwd", submitPwd);
-                CommonHelper::saveSetting("Login", "headUrl", headImg);
-                CommonHelper::saveSetting("Login", "time", QDateTime::currentSecsSinceEpoch());
+                CommonHelper::saveSetting(kSettingLoginUserName, name);
+                CommonHelper::saveSetting(kSettingLoginToken, token);
+                CommonHelper::saveSetting(kSettingSummitPwd, submitPwd);
+                CommonHelper::saveSetting(kSettingLoginHeadUrl, headImg);
+                CommonHelper::saveSetting(kSettingLoginTime, QDateTime::currentSecsSinceEpoch());
 
                 onLoginSuccess();
             }
@@ -473,7 +487,7 @@ void UPlusLogin::onUploadHeaderImgReply(QByteArray replyData, int code)
 
             if (ret == 0)
             {
-                CommonHelper::saveSetting("Login", "headUrl", headimgurl);
+                CommonHelper::saveSetting(kSettingLoginHeadUrl, headimgurl);
             }
         }
     }

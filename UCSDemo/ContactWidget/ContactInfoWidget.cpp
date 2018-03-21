@@ -21,7 +21,7 @@ void ContactInfoWidget::initLayout()
     QHBoxLayout *pDetailLayout = new QHBoxLayout;
     QHBoxLayout *pBtnLayout = new QHBoxLayout;
 
-    m_pLblHeaderImg = new QLabel(this);
+    m_pLblHeaderImg = new MaskLabel(this);
     m_pLblUserName = new MyLabel(this);
     m_pLblUserSex = new QLabel(this);
     m_pLblUserPhone = new MyLabel(this);
@@ -50,10 +50,11 @@ void ContactInfoWidget::initLayout()
     m_pBtnIM->setObjectName(("btnIM"));
 
     m_pLblHeaderImg->setFixedSize(100, 100);
+    m_pLblUserPhone->setFixedSize(100, 30);
     m_pLblHeaderImg->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_pLblUserName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_pLblUserSex->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_pLblUserPhone->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_pLblUserPhone->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_pLblSectionName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_pBtnDirectAudio->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -67,11 +68,11 @@ void ContactInfoWidget::initLayout()
     m_pLblHeaderImg->setPixmap(QPixmap(":/images/midright/u3901.png"));
 
     pDetailLayout->addStretch();
-    pDetailLayout->addWidget(m_pLblPhoneTitle);
-    pDetailLayout->addWidget(m_pLblUserPhone);
+    pDetailLayout->addWidget(m_pLblPhoneTitle, 0, Qt::AlignHCenter);
+    pDetailLayout->addWidget(m_pLblUserPhone, 0, Qt::AlignHCenter);
     pDetailLayout->addSpacing(36);
-    pDetailLayout->addWidget(m_pLblSectionTitle);
-    pDetailLayout->addWidget(m_pLblSectionName);
+    pDetailLayout->addWidget(m_pLblSectionTitle, 0, Qt::AlignHCenter);
+    pDetailLayout->addWidget(m_pLblSectionName, 0, Qt::AlignHCenter);
     pDetailLayout->setSpacing(8);
     pDetailLayout->addStretch();
     pDetailLayout->setContentsMargins(0, 0, 0, 0);
@@ -141,15 +142,9 @@ void ContactInfoWidget::contactShow()
 {
     m_pLblUserName->setText(m_contact.userName);
 
-    if (m_contact.headPath.size())
-    {
-        QSize headSize = m_pLblHeaderImg->size();
-        m_pLblHeaderImg->setPixmap(QPixmap(m_contact.headPath).scaled(headSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    }
-    else
-    {
-        m_pLblHeaderImg->setPixmap(QPixmap(":/images/midright/u3901.png"));
-    }
+    QSize headSize = m_pLblHeaderImg->size();
+    m_pLblHeaderImg->setPixmap(QPixmap(m_contact.headPath).scaled(headSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
 
     /* 旋转45° */
 //    QMatrix mrix;
@@ -193,5 +188,5 @@ void ContactInfoWidget::onConfCallClick(bool)
 
 void ContactInfoWidget::onImClick(bool)
 {
-
+    emit sigOpenIMPage(m_contact);
 }

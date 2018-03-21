@@ -7,7 +7,6 @@
 #include "common/qtheaders.h"
 #include "absFiles/myPushButton.h"
 #include "KeypadWidget.h"
-#include "ConferenceStackWidget.h"
 #include "BaseWidget.h"
 
 
@@ -30,19 +29,10 @@ private:
 signals:
 
 public slots:
-    void onSwitchPage();
-    void slot_curStackChanged(int index);
-    void slot_keypadClicked(QString text);
-    void slot_startConference();
-    void slot_bookConference();
+    void onKeypadClicked(QString text);
 
 private:
-    MyPushButton m_btnArray[2];
-//    QStackedWidget m_stackWid;
     KeyPadWidget *m_pKeypadWid;
-    ConferenceStackWidget *m_pConfWid;
-    int preIndex;
-    QStackedLayout *m_pStackedLayout;
 };
 
 #endif // PHONECALLSTACKWIDGET_H

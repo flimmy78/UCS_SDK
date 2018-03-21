@@ -8,22 +8,6 @@
 
 class TreeItem;
 
-enum ContactRole
-{
-    ContactIdRole = Qt::UserRole,
-    SectionNameRole,
-    SectionIdRole,
-    parentIdRole,
-    parentNameRole,
-    gradeRole,
-    userNumRole,
-    userIdRole,
-    userNameRole,
-    userSexRole,
-    headUrlRole,
-    headPathRole,
-};
-
 class ContactTreeItemModel : public QAbstractItemModel
 {
     Q_OBJECT

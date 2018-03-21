@@ -10,7 +10,7 @@ UPlusRestApi::UPlusRestApi()
     m_uplusUrl = "https://uplus.uc.ucpaas.com/";
 }
 
-void UPlusRestApi::doInit(bool isOnLine)
+void UPlusRestApi::doSwitchEnv(bool isOnLine)
 {
     if (isOnLine)
     {

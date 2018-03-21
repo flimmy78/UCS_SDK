@@ -4,14 +4,10 @@ HEADERS += \
     $$PWD/ConversationItemModel.h \
     $$PWD/ConversationItemDelegate.h \
     $$PWD/IMChatWidget.h \
-#    $$PWD/ChatMsgTableView.h \
-#    $$PWD/ChatMsgTableModel.h \
-#    $$PWD/ChatMsgTableDelegate.h \
-#    $$PWD/TextMsgWidget.h \
-#    $$PWD/BaseMsgWidget.h
     $$PWD/ChatWebView.h \
     $$PWD/MsgConvert.h \
-    $$PWD/WebBridge.h
+    $$PWD/WebBridge.h \
+    $$PWD/IMCommonDefine.h
 
 SOURCES += \
     $$PWD/IMWidget.cpp \
@@ -19,11 +15,6 @@ SOURCES += \
     $$PWD/ConversationItemModel.cpp \
     $$PWD/ConversationItemDelegate.cpp \
     $$PWD/IMChatWidget.cpp \
-#    $$PWD/ChatMsgTableView.cpp \
-#    $$PWD/ChatMsgTableModel.cpp \
-#    $$PWD/ChatMsgTableDelegate.cpp \
-#    $$PWD/TextMsgWidget.cpp \
-#    $$PWD/BaseMsgWidget.cpp
     $$PWD/ChatWebView.cpp \
     $$PWD/MsgConvert.cpp \
     $$PWD/WebBridge.cpp

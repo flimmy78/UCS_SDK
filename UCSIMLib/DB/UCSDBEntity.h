@@ -101,8 +101,15 @@ typedef struct
  * \struct ChatEntity
  * \brief 每条聊天消息的实体
 */
-typedef struct
+typedef struct ChatEntity
 {
+    ChatEntity()
+    {
+        msgId.clear();
+        imsgId.clear();
+        targetId.clear();
+        senderId.clear();
+    }
     QString msgId;                  ///< 消息的唯一标识 >
     QString imsgId;                 ///< 暂时不用，从服务器收到的每一条消息的imsgId是唯一的，所以可以用这个来区分消息 >
     QString targetId;               ///< 消息所在聊天会话的Id >

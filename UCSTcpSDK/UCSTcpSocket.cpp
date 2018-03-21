@@ -212,7 +212,7 @@ void UCSTcpSocket::setState(const UcsTcpState &state)
 
 void UCSTcpSocket::forceChangeProxy()
 {
-    m_proxyIndex++;
+    m_proxyIndex = (++m_proxyIndex) % m_proxyList.size();
 }
 
 UcsTcpState UCSTcpSocket::state() const

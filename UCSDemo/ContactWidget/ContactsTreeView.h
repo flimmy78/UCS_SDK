@@ -19,6 +19,8 @@ public:
 
     static ContactItem downloadHeader(const ContactItem &contact);
 
+    ContactList contactList() const;
+
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
 

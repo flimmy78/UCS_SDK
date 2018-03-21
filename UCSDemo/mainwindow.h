@@ -44,10 +44,10 @@ private:
     void saveSetting();
 
 private slots:
-    void slot_iconIsActived(QSystemTrayIcon::ActivationReason);
-    void slot_quitApp();
-
+    void onTrayIconActived(QSystemTrayIcon::ActivationReason);
+    void onQuitClient();
     void onSwitchPage();
+    void onSwitchIMPage(ContactItem contact);
 
 private:
     QSystemTrayIcon m_system_tray;

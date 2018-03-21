@@ -39,7 +39,7 @@ private slots:
     void onBtnClosed();
     void onBtnMin();
     void onBtnLogin();
-    void onCheckedChange();
+    void onCheckedChanged();
 
     void onLoginReply(QByteArray replyData, int code);
     void onReLoginReply(QByteArray replyData, int code);

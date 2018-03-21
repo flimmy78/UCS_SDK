@@ -129,6 +129,14 @@ public:
     QList<UCSDiscussion> getDiscussions();
 
     /*!
+     * \brief createSoloConversation 创建一个单聊会话
+     * \param targetId 接收方用户
+     * \param name 用户名，作为会话名称
+     * \return true for success, else false
+     */
+    bool createSoloConversation(IN QString targetId, IN QString name);
+
+    /*!
      * \brief getConversationList 获取会话列表
      * \param conversationListType 获取的会话列表的类型。具体参考UCS_IM_ConversationListType
      * \return 会话数组，每个元素是一个UCSConversation对象

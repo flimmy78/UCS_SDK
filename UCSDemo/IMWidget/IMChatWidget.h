@@ -8,6 +8,7 @@
 #include "absFiles/myToolButton.h"
 #include "BaseWidget.h"
 #include "ChatWebView.h"
+#include "IMCommonDefine.h"
 
 class QWebEngineView;
 class QWebChannel;
@@ -39,11 +40,11 @@ private:
     void showMessages(int count = 20);
 
 signals:
-    void sendingNewMsg();
+    void sigSendingMsg();
 
 public slots:
-    void onChangeConversation(QString targetId, quint32 type);
-    void onConversationDeleted(QString targetId, quint32 type);
+    void onChangeConversation(ConversationItem conversation);
+    void onConversationDeleted(ConversationItem conversation);
 
 
 private slots:
@@ -56,8 +57,9 @@ private:
     MyChatTextEdit m_txtSending;
     MyToolButton m_btnSend;
     QAction *m_pAct[2];
-    QString m_conversationId;
-    quint32 m_conversationType;
+//    QString m_conversationId;
+//    quint32 m_conversationType;
+    ConversationItem m_conversation;
 
     QMap<QString, ChatWebView*> m_chatsMap;
     QWebChannel *m_pWebChannel;

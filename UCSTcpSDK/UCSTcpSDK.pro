@@ -55,7 +55,6 @@ HEADERS +=\
     UCSTcpSocket.h \
     UCSTcpClient.h \
     UCSTcpManager.h \
-    UCSTcpPublicDef.h \
     UCSCommonTypes.h \
     UCSTcpVersion.h
 

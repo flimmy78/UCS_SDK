@@ -48,7 +48,7 @@ public:
      * \brief doInit 初始化环境
      * \param isOnLine true 为生产环境，false为测试环境
      */
-    void doInit(bool isOnLine);
+    void doSwitchEnv(bool isOnLine);
 
     /*!
      * \brief doLogin 登录UPlus server

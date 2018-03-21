@@ -1,7 +1,6 @@
 ﻿#include "IMWidget.h"
 #include "Interface/UCSLogger.h"
 #include "EmptyWidget.h"
-#define TAG "IMWidget"
 
 IMWidget::IMWidget(QWidget *parent)
     : BaseWidget(parent)
@@ -55,26 +54,38 @@ void IMWidget::initLayout()
 
 void IMWidget::initConnections()
 {
-    connect(m_pConversationListView, SIGNAL(itemClicked(QString,quint32)), this, SLOT(onConversationItemClicked(QString,quint32)));
-    connect(m_pConversationListView, SIGNAL(itemClicked(QString,quint32)), m_pMsgChatWidget, SLOT(onChangeConversation(QString,quint32)));
-    connect(m_pConversationListView, SIGNAL(itemDeleted(QString, quint32)), m_pMsgChatWidget, SLOT(onConversationDeleted(QString,quint32)));
-    connect(m_pConversationListView, SIGNAL(itemDeleted(QString, quint32)), this, SLOT(onPageSwitch()));
-    connect(m_pMsgChatWidget, SIGNAL(sendingNewMsg()), m_pConversationListView, SLOT(onUpdateData()));
+    connect(m_pConversationListView, SIGNAL(itemClicked(ConversationItem)), this, SLOT(onConversationItemClicked(ConversationItem)));
+    connect(m_pConversationListView, SIGNAL(itemClicked(ConversationItem)), m_pMsgChatWidget, SLOT(onChangeConversation(ConversationItem)));
+    connect(m_pConversationListView, SIGNAL(itemDeleted(ConversationItem)), m_pMsgChatWidget, SLOT(onConversationDeleted(ConversationItem)));
+    connect(m_pConversationListView, SIGNAL(itemDeleted(ConversationItem)), this, SLOT(onSwitchEmptyPage()));
+    connect(m_pMsgChatWidget, SIGNAL(sigSendingMsg()), m_pConversationListView, SLOT(onUpdateData()));
 }
 
-void IMWidget::onPageSwitch()
+void IMWidget::onSwitchEmptyPage()
 {
     m_pStackedLayout->setCurrentIndex(0);
     m_pTitleBar->setTitle("");
 }
 
-void IMWidget::onConversationItemClicked(QString targetId, quint32 type)
+void IMWidget::onOpenConversation(ContactItem contact)
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onConversationChanged: userId(%1)").arg(contact.userId));
+    m_pTitleBar->setTitle(contact.userName);
+    m_pStackedLayout->setCurrentIndex(1);
+
+    UCSIMClient::Instance()->createSoloConversation(contact.userId, contact.userName);
+    m_pConversationListView->updateConversationList();
+    m_pConversationListView->enterConversation(contact.userId, contact.userName);
+}
+
+void IMWidget::onConversationItemClicked(ConversationItem conversation)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
             QString("onConversationItemClicked targetId: %1 type: %2")
-            .arg(targetId).arg(type));
+            .arg(conversation.conversationId).arg(conversation.conversationType));
 
-    m_pTitleBar->setTitle(targetId);
+    m_pTitleBar->setTitle(conversation.conversationTitle);
     m_pStackedLayout->setCurrentIndex(1);
 }
 

@@ -55,8 +55,8 @@ ContactsTreeView::~ContactsTreeView()
 
 void ContactsTreeView::doUpdateContacts()
 {
-    QString userId = CommonHelper::readSetting("Login", "userId", "").toString();
-    QString pwd = CommonHelper::readUserPwd("pwd");
+    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+    QString pwd = CommonHelper::readSetting(kSettingLoginPwd).toString();
 
     m_pRestApi->doGetContacts(userId, pwd);
 }
@@ -140,12 +140,12 @@ void ContactsTreeView::initMenu()
     m_pGroupMenu->addAction(pDelGroup);
 
     /* 联系人右键菜单 */
-    QAction *pDelAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("删除该联系人"));
+//    QAction *pDelAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("删除该联系人"));
     QAction *pMsgAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("发消息"));
     QAction *pAudioAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("音频通话"));
     QAction *pVideoAct = new QAction(QIcon(":/images/btn_del.png"), QStringLiteral("视频通话"));
 
-    connect(pDelAct, SIGNAL(triggered(bool)), this, SLOT(onRemoveContactAction(bool)));
+//    connect(pDelAct, SIGNAL(triggered(bool)), this, SLOT(onRemoveContactAction(bool)));
     connect(pMsgAct, SIGNAL(triggered(bool)), this, SLOT(onSendMessageAction(bool)));
     connect(pAudioAct, SIGNAL(triggered(bool)), this, SLOT(onAudioCallAction(bool)));
     connect(pVideoAct, SIGNAL(triggered(bool)), this, SLOT(onVideoCallAction(bool)));
@@ -154,7 +154,7 @@ void ContactsTreeView::initMenu()
     m_pPersonMenu->addAction(pAudioAct);
     m_pPersonMenu->addAction(pVideoAct);
     m_pPersonMenu->addSeparator();
-    m_pPersonMenu->addAction(pDelAct);
+//    m_pPersonMenu->addAction(pDelAct);
 }
 
 void ContactsTreeView::loadStyleSheet()
@@ -289,8 +289,7 @@ void ContactsTreeView::parseContactData()
                     for (int index = 0; index < persons.size(); ++index)
                     {
                        ContactItem person;
-                       person.contactId = contactId++;
-//                       person.sectionId = section.sectionId;
+                       person.contactId = contactId++;                       
                        person.parentId = section.sectionId;
                        person.parentName = section.sectionName;
                        person.grade = section.grade;
@@ -299,7 +298,6 @@ void ContactsTreeView::parseContactData()
                        if (personObj.contains("userid"))
                        {
                            person.userId = personObj["userid"].toString();
-//                           person.sectionId = person.userId;
                        }
                        if (personObj.contains("name"))
                        {
@@ -493,4 +491,9 @@ void ContactsTreeView::onUpdateContactsReply(QByteArray data, int code)
 void ContactsTreeView::onHeaderReady(int index)
 {
     m_contactList.replace(index, m_pDownloadWatcher->resultAt(index));
+}
+
+ContactList ContactsTreeView::contactList() const
+{
+    return m_contactList;
 }

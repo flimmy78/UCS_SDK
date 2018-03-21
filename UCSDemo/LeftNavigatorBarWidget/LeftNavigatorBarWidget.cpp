@@ -38,7 +38,7 @@ void LeftNavigatorBarWidget::initLayout()
                                "QPushButton::pressed{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}");
 
 
-    QString userId = CommonHelper::readSetting("Login", "userId", "").toString();
+    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
     m_pBtnInfo->setToolTip(userId);
 
     m_pBtn[0] = new StackButton(0,

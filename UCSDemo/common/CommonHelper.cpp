@@ -95,7 +95,7 @@ QString CommonHelper::tempDir()
 
 QString CommonHelper::userTempPath()
 {
-    QString userId = readSetting("Login", "userId", "").toString();
+    QString userId = readSetting(kSettingLoginUserId).toString();
     if (userId.isEmpty())
     {
         return QString("");
@@ -126,7 +126,7 @@ QString CommonHelper::dataDir()
 
 QString CommonHelper::userDataPath()
 {
-    QString userId = readSetting("Login", "userId", "").toString();
+    QString userId = readSetting(kSettingLoginUserId).toString();
     if (userId.isEmpty())
     {
         return QString();
@@ -141,51 +141,191 @@ QString CommonHelper::userDataPath()
     return dataPath;
 }
 
-void CommonHelper::saveSetting(const QString &group, const QString &key, const QVariant &value)
+void CommonHelper::saveSetting(const SettingKey &key, const QVariant &value)
 {
     QString iniName = QCoreApplication::applicationName() + ".ini";
     QSettings settings(dataDir() + "/" + iniName, QSettings::IniFormat);
-    if (!group.isEmpty())
-    {
-        settings.beginGroup(group);
-    }
 
-    settings.setValue(key, value);
-
-    if (!group.isEmpty())
+    switch (key)
     {
+    case kSettingLoginUserId:
+    {
+        settings.beginGroup("Login");
+        settings.setValue("userId", value);
         settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginUserName:
+    {
+        settings.beginGroup("Login");
+        settings.setValue("name", value);
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginPwd:
+    {
+        QString pwd = value.toString();
+        settings.beginGroup("Login");
+        settings.setValue("pwd", QString(pwd.toLocal8Bit().toBase64()));
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginTime:
+    {
+        settings.beginGroup("Login");
+        settings.setValue("time", value);
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingSummitPwd:
+    {
+        QString pwd = value.toString();
+        settings.beginGroup("Login");
+        settings.setValue("summitpwd", QString(pwd.toLocal8Bit().toBase64()));
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginToken:
+    {
+        settings.beginGroup("Login");
+        settings.setValue("token", value);
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginHeadUrl:
+    {
+        settings.beginGroup("Login");
+        settings.setValue("headUrl", value);
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginEnv:
+    {
+        settings.beginGroup("Login");
+        settings.setValue("onLineEnv", value);
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginKeepPwd:
+    {
+        settings.beginGroup("Login");
+        settings.setValue("KeepPwd", value);
+        settings.endGroup();
+    }
+        break;
+
+    default:
+        break;
     }
 }
 
-QVariant CommonHelper::readSetting(const QString &group, const QString &key, const QVariant &defaultVal)
+QVariant CommonHelper::readSetting(const SettingKey &key)
 {
     QString iniName = QCoreApplication::applicationName() + ".ini";
     QSettings settings(dataDir() + "/" + iniName, QSettings::IniFormat);
-    if (!group.isEmpty())
-    {
-        settings.beginGroup(group);
-    }
 
-    QVariant value = settings.value(key, defaultVal);
+    QVariant value;
 
-    if (!group.isEmpty())
+    switch (key)
     {
+    case kSettingLoginUserId:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("userId", "");
         settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginUserName:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("name", "");
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginPwd:
+    {
+        settings.beginGroup("Login");
+        QString pwdBase64 = settings.value("pwd", "").toString();
+        value = QString(QByteArray::fromBase64(pwdBase64.toLocal8Bit()));
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginTime:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("time", "");
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingSummitPwd:
+    {
+        settings.beginGroup("Login");
+        QString pwdBase64 = settings.value("summitpwd", "").toString();
+        value = QString(QByteArray::fromBase64(pwdBase64.toLocal8Bit()));
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginToken:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("token", "");
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginHeadUrl:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("headUrl", "");
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginEnv:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("onLineEnv", false);
+        settings.endGroup();
+    }
+        break;
+
+    case kSettingLoginKeepPwd:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("KeepPwd", false);
+        settings.endGroup();
+    }
+        break;
+
+    default:
+        break;
     }
 
     return value;
 }
 
-void CommonHelper::saveUserPwd(QString key, QString pwd)
-{
-    CommonHelper::saveSetting("Login", key, QString(pwd.toLocal8Bit().toBase64()));
-}
+//void CommonHelper::saveUserPwd(QString key, QString pwd)
+//{
+//    CommonHelper::saveSetting("Login", key, QString(pwd.toLocal8Bit().toBase64()));
+//}
 
-QString CommonHelper::readUserPwd(QString key)
-{
-    QString pwdBase64 = CommonHelper::readSetting("Login", key, "").toString();
-    QString pwd = QString(QByteArray::fromBase64(pwdBase64.toLocal8Bit()));
+//QString CommonHelper::readUserPwd(QString key)
+//{
+//    QString pwdBase64 = CommonHelper::readSetting("Login", key, "").toString();
+//    QString pwd = QString(QByteArray::fromBase64(pwdBase64.toLocal8Bit()));
 
-    return pwd;
-}
+//    return pwd;
+//}

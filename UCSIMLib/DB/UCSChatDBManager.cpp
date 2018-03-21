@@ -577,6 +577,32 @@ QList<ChatEntity> ChatDBManager::searchChats(const QString targetId,
     return chatList;
 }
 
+bool ChatDBManager::dropTable(const QString &targetId, const UCS_IM_ConversationType &type)
+{
+    if (!UCSDBHelper::checkTableExist(tableName(targetId, type)))
+    {
+        return true;
+    }
+
+    UCSDBScoped scoped;
+    QSqlDatabase db = scoped.db();
+    QSqlQuery sqlQuery(db);
+
+    QString sql = QString("DROP TABLE %1;").arg(tableName(targetId, type));
+    sqlQuery.prepare(sql);
+    if (!sqlQuery.exec())
+    {
+        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                QString("failed drop table %1 with error(%2)")
+                        .arg(tableName(targetId, type))
+                        .arg(sqlQuery.lastError().text()));
+
+        return false;
+    }
+
+    return true;
+}
+
 QString ChatDBManager::tableName(const QString targetId,
                                  const UCS_IM_ConversationType type)
 {

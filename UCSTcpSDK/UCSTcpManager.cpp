@@ -214,10 +214,23 @@ void UCSTcpManager::onUpdateProxyFinished(int error)
     else
     {
         QList<QObject*> receivers = m_cusListenMap.values(kUCSLoginEvent);
+        UCSErrorCode code;
+        if (error == RequestUrlError || error == ResponseError)
+        {
+            code = ErrorCode_ConnectServerFail;
+        }
+        else if (error == JsonFormatError)
+        {
+            code = ErrorCode_PacketParseError;
+        }
+        else
+        {
+            code = ErrorCode_PullProxyError;
+        }
         foreach (QObject *receiver, receivers)
         {
             UCSEvent::postEvent(receiver,
-                                new UCSLoginEvent(ErrorCode_ConnectServerFail, m_tokenData.userId));
+                                new UCSLoginEvent(code, m_tokenData.userId));
         }
     }
 }
@@ -225,7 +238,7 @@ void UCSTcpManager::onUpdateProxyFinished(int error)
 void UCSTcpManager::onTcpStateChanged(UcsTcpState state)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
-            QString("slot_onTcpStateChanged state(%1)").arg(state));
+            QString("onTcpStateChanged state(%1)").arg(state));
 
     switch (state) {
     case TcpConnected:
@@ -301,7 +314,7 @@ void UCSTcpManager::onTcpStateChanged(UcsTcpState state)
 void UCSTcpManager::onReadReady(QByteArray dataArray)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kTcpManager,
-            QString("slot_readReady size(%1)").arg(dataArray.size()));
+            QString("onReadReady size(%1)").arg(dataArray.size()));
 
     m_pMsgDispatch->receivedPacket(dataArray);
 }
@@ -360,11 +373,11 @@ void UCSTcpManager::onLoginStateChanged(UcsLoginState state)
             foreach (QObject *receiver, receivers)
             {
                 UCSEvent::postEvent(receiver,
-                                    new UCSLoginEvent(ErrorCode_InvalidToken, ""));
+                                    new UCSLoginEvent(ErrorCode_LoginInfoError, ""));
             }
         }
 
-        if (m_pTcpSocket)
+        if (m_pTcpSocket && m_pLoginManager->lastState() != LoginFailed)
         {
             m_pTcpSocket->forceChangeProxy();
             m_pTcpSocket->doReConnect();

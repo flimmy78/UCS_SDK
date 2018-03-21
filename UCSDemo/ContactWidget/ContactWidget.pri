@@ -5,7 +5,10 @@ HEADERS += \
     $$PWD/ContactTreeItemModel.h \
     $$PWD/ContactInfoWidget.h \
     $$PWD/ContactsTreeView.h \
-    $$PWD/ContactDefine.h
+    $$PWD/ContactDefine.h \
+    $$PWD/ContactSearchListView.h \
+    $$PWD/ContactSearchListModel.h \
+    $$PWD/ContactSearchListItemDelegate.h
 
 SOURCES += \
     $$PWD/ContactWidget.cpp \
@@ -13,4 +16,7 @@ SOURCES += \
     $$PWD/treeItem.cpp \
     $$PWD/ContactTreeItemModel.cpp \
     $$PWD/ContactInfoWidget.cpp \
-    $$PWD/ContactsTreeView.cpp
+    $$PWD/ContactsTreeView.cpp \
+    $$PWD/ContactSearchListView.cpp \
+    $$PWD/ContactSearchListModel.cpp \
+    $$PWD/ContactSearchListItemDelegate.cpp

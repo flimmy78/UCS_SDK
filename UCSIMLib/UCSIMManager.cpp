@@ -78,7 +78,7 @@ void UCSIMManager::updateLoginState(UcsLoginState state, QString userid)
 void UCSIMManager::processRecvData(quint32 cmd, QByteArray recvData)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMManager,
-            QString("processRecvData cmd(%1)").arg(cmd));
+            QString("processRecvData cmd(%1)").arg(UCSPackage::cmdName(cmd)));
 
     switch (cmd) {
     case RESP_SEND_MSG: ///<发送文本消息响应>
@@ -448,6 +448,23 @@ bool UCSIMManager::doGetAllDiscussions(QList<UCSDiscussion> &discussionList)
     return true;
 }
 
+bool UCSIMManager::doCreateSoloConversation(QString targetId, QString name)
+{
+    QString timeNow = QString::number(UCSClock::TimeInMicroseconds());
+    ConversationEntity conversation;
+    conversation.targetId = targetId;
+    conversation.conversationTitle = name;
+    conversation.categoryId = QString::number(UCS_IM_SOLOCHAT);
+    conversation.lastTime = timeNow;
+    conversation.localTime = timeNow;
+
+    if (name.isEmpty())
+    {
+        conversation.conversationTitle = targetId;
+    }
+    return UCSDBCenter::conversationMgr()->addConversation(&conversation);
+}
+
 bool UCSIMManager::doGetConversationList(UCS_IM_ConversationListType typeList,
                                          QList<UCSConversation*> &conversationList)
 {
@@ -527,7 +544,7 @@ bool UCSIMManager::doGetConversationList(UCS_IM_ConversationListType typeList,
         bool result = UCSDBCenter::chatMgr()->getNewestChat(conversation->targetId(),
                                                             conversation->conversationType(),
                                                             chatEntity);
-        if (result)
+        if (result && chatEntity.targetId.size())
         {
             UCSMessage *message = new UCSMessage;
             UCSDBEntity::convertMessageFromChat(chatEntity, message);
@@ -553,12 +570,27 @@ bool UCSIMManager::doGetConversationList(UCS_IM_ConversationListType typeList,
 
 bool UCSIMManager::doRemoveConversation(UCS_IM_ConversationType type, QString targetId)
 {
-    return UCSDBCenter::conversationMgr()->delConversation(type, targetId);
+    bool result = UCSDBCenter::conversationMgr()->delConversation(type, targetId);
+    if (result)
+    {
+//        UCSDBCenter::chatMgr()->dropTable(targetId, type);
+    }
+
+    return result;
 }
 
 bool UCSIMManager::doClearMessages(UCS_IM_ConversationType type, QString targetId)
 {
-    return UCSDBCenter::chatMgr()->clearChats(targetId, type);
+    bool result = UCSDBCenter::chatMgr()->clearChats(targetId, type);
+    if (result)
+    {
+        MapConditions condition;
+        MapValues values;
+        condition.insert("targetId", targetId);
+        values.insert("lastestMessageId", "");
+        UCSDBCenter::conversationMgr()->updateConversation(condition, values);
+    }
+    return result;
 }
 
 bool UCSIMManager::doClearConversations()
@@ -678,7 +710,7 @@ bool UCSIMManager::doUpdateDraft(UCS_IM_ConversationType type,
 
 void UCSIMManager::initConnections()
 {
-    connect(UCSIMTimer::getInstance(), SIGNAL(sig_timeout(UCSIMTimer::ImTimerId)), this, SLOT(slot_timeOut(UCSIMTimer::ImTimerId)));
+    connect(UCSIMTimer::getInstance(), SIGNAL(sig_timeout(UCSIMTimer::ImTimerId)), this, SLOT(onTimeOut(UCSIMTimer::ImTimerId)));
 }
 
 void UCSIMManager::doInitSyncRequest()
@@ -1599,7 +1631,7 @@ void UCSIMManager::saveConversationAndChat(QMap<QString, QList<ChatEntity> > cha
     }
 }
 
-void UCSIMManager::slot_timeOut(UCSIMTimer::ImTimerId id)
+void UCSIMManager::onTimeOut(UCSIMTimer::ImTimerId id)
 {
     switch (id) {
     case UCSIMTimer::kMsgSendTimer:

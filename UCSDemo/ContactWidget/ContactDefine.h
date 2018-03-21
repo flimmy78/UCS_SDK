@@ -2,6 +2,22 @@
 #define CONTACTDEFINE_H
 #include <QObject>
 
+enum ContactRole
+{
+    ContactIdRole = Qt::UserRole,
+    SectionNameRole,
+    SectionIdRole,
+    parentIdRole,
+    parentNameRole,
+    gradeRole,
+    userNumRole,
+    userIdRole,
+    userNameRole,
+    userSexRole,
+    headUrlRole,
+    headPathRole,
+};
+
 typedef struct ContactItem
 {
     ContactItem() {
@@ -16,7 +32,15 @@ typedef struct ContactItem
         userName = "";
         userSex = 0;
         headUrl = "";
-        headPath = "";
+        headPath = ":/images/midright/u3901.png";
+    }
+
+    QString toString() {
+        return QString("%1,%2,%3,%4")
+                .arg(sectionName)
+                .arg(parentName)
+                .arg(userId)
+                .arg(userName);
     }
 
     int     contactId;  ///< 唯一标识 >

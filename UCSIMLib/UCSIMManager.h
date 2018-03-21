@@ -103,6 +103,14 @@ public:
     bool doGetAllDiscussions(QList<UCSDiscussion> &discussionList);
 
     /*!
+     * \brief doCreateSoloConversation 创建单聊会话
+     * \param targetId
+     * \param name
+     * \return
+     */
+    bool doCreateSoloConversation(QString targetId, QString name);
+
+    /*!
      * \brief doGetAllConversation 查询指定会话类型的所有会话
      * \param typeList
      * \param conversationList
@@ -394,7 +402,7 @@ private:
 signals:
 
 public slots:
-    void slot_timeOut(UCSIMTimer::ImTimerId id);
+    void onTimeOut(UCSIMTimer::ImTimerId id);
 
 private:
     QString m_userId;

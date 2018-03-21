@@ -5,6 +5,19 @@
 #include <QObject>
 #include <qglobal.h>
 
+enum SettingKey
+{
+    kSettingLoginUserId = 0,
+    kSettingLoginUserName,
+    kSettingLoginPwd,
+    kSettingLoginTime,
+    kSettingSummitPwd,
+    kSettingLoginEnv,
+    kSettingLoginHeadUrl,
+    kSettingLoginToken,
+    kSettingLoginKeepPwd,
+};
+
 class CommonHelper
 {
 public:
@@ -56,33 +69,28 @@ public:
     static QString userDataPath();
 
     /*!
-     * \brief saveSetting 保存配置项
-     * \param group
-     * \param key
+     * \brief saveSetting 保存配置项     
+     * \param key see @SettingKey
      * \param value
      */
-    static void saveSetting(const QString &group,
-                               const QString &key,
-                               const QVariant &value);
+    static void saveSetting(const SettingKey &key,
+                            const QVariant &value);
 
     /*!
      * \brief readSetting 读取指定配置项
-     * \param group
-     * \param key
+     * \param see @SettingKey
      * \param defaultVal
      * \return
      */
-    static QVariant readSetting(const QString &group,
-                                const QString &key,
-                                const QVariant &defaultVal);
+    static QVariant readSetting(const SettingKey &key);
 
     /*!
      * \brief saveUserPwd 用户密码需要加密，单独函数保存
      * \param key 密码对应的key
      * \param pwd
      */
-    static void saveUserPwd(QString key, QString pwd);
-    static QString readUserPwd(QString key);
+//    static void saveUserPwd(QString key, QString pwd);
+//    static QString readUserPwd(QString key);
 };
 
 #endif // COMMONHELPER_H

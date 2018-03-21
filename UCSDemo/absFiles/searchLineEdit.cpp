@@ -26,17 +26,13 @@ bool SearchLineEdit::eventFilter(QObject *watched, QEvent *event)
     {
         m_pBtn->setIcon(QIcon(":/images/btn_del.png"));
         m_bFocusIn = true;
-        emit sig_FocusChanged(true);
+        emit sigFocusChanged(true);
     }
-    else if(event->type() == QEvent::FocusOut)
-    {
-//        m_pBtn->setIcon(QIcon(":/images/btn_search_normal.png"));
-//        emit sig_FocusChanged(false);
-    }
+
     return QObject::eventFilter(watched, event);
 }
 
-void SearchLineEdit::slot_clearText()
+void SearchLineEdit::onClearText()
 {
     if (m_bFocusIn)
     {
@@ -44,7 +40,7 @@ void SearchLineEdit::slot_clearText()
     }
     m_bFocusIn = false;
     m_pBtn->setIcon(QIcon(":/images/btn_search_normal.png"));
-    emit sig_FocusChanged(false);
+    emit sigFocusChanged(false);
 }
 
 void SearchLineEdit::initLayout()
@@ -75,5 +71,5 @@ void SearchLineEdit::initLayout()
 
 void SearchLineEdit::initConnection()
 {
-    connect(m_pBtn, SIGNAL(clicked(bool)), this, SLOT(slot_clearText()));
+    connect(m_pBtn, SIGNAL(clicked(bool)), this, SLOT(onClearText()));
 }

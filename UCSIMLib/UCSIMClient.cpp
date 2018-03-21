@@ -225,6 +225,18 @@ QList<UCSDiscussion> UCSIMClient::getDiscussions()
     return discussionList;
 }
 
+bool UCSIMClient::createSoloConversation(QString targetId, QString name)
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);
+
+    if (targetId.isEmpty())
+    {
+        return false;
+    }
+
+    return m_pIManager->doCreateSoloConversation(targetId, name);
+}
+
 QList<UCSConversation*> UCSIMClient::getConversationList(UCS_IM_ConversationListType conversationListType)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, UCSLogger::kIMClient, __FUNCTION__);

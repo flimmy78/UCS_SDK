@@ -58,7 +58,7 @@ QVariant ConversationItemModel::data(const QModelIndex &index, int role) const
     {
         QPixmap pixmap;
         pixmap.load(item.headerPath);
-        return pixmap.scaled(50, 50, Qt::KeepAspectRatio, Qt::FastTransformation);
+        return pixmap.scaled(44, 44, Qt::IgnoreAspectRatio, Qt::FastTransformation);
     }
     else if (role == Qt::UserRole + 2)
     {

@@ -5,6 +5,7 @@
 #include "absFiles/myLabel.h"
 #include "BaseWidget.h"
 #include "ContactDefine.h"
+#include "MaskLabel.h"
 
 class ContactInfoWidget : public BaseWidget
 {
@@ -23,6 +24,7 @@ private:
 
     void contactShow();
 signals:
+    void sigOpenIMPage(ContactItem contact);
 
 public slots:
     void onContactItemClicked(ContactItem contact);
@@ -35,7 +37,7 @@ private slots:
     void onImClick(bool);
 
 private:
-    QLabel *m_pLblHeaderImg;
+    MaskLabel *m_pLblHeaderImg;
     MyLabel *m_pLblUserName;
     QLabel *m_pLblUserSex;
     MyLabel *m_pLblUserPhone;

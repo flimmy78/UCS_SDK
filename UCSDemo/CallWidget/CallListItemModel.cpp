@@ -33,7 +33,7 @@ QVariant CallListItemModel::data(const QModelIndex &index, int role) const
     {
         QPixmap pixmap;
         pixmap.load(item.headerPath);
-        return pixmap.scaled(50, 50, Qt::KeepAspectRatio, Qt::FastTransformation);
+        return pixmap.scaled(44, 44, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     else if (role == Qt::UserRole + 1)
     {
@@ -51,7 +51,7 @@ QVariant CallListItemModel::data(const QModelIndex &index, int role) const
     {
         QPixmap pixmap;
         pixmap.load(item.typeIconPath);
-        return pixmap.scaled(20, 20, Qt::KeepAspectRatio, Qt::FastTransformation);
+        return pixmap.scaled(20, 20, Qt::IgnoreAspectRatio, Qt::FastTransformation);
     }
 
     return QVariant();

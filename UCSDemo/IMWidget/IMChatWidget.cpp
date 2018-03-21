@@ -46,12 +46,12 @@ void IMChatWidget::doSyncMessages(QMap<QString, qint32> messageCount)
 {
     createChat();
 
-    if (m_conversationId.isEmpty())
+    if (m_conversation.conversationId.isEmpty())
     {
         return;
     }
 
-    int count = messageCount[m_conversationId];
+    int count = messageCount[m_conversation.conversationId];
     if (count <= 0)
     {
         return;
@@ -185,9 +185,9 @@ void IMChatWidget::createChat()
 void IMChatWidget::changeChat()
 {
     UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(), "changeChat");
-    if (m_chatsMap.contains(m_conversationId))
+    if (m_chatsMap.contains(m_conversation.conversationId))
     {
-        ChatWebView *webView = m_chatsMap[m_conversationId];
+        ChatWebView *webView = m_chatsMap[m_conversation.conversationId];
         int index = m_pStackedLayout->indexOf(webView);
         m_pStackedLayout->setCurrentIndex(index);
 
@@ -208,19 +208,19 @@ void IMChatWidget::changeChat()
     // Assume that the last added widget index equal to count() - 1
     m_pStackedLayout->setCurrentIndex(m_pStackedLayout->count() - 1);
 
-    m_chatsMap.insert(m_conversationId, webView);
+    m_chatsMap.insert(m_conversation.conversationId, webView);
 #endif
 }
 
 void IMChatWidget::showMessages(int count)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(), "showMessages");
-    if (m_conversationId.isEmpty())
+    if (m_conversation.conversationId.isEmpty())
     {
         return;
     }
 
-    ChatWebView *webView = m_chatsMap[m_conversationId];
+    ChatWebView *webView = m_chatsMap[m_conversation.conversationId];
     if (webView == Q_NULLPTR || !webView->isLoadFinished())
     {
         return;
@@ -228,7 +228,9 @@ void IMChatWidget::showMessages(int count)
 
     UCS_LOG(UCSLogger::kTraceInfo, this->objectName(), "showMessages");
     QList<UCSMessage*> messageList;
-    messageList = UCSIMClient::Instance()->getLatestMessages((UCS_IM_ConversationType)m_conversationType, m_conversationId, count);
+    messageList = UCSIMClient::Instance()->getLatestMessages((UCS_IM_ConversationType)m_conversation.conversationType,
+                                                             m_conversation.conversationId,
+                                                             count);
     int msgCount = messageList.size();
     for (int i = msgCount - 1; i >= 0; i--)
     {
@@ -249,16 +251,18 @@ void IMChatWidget::showMessages(int count)
     messageList.clear();
 }
 
-void IMChatWidget::onChangeConversation(QString targetId, quint32 type)
+void IMChatWidget::onChangeConversation(ConversationItem conversation)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
-            QString("onChangeConversation targetId: %1 type: %2")
-            .arg(targetId).arg(type));
+            QString("onChangeConversation conversationId: %1 type: %2")
+            .arg(conversation.conversationId).arg(conversation.conversationType));
 
-    m_conversationId = targetId;
-    m_conversationType = type;
+//    m_conversationId = targetId;
+//    m_conversationType = type;
 
-    if (m_conversationId.isEmpty())
+    m_conversation = conversation;
+
+    if (m_conversation.conversationId.isEmpty())
     {
         return;
     }
@@ -267,11 +271,11 @@ void IMChatWidget::onChangeConversation(QString targetId, quint32 type)
     showMessages();
 }
 
-void IMChatWidget::onConversationDeleted(QString targetId, quint32 type)
+void IMChatWidget::onConversationDeleted(ConversationItem conversation)
 {
-    if (m_chatsMap.contains(targetId))
+    if (m_chatsMap.contains(conversation.conversationId))
     {
-        ChatWebView *webView = m_chatsMap.take(targetId);
+        ChatWebView *webView = m_chatsMap.take(conversation.conversationId);
         m_pStackedLayout->removeWidget(webView);
         webView->deleteLater();
     }
@@ -281,23 +285,22 @@ void IMChatWidget::onSendingMsg()
 {
     if (!m_txtSending.toPlainText().isEmpty())
     {
-        qDebug() << "sending msg: " << m_txtSending.toPlainText();
         UCSMessage message;
         UCSTextMsg *txtMsg = new UCSTextMsg(m_txtSending.toPlainText().trimmed());
-        message.receivedId = m_conversationId;
-        message.conversationType = (UCS_IM_ConversationType)(m_conversationType);
+        message.receivedId = m_conversation.conversationId;
+        message.conversationType = (UCS_IM_ConversationType)(m_conversation.conversationType);
         message.messageType = UCS_IM_TEXT;
         message.content = txtMsg;
 
         UCSIMClient::Instance()->sendMessage(&message);
+        m_msgIdList.append(message.messageId);
 
         ChatMsgModel msg = MsgConvert::convert2Model(&message);
-//        m_pChatWebView->sendMsgShow(msg);
-        ChatWebView *webView = m_chatsMap[m_conversationId];
+        ChatWebView *webView = m_chatsMap[m_conversation.conversationId];
         webView->msgShow(msg);
 
         m_txtSending.clear();
-        emit sendingNewMsg();
+        emit sigSendingMsg();
     }
 }
 

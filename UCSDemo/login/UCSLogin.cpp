@@ -176,7 +176,7 @@ void UCSLogin::customEvent(QEvent *event)
 
             UCSTcpClient::Instance()->unRegisterEventListener(kUCSLoginEvent, this);
 
-            CommonHelper::saveSetting("Login", "userId", loginEvt->userId());
+            CommonHelper::saveSetting(kSettingLoginUserId, loginEvt->userId());
 
             if (m_timerId)
             {

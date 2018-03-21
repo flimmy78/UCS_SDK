@@ -35,12 +35,12 @@ private:
     void initConnection();
 
 signals:
-    void sig_Clicked(QString text);
+    void sigBtnClicked(QString text);
 
 private slots:
-    void slot_digitClicked();
-    void slot_backspaceClicked();
-    void slot_BtnClicked();
+    void onBtnDigitClicked();
+    void onBtnBackspaceClicked();
+    void onBtnClicked();
 
 private:
     QLineEdit *m_pDisplayLine;
@@ -49,7 +49,6 @@ private:
     MyToolButton *m_pDigitBtn[NumDigitButtons];
     MyToolButton *m_pStarBtn;
     MyToolButton *m_pPoundBtn;
-    MyToolButton *m_pBackSpaceBtn;
 
     MyPushButton m_customBtn;
 };

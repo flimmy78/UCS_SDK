@@ -9,6 +9,7 @@
 #include "IMChatWidget.h"
 #include "topWidget.h"
 #include "searchLineEdit.h"
+#include "ContactDefine.h"
 
 class IMWidget : public BaseWidget
 {
@@ -29,10 +30,11 @@ private:
 signals:
 
 public slots:
-    void onPageSwitch();
+    void onSwitchEmptyPage();
+    void onOpenConversation(ContactItem contact);
 
 private slots:
-    void onConversationItemClicked(QString targetId, quint32 type);
+    void onConversationItemClicked(ConversationItem conversation);
 
 private:
     TopWidget *m_pTitleBar;

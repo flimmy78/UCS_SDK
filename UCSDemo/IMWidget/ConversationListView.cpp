@@ -168,6 +168,20 @@ void ConversationListView::updateConversationList()
     m_pModel->refreshModel();
 }
 
+void ConversationListView::enterConversation(QString targetId, QString name)
+{
+    for (int row = 0; row < m_conversationList.size(); ++row)
+    {
+        ConversationItem conversation = m_conversationList.at(row);
+        if (!QString::compare(conversation.conversationId, targetId, Qt::CaseSensitive))
+        {
+            QModelIndex index = m_pModel->index(row);
+            this->setCurrentIndex(index);
+            emit itemClicked(conversation);
+        }
+    }
+}
+
 void ConversationListView::initConnections()
 {
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onClickedItem(QModelIndex)));
@@ -215,13 +229,12 @@ void ConversationListView::onClickedItem(QModelIndex index)
 {
     if (index.isValid())
     {
+        ConversationItem conversation = m_conversationList.at(index.row());
+
 //        UCS_LOG(UCSLogger::kTraceApiCall, "Conversation",
 //                QString("onClickedItem: %1").arg(index.data(Qt::UserRole).toString()));
 
-        QString conversationId = m_conversationList.at(index.row()).conversationId;
-        quint32 conversationType = m_conversationList.at(index.row()).conversationType;
-
-        emit itemClicked(conversationId, conversationType);
+        emit itemClicked(conversation);
     }
 }
 
@@ -236,18 +249,18 @@ void ConversationListView::onDeleteItemAction()
 
         if (!m_conversationList.isEmpty())
         {
-            QString conversationId = m_conversationList.at(index.row()).conversationId;
-            quint32 conversationType = m_conversationList.at(index.row()).conversationType;
+            ConversationItem conversation = m_conversationList.at(index.row());
+            QString conversationId = conversation.conversationId;
+            quint32 conversationType = conversation.conversationType;
 
             m_conversationList.removeAt(index.row());
 
-
-//        UCSIMClient::Instance()->removeConversation(conversationType,
-//                                                    conversationId);
+            UCSIMClient::Instance()->removeConversation((UCS_IM_ConversationType)conversationType,
+                                                        conversationId);
 
             m_pModel->refreshModel();
 
-            emit itemDeleted(conversationId, conversationType);
+            emit itemDeleted(conversation);
         }
     }
 }
