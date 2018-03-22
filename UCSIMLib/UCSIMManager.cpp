@@ -176,8 +176,8 @@ bool UCSIMManager::doSendMessage(UCSMessage *pMessage)
 
     pMessage->messageId = msgId.toLongLong();
     pMessage->messageDirection = MessageDirection_SEND;
-    pMessage->senderUserId = userId();
-    pMessage->senderNickName = userId();
+    pMessage->senderUserId = pMessage->senderUserId;
+    pMessage->senderNickName = pMessage->senderNickName;
     pMessage->sendStatus = SendStatus_sending;
     pMessage->receivedStatus = ReceivedStatus_UNREAD;
     pMessage->time = nowTime;
@@ -1038,7 +1038,13 @@ void UCSIMManager::handleDownloadVoiceResponse(QByteArray recvData)
 {
     UCSDownloadVoiceResponse_t response;
     UCSPackage::UnpackDownloadVoiceReponse(recvData, &response);
-
+    if (response.tBaseResponse.iRet != 0)
+    {
+        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMManager,
+                QString("handleDownloadVoiceResponse: %1(%2)")
+                        .arg(response.tBaseResponse.tErrMsg)
+                        .arg(response.tBaseResponse.iRet));
+    }
 
 }
 
@@ -1418,11 +1424,12 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
             chatEntity.thumbnaiUrl = thumbnaiPath;
             chatEntity.content = remoteUrl;
 
+#if 0
             UCSImageMsg *imgMsg = new UCSImageMsg;
             imgMsg->imageRemoteUrl = remoteUrl;
             imgMsg->thumbnailLocalPath = thumbnaiPath;
             imgMsg->pushContent = msg.pcPushContent;
-#if 0
+
             recvMsg->content = imgMsg;
 #endif
         }
@@ -1473,7 +1480,7 @@ void UCSIMManager::handleRecivedMsgList(const QList<UCSIMAddMsg_t> msgList)
 
             ///< 启动语音下载 >
             UCSDownloadVoiceRequest_t request;
-            request.iMsgId = msgId.toLongLong();
+            request.iMsgId = msg.iMsgId;
             request.pcClientMsgId = entity.pcClientMsgId;
             request.iOffset = 0;
             request.iLenght = entity.iLength.toInt();

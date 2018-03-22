@@ -2,7 +2,7 @@
 
 MyChatTextEdit::MyChatTextEdit(QWidget *parent)
     : QTextEdit(parent)
-    , m_sendingMode(CTRL_ENTER_SEND)
+    , m_sendingMode(ENTER_SEND)
 {
     this->setLineWrapMode(WidgetWidth);
     this->setFrameShadow(QFrame::Plain);

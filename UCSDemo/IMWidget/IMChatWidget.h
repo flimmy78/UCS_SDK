@@ -30,10 +30,6 @@ private:
     void initMisc();
     void initLayout();
     void initConnections();
-    void initTBtnMenu();
-
-    void saveSetting();
-    void readSetting();
 
     void createChat();
     void changeChat();
@@ -49,22 +45,32 @@ public slots:
 
 private slots:
     void onSendingMsg();
-    void onUpdateSendAction(QAction* pAction);
     void urlChanged(const QUrl &url);
     void onLoadFinished();
+    void onOpenEmojiPanel();
+    void onSendImage();
+    void onClearMessage();
+    void onStartConference();
+    void onStartDirectCall();
+    void onStartAudioCall();
+    void onStartVideoCall();
 
 private:
-    MyChatTextEdit m_txtSending;
-    MyToolButton m_btnSend;
-    QAction *m_pAct[2];
-//    QString m_conversationId;
-//    quint32 m_conversationType;
     ConversationItem m_conversation;
-
     QMap<QString, ChatWebView*> m_chatsMap;
     QWebChannel *m_pWebChannel;
     QStackedLayout *m_pStackedLayout;
     QList<qint64> m_msgIdList;
+
+    MyChatTextEdit *m_pTxtSending;
+    MyPushButton *m_pBtnSend;
+    MyPushButton *m_pBtnEmoji;
+    MyPushButton *m_pBtnClear;
+    MyPushButton *m_pBtnImage;
+    MyPushButton *m_pBtnConf;
+    MyPushButton *m_pBtnDirect;
+    MyPushButton *m_pBtnAudio;
+    MyPushButton *m_pBtnVideo;
 };
 
 #endif // MESSAGECHATSTACKWIDGET_H

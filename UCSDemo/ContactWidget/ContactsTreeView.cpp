@@ -10,6 +10,7 @@
 #include "CommonHelper.h"
 #include "UCSLogger.h"
 #include "HttpDownloadPicture.h"
+#include "DBCenter.h"
 
 ContactsTreeView::ContactsTreeView(QWidget *parent)
     : QTreeView(parent)
@@ -50,13 +51,44 @@ ContactsTreeView::~ContactsTreeView()
     {
         m_pDownloadWatcher->cancel();
         m_pDownloadWatcher->waitForFinished();
+
+        delete m_pDownloadWatcher;
+        m_pDownloadWatcher = Q_NULLPTR;
+    }
+
+    if (m_pContactWatcher)
+    {
+        m_pContactWatcher->waitForFinished();
+
+        delete m_pContactWatcher;
+        m_pContactWatcher = Q_NULLPTR;
+    }
+
+    if (m_pContactSaveWatcher)
+    {
+        m_pContactSaveWatcher->waitForFinished();
+
+        delete m_pContactSaveWatcher;
+        m_pContactSaveWatcher = Q_NULLPTR;
     }
 }
 
 void ContactsTreeView::doUpdateContacts()
 {
-    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
-    QString pwd = CommonHelper::readSetting(kSettingLoginPwd).toString();
+//    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+//    QString pwd = CommonHelper::readSetting(kSettingLoginPwd).toString();
+
+    LoginEntity entity;
+    LoginEntityList loginList;
+    DBCenter::loginMgr()->getAllLoginInfo(loginList);
+    if (loginList.empty())
+    {
+        return;
+    }
+
+    entity = loginList.at(0);
+    QString userId = entity.userId;
+    QString pwd = CommonHelper::decryptPwd(entity.userPwd);
 
     m_pRestApi->doGetContacts(userId, pwd);
 }
@@ -73,6 +105,21 @@ ContactItem ContactsTreeView::downloadHeader(const ContactItem &contact)
     newContact.headPath = HttpDownloadPicture::downloadBlock(contact.headUrl, saveDir);
 
     return newContact;
+}
+
+void ContactsTreeView::saveContactToDB(const ContactList &contactList)
+{
+    ContactEntityList entityList;
+    foreach (ContactItem contact, contactList)
+    {
+        ContactEntity entity;
+        DBEntity::convertContact2Entity(contact, entity);
+        entityList.append(entity);
+    }
+    if (entityList.size() > 0)
+    {
+        DBCenter::contactMgr()->addContacts(entityList);
+    }
 }
 
 void ContactsTreeView::contextMenuEvent(QContextMenuEvent *event)
@@ -99,13 +146,18 @@ void ContactsTreeView::contextMenuEvent(QContextMenuEvent *event)
 void ContactsTreeView::init()
 {
     m_pRestApi = new UPlusRestApi;
+    m_pContactWatcher = new QFutureWatcher<ContactList>(this);
     m_pDownloadWatcher = new QFutureWatcher<ContactItem>(this);
+    m_pContactSaveWatcher = new QFutureWatcher<void>(this);
 
     m_pContactModel = new ContactTreeItemModel(this);
     this->setModel(m_pContactModel);
+    m_pContactModel->setOrganizationList(&m_contactList);
 
     ContractTreeItemDelegate *delegate = new ContractTreeItemDelegate(this);
     this->setItemDelegate(delegate);
+
+    loadContactList();
 }
 
 void ContactsTreeView::initConnection()
@@ -115,7 +167,9 @@ void ContactsTreeView::initConnection()
     connect(m_pRestApi, SIGNAL(sigOnGetContactsReply(QByteArray,int)),
             this, SLOT(onUpdateContactsReply(QByteArray,int)));
 
+    connect(m_pContactWatcher, SIGNAL(finished()), this, SLOT(onParseContactFinish()));
     connect(m_pDownloadWatcher, SIGNAL(resultReadyAt(int)), this, SLOT(onHeaderReady(int)));
+    connect(m_pDownloadWatcher, SIGNAL(finished()), this, SLOT(onDownLoadHeaderFinish()));
 }
 
 void ContactsTreeView::initMenu()
@@ -170,10 +224,10 @@ void ContactsTreeView::loadStyleSheet()
     }
 }
 
-void ContactsTreeView::parseContactData()
+void ContactsTreeView::parseContactData(QByteArray data)
 {
     QJsonParseError jsonError;
-    QJsonDocument document = QJsonDocument::fromJson(m_contactData, &jsonError);
+    QJsonDocument document = QJsonDocument::fromJson(data, &jsonError);
     if ( jsonError.error == QJsonParseError::NoError &&
          document.isObject())
     {
@@ -208,13 +262,13 @@ void ContactsTreeView::parseContactData()
                 m_contactVer = newVersion;
             }
 
-#if 0   ///< 未使用数据库或文件，暂不适用 >
-            QString oldVersion = CommonHelper::readSetting("Contact", "version", "");
+#if 1   ///< 未使用数据库或文件，暂不适用 >
+            QString oldVersion = CommonHelper::readSetting(kSettingContactVersion).toString();
             if (QString::compare(newVersion, oldVersion, Qt::CaseInsensitive) == 0)
             {
                 return;
             }
-            CommonHelper::saveSetting("Contact", "version", newVersion);
+            CommonHelper::saveSetting(kSettingContactVersion, newVersion);
 #endif
         }
 
@@ -346,7 +400,7 @@ void ContactsTreeView::parseContactData()
 
             m_contactList.append(topItem);
             m_contactList.append(sectionList);
-            m_pContactModel->setOrganizationList(&m_contactList);
+            m_pContactModel->refreshModel();
             startDownloadHeader();
         }
     }
@@ -355,6 +409,21 @@ void ContactsTreeView::parseContactData()
 void ContactsTreeView::startDownloadHeader()
 {
     m_pDownloadWatcher->setFuture(QtConcurrent::mapped(m_contactList, ContactsTreeView::downloadHeader));
+}
+
+void ContactsTreeView::loadContactList()
+{
+    ContactEntityList entityList;
+    DBCenter::contactMgr()->getAllContacts(entityList);
+
+    foreach (ContactEntity entity, entityList)
+    {
+        ContactItem contact;
+        DBEntity::convertEntity2Contact(entity, contact);
+        m_contactList.append(contact);
+    }
+
+    m_pContactModel->refreshModel();
 }
 
 void ContactsTreeView::onItemClicked(QModelIndex index)
@@ -461,8 +530,54 @@ void ContactsTreeView::onUpdateContactsReply(QByteArray data, int code)
 {
     if (code == HTTP_OK)
     {
-        m_contactData = data;
+        QJsonParseError jsonError;
+        QJsonDocument document = QJsonDocument::fromJson(data, &jsonError);
+        if ( jsonError.error == QJsonParseError::NoError &&
+             document.isObject())
+        {
+            int ret;
+            QString retMsg;
+            QJsonObject rootObj = document.object();
+            if (rootObj.contains("ret"))
+            {
+                ret = rootObj["ret"].toInt();
+            }
 
+            if (rootObj.contains("retMsg"))
+            {
+                retMsg = rootObj["retMsg"].toString();
+            }
+
+            if (ret != 0)
+            {
+                UCS_LOG(UCSLogger::kTraceError, this->objectName(),
+                        QString(QStringLiteral("更新通讯录")).append(retMsg));
+                return;
+            }
+            if (rootObj.contains("version"))
+            {
+                QString newVersion = rootObj["version"].toString();
+//                if (QString::compare(newVersion, m_contactVer, Qt::CaseInsensitive) == 0)
+//                {
+//                    return;
+//                }
+//                else
+//                {
+//                    m_contactVer = newVersion;
+//                }
+
+//#if 1   ///< 未使用数据库或文件，暂不适用 >
+                QString oldVersion = CommonHelper::readSetting(kSettingContactVersion).toString();
+                if (QString::compare(newVersion, oldVersion, Qt::CaseInsensitive) == 0)
+                {
+                    return;
+                }
+                CommonHelper::saveSetting(kSettingContactVersion, newVersion);
+//#endif
+            }
+        }
+
+        m_contactData = data;
 #if 0
         QString filename = CommonHelper::userDataPath() + "/contacts.json";
         QFileInfo fileInfo(filename);
@@ -479,7 +594,8 @@ void ContactsTreeView::onUpdateContactsReply(QByteArray data, int code)
         file.close();
 #endif
 
-        parseContactData();
+//        parseContactData(data);
+        m_pContactWatcher->setFuture(QtConcurrent::run(ContactsTreeView::parseContactReply, data));
     }
     else
     {
@@ -488,12 +604,190 @@ void ContactsTreeView::onUpdateContactsReply(QByteArray data, int code)
     }
 }
 
+void ContactsTreeView::onParseContactFinish()
+{
+    ContactList contactList = m_pContactWatcher->result();
+
+    if (contactList.isEmpty())
+    {
+        return;
+    }
+
+    m_contactList.clear();
+    m_contactList.append(contactList);
+//    m_pContactModel->setOrganizationList(&m_contactList);
+    m_pContactModel->refreshModel();
+
+    ///< 头像更新 >
+    startDownloadHeader();
+}
+
 void ContactsTreeView::onHeaderReady(int index)
 {
+    ContactItem contact = m_pDownloadWatcher->resultAt(index);
+    if ( contact.headUrl.isEmpty())
+    {
+        return;
+    }
+
+    MapConditions conditions;
+    MapValues values;
+    conditions.insert("contactId", QString::number(contact.contactId));
+    values.insert("headPath", contact.headPath);
+    DBCenter::contactMgr()->updateContact(conditions, values);
+
     m_contactList.replace(index, m_pDownloadWatcher->resultAt(index));
+}
+
+void ContactsTreeView::onDownLoadHeaderFinish()
+{
+    m_pContactModel->refreshModel();
+
+    ///< 保存到数据库 >
+    m_pContactSaveWatcher->setFuture(QtConcurrent::run(ContactsTreeView::saveContactToDB, m_contactList));
 }
 
 ContactList ContactsTreeView::contactList() const
 {
     return m_contactList;
+}
+
+ContactList ContactsTreeView::parseContactReply(const QByteArray &dataReply)
+{
+    ContactList contactList;
+    QJsonParseError jsonError;
+    QJsonDocument document = QJsonDocument::fromJson(dataReply, &jsonError);
+    if ( jsonError.error == QJsonParseError::NoError &&
+         document.isObject())
+    {
+        QJsonObject rootObj = document.object();
+
+        if (rootObj.contains("response"))
+        {
+            int contactId = 0;
+
+            ContactItem topItem;
+            topItem.contactId = contactId++;
+            topItem.sectionId = "toporg";
+            topItem.sectionName = QStringLiteral("云之讯");
+            contactList.append(topItem);
+
+            QJsonArray contacts = rootObj["response"].toArray();
+            for (int idx = 0; idx < contacts.size(); ++idx)
+            {
+                bool isExist = false;
+                ContactItem section;
+                section.contactId = contactId++;
+
+                QJsonObject contactObj = contacts.at(idx).toObject();
+
+                if (contactObj.contains("name"))
+                {
+                    section.sectionName = contactObj["name"].toString();
+                }
+                if (contactObj.contains("grade"))
+                {
+                    section.grade = contactObj["grade"].toInt();
+                }
+                if (contactObj.contains("sectionid"))
+                {
+                    section.sectionId = contactObj["sectionid"].toString();
+                }
+                if (contactObj.contains("sortNum"))
+                {
+                    section.sortNum = contactObj["sortNum"].toInt();
+                }
+                if (contactObj.contains("personNum"))
+                {
+                    section.userNum = contactObj["personNum"].toInt();
+                }
+                if (section.grade == 1)
+                {
+                    section.parentId = topItem.sectionId;
+                    topItem.userNum += section.userNum;
+                }
+
+                for (int idx = 0; idx < contactList.size(); ++idx)
+                {
+                    if (section.sectionId == contactList.at(idx).sectionId)
+                    {
+                        isExist = true;
+                        section.contactId = contactList.at(idx).contactId;
+                        section.parentId = contactList.at(idx).parentId;
+                        section.parentName = contactList.at(idx).parentName;
+
+                        contactList.replace(idx, section);
+                    }
+                }
+                if (isExist == false)
+                {
+                    contactList.append(section);
+                }
+
+                if (contactObj.contains("person"))
+                {
+                    QJsonArray persons = contactObj["person"].toArray();
+                    for (int index = 0; index < persons.size(); ++index)
+                    {
+                       ContactItem person;
+                       person.contactId = contactId++;
+                       person.parentId = section.sectionId;
+                       person.parentName = section.sectionName;
+                       person.grade = section.grade;
+
+                       QJsonObject personObj = persons.at(index).toObject();
+                       if (personObj.contains("userid"))
+                       {
+                           person.userId = personObj["userid"].toString();
+                       }
+                       if (personObj.contains("name"))
+                       {
+                           person.userName = personObj["name"].toString();
+                       }
+                       if (personObj.contains("headimg"))
+                       {
+                           person.headUrl = personObj["headimg"].toString();
+                       }
+                       if (personObj.contains("sex"))
+                       {
+                           person.userSex = personObj["sex"].toInt();
+                       }
+                       contactList.append(person);
+                    }
+                }
+
+                if (contactObj.contains("section"))
+                {
+                    QJsonArray childArray = contactObj["section"].toArray();
+                    for (int index = 0; index < childArray.size(); ++index)
+                    {
+                        QJsonObject childObj = childArray.at(index).toObject();
+                        ContactItem childSection;
+
+                        childSection.contactId = contactId++;
+                        childSection.parentId = section.sectionId;
+                        childSection.parentName = section.sectionName;
+
+                        if (childObj.contains("name"))
+                        {
+                            childSection.sectionName = childObj["name"].toString();
+                        }
+                        if (childObj.contains("grade"))
+                        {
+                            childSection.grade = childObj["grade"].toInt();
+                        }
+                        if (childObj.contains("sectionid"))
+                        {
+                            childSection.sectionId = childObj["sectionid"].toString();
+                        }
+                        contactList.append(childSection);
+                    }
+                }
+            }
+
+            contactList.replace(0, topItem);
+        }
+    }
+
+    return contactList;
 }

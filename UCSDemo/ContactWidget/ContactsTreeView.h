@@ -18,6 +18,8 @@ public:
     void doUpdateContacts();
 
     static ContactItem downloadHeader(const ContactItem &contact);
+    static ContactList parseContactReply(const QByteArray &dataReply);
+    static void saveContactToDB(const ContactList &contactList);
 
     ContactList contactList() const;
 
@@ -30,8 +32,10 @@ private:
     void initMenu();
     void loadStyleSheet();
 
-    void parseContactData();
+    void parseContactData(QByteArray data);
     void startDownloadHeader();
+
+    void loadContactList();
 
 signals:
     void sigItemClicked(ContactItem);
@@ -53,9 +57,11 @@ public slots:
 
     ///< contact update action >
     void onUpdateContactsReply(QByteArray data, int code);
+    void onParseContactFinish();
 
     ///< contact header download finish >
     void onHeaderReady(int index);
+    void onDownLoadHeaderFinish();
 
 private:
     ContactTreeItemModel *m_pContactModel;
@@ -68,7 +74,9 @@ private:
     ContactList m_contactList;
     QString m_contactVer;
 
+    QFutureWatcher<ContactList> *m_pContactWatcher;
     QFutureWatcher<ContactItem> *m_pDownloadWatcher;
+    QFutureWatcher<void> *m_pContactSaveWatcher;
 };
 
 #endif // MIDLEFTCONTRACTSTREEVIEW_H

@@ -222,6 +222,14 @@ void CommonHelper::saveSetting(const SettingKey &key, const QVariant &value)
     }
         break;
 
+    case kSettingContactVersion:
+    {
+        settings.beginGroup("Contact");
+        settings.setValue("version", value);
+        settings.endGroup();
+    }
+        break;
+
     default:
         break;
     }
@@ -310,6 +318,14 @@ QVariant CommonHelper::readSetting(const SettingKey &key)
     }
         break;
 
+    case kSettingContactVersion:
+    {
+        settings.beginGroup("Contact");
+        value = settings.value("version", "");
+        settings.endGroup();
+    }
+        break;
+
     default:
         break;
     }
@@ -317,15 +333,13 @@ QVariant CommonHelper::readSetting(const SettingKey &key)
     return value;
 }
 
-//void CommonHelper::saveUserPwd(QString key, QString pwd)
-//{
-//    CommonHelper::saveSetting("Login", key, QString(pwd.toLocal8Bit().toBase64()));
-//}
+QString CommonHelper::encryptPwd(QString pwd)
+{
+    return QString(pwd.toLocal8Bit().toBase64());
+}
 
-//QString CommonHelper::readUserPwd(QString key)
-//{
-//    QString pwdBase64 = CommonHelper::readSetting("Login", key, "").toString();
-//    QString pwd = QString(QByteArray::fromBase64(pwdBase64.toLocal8Bit()));
+QString CommonHelper::decryptPwd(QString encryptPwd)
+{
+    return QString(QByteArray::fromBase64(encryptPwd.toLocal8Bit()));
+}
 
-//    return pwd;
-//}

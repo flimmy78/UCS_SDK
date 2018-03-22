@@ -10,6 +10,7 @@
 #include "UCSTcpSDK.h"
 #include "CommonHelper.h"
 #include "DownloadNetworkManager.h"
+#include "DBCenter.h"
 
 UPlusLogin::UPlusLogin(QWidget *parent)
     : QDialog(parent)
@@ -87,16 +88,16 @@ void UPlusLogin::initLayout()
     m_titleBar->setTitleContent("U+");
 //    m_titleBar->setTitleContentFontSize(12);
 
-    m_pLineUserName = new QLineEdit(this);
-    m_pLineUserName->setObjectName("loginUserName");
-    m_pLineUserName->setPlaceholderText(QStringLiteral("请输入手机号"));
-    m_pLineUserName->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_pLineUserName->setMaxLength(20);
+    m_pLineUserId = new QLineEdit(this);
+    m_pLineUserId->setObjectName("loginUserName");
+    m_pLineUserId->setPlaceholderText(QStringLiteral("请输入手机号"));
+    m_pLineUserId->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pLineUserId->setMaxLength(20);
 
     QRegExp reg("[0-9]+$");
     QRegExpValidator *pValidator = new QRegExpValidator(this);
     pValidator->setRegExp(reg);
-    m_pLineUserName->setValidator(pValidator);
+    m_pLineUserId->setValidator(pValidator);
 
     m_pLinePassword = new QLineEdit(this);
     m_pLinePassword->setObjectName("loginPassword");
@@ -131,7 +132,7 @@ void UPlusLogin::initLayout()
 
     pMainLayout->addWidget(m_titleBar);
     pMainLayout->addStretch(0.2);
-    pMainLayout->addWidget(m_pLineUserName, 0, Qt::AlignHCenter);
+    pMainLayout->addWidget(m_pLineUserId, 0, Qt::AlignHCenter);
     pMainLayout->addSpacing(8);
     pMainLayout->addWidget(m_pLinePassword, 0, Qt::AlignHCenter);
     pMainLayout->addSpacing(8);
@@ -162,29 +163,7 @@ void UPlusLogin::initConnections()
 
 void UPlusLogin::readSettings()
 {
-    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
-    QString pwd = CommonHelper::readSetting(kSettingLoginPwd).toString();
-
-//    QString name = CommonHelper::readSetting("Login", "name", "").toString();
-//    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
-//            QString("readSettings: userId(%1) pwd(%2) name(%3)")
-//                    .arg(userId).arg(pwd).arg(name));
-
-    bool chkState = CommonHelper::readSetting(kSettingLoginKeepPwd).toBool();
-    m_pChkKeepPwd->setChecked(chkState);
-
-    m_doReLogin = false;
-    if (m_pChkKeepPwd->checkState() == Qt::Unchecked)
-    {
-        pwd.clear();
-    }
-
-    if (!pwd.isEmpty())
-    {
-        m_doReLogin = true;
-    }
-
-    chkState = CommonHelper::readSetting(kSettingLoginEnv).toBool();
+    bool chkState = CommonHelper::readSetting(kSettingLoginEnv).toBool();
     m_pChkOnLine->setChecked(chkState);
     if (chkState)
     {
@@ -197,21 +176,55 @@ void UPlusLogin::readSettings()
         m_pRestApi->doSwitchEnv(true);
     }
 
-    m_pLineUserName->setText(userId);
+//    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+//    QString pwd = CommonHelper::readSetting(kSettingLoginPwd).toString();
+
+//    chkState = CommonHelper::readSetting(kSettingLoginKeepPwd).toBool();
+
+    LoginEntity entity;
+    LoginEntityList loginList;
+    DBCenter::loginMgr()->getAllLoginInfo(loginList);
+    if (loginList.empty())
+    {
+        return;
+    }
+
+    entity = loginList.at(0);
+
+    QString pwd = CommonHelper::decryptPwd(entity.userPwd);
+    m_pChkKeepPwd->setChecked(entity.isKeepPwd);
+    m_doReLogin = false;
+    if (m_pChkKeepPwd->checkState() == Qt::Unchecked)
+    {
+        pwd.clear();
+    }
+
+    if (!pwd.isEmpty())
+    {
+        m_doReLogin = true;
+    }
+
+    m_pLineUserId->setText(entity.userId);
     m_pLinePassword->setText(pwd);
 }
 
 void UPlusLogin::onLoginSuccess()
 {
+    QString userId = m_pLineUserId->text().trimmed();
+    LoginEntity entity;
+    DBCenter::loginMgr()->getLoginInfo(userId, entity);
+
     ///< 登录 Paas >
-    QString token = CommonHelper::readSetting(kSettingLoginToken).toString();
-    UCSTcpClient::Instance()->doLogin(token);
+//    QString token = CommonHelper::readSetting(kSettingLoginToken).toString();
+    if (entity.token.size())
+    {
+        UCSTcpClient::Instance()->doLogin(entity.token);
+    }
 
     ///< 异步下载个人头像 >
-    QString headUrl = CommonHelper::readSetting(kSettingLoginHeadUrl).toString();
-    QStringList headList;
-    headList.append(headUrl);
-    QtConcurrent::mapped(headList, UPlusLogin::downloadHeadImg);
+    QStringList userIdList;
+    userIdList.append(entity.userId);
+    QtConcurrent::mapped(userIdList, UPlusLogin::downloadHeadImg);
 }
 
 void UPlusLogin::uploadHeaderImg()
@@ -235,9 +248,17 @@ void UPlusLogin::uploadHeaderImg()
     m_pRestApi->doUploadHeaderImg(userId, pwd, imgData, "jpg");
 }
 
-QString UPlusLogin::downloadHeadImg(const QString &headUrl)
+QString UPlusLogin::downloadHeadImg(const QString &userId)
 {
-    QString filepath = HttpDownloadPicture::downloadBlock(headUrl, CommonHelper::userTempPath());
+    LoginEntity entity;
+    DBCenter::loginMgr()->getLoginInfo(userId, entity);
+    QString filepath = HttpDownloadPicture::downloadBlock(entity.headUrl, CommonHelper::userTempPath());
+
+    MapConditions condition;
+    MapValues values;
+    condition.insert("userId", entity.userId);
+    values.insert("headPath", filepath);
+    DBCenter::loginMgr()->updateLoginInfo(condition, values);
     return filepath;
 }
 
@@ -253,7 +274,7 @@ void UPlusLogin::onBtnMin()
 
 void UPlusLogin::onBtnLogin()
 {
-    QString userId = m_pLineUserName->text().trimmed();
+    QString userId = m_pLineUserId->text().trimmed();
     QString pwd = m_pLinePassword->text().trimmed();
 
     if (userId.isEmpty() || pwd.isEmpty())
@@ -263,10 +284,6 @@ void UPlusLogin::onBtnLogin()
 
     if (m_pRestApi)
     {
-//        UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
-//                QString("doLogin: userId[%1] pwd[%2]")
-//                    .arg(userId).arg(pwd));
-
         m_pBtnLoginOn->setEnabled(false);
 
         if (m_doReLogin)
@@ -279,8 +296,8 @@ void UPlusLogin::onBtnLogin()
         }
 
         CommonHelper::saveSetting(kSettingLoginUserId, userId);
-        CommonHelper::saveSetting(kSettingLoginPwd, pwd);
-        CommonHelper::saveSetting(kSettingLoginKeepPwd, m_pChkKeepPwd->isChecked());
+//        CommonHelper::saveSetting(kSettingLoginPwd, pwd);
+//        CommonHelper::saveSetting(kSettingLoginKeepPwd, m_pChkKeepPwd->isChecked());
         CommonHelper::saveSetting(kSettingLoginEnv, m_pChkOnLine->isChecked());
     }
 }
@@ -368,10 +385,21 @@ void UPlusLogin::onLoginReply(QByteArray replyData, int code)
             if (ret == 0)
             {
                 CommonHelper::saveSetting(kSettingLoginUserName, name);
-                CommonHelper::saveSetting(kSettingLoginToken, token);
-                CommonHelper::saveSetting(kSettingSummitPwd, submitPwd);
-                CommonHelper::saveSetting(kSettingLoginHeadUrl, headImg);
-                CommonHelper::saveSetting(kSettingLoginTime, QDateTime::currentSecsSinceEpoch());
+//                CommonHelper::saveSetting(kSettingLoginToken, token);
+//                CommonHelper::saveSetting(kSettingSummitPwd, submitPwd);
+//                CommonHelper::saveSetting(kSettingLoginHeadUrl, headImg);
+//                CommonHelper::saveSetting(kSettingLoginTime, QDateTime::currentSecsSinceEpoch());
+
+                LoginEntity entity;
+                entity.userId = m_pLineUserId->text().trimmed();
+                entity.userPwd = CommonHelper::encryptPwd(m_pLinePassword->text().trimmed());
+                entity.userName = name;
+                entity.summitPwd = CommonHelper::encryptPwd(submitPwd);
+                entity.token = token;
+                entity.headUrl = headImg;
+                entity.userSex = sex;
+                entity.isKeepPwd = m_pChkKeepPwd->isChecked();
+                DBCenter::loginMgr()->addLoginInfo(entity);
 
                 onLoginSuccess();
             }
@@ -422,18 +450,25 @@ void UPlusLogin::onReLoginReply(QByteArray replyData, int code)
 
                 if (ret == 0)
                 {
+                    ///< update login time >
+                    QString userId = m_pLineUserId->text().trimmed();
+                    QString time = QString::number(QDateTime::currentSecsSinceEpoch());
+                    MapConditions condition;
+                    MapValues values;
+                    condition.insert("userId", userId);
+                    values.insert("time", time);
+                    DBCenter::loginMgr()->updateLoginInfo(condition, values);
+
                     onLoginSuccess();
                 }
-                else if (ret == 3)
+                else
                 {
+                    m_doReLogin = false;
+                    m_pLoginTip->setText(retMsg);
                     m_pLinePassword->clear();
                     m_pLinePassword->setFocus();
+                    m_pBtnLoginOn->setEnabled(true);
                 }
-            }
-
-            if (ret != 0)
-            {
-                m_pLoginTip->setText(retMsg);
             }
         }
         else

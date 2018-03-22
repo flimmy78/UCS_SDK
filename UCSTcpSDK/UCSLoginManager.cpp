@@ -105,6 +105,7 @@ void UCSLoginManager::doNoop()
 void UCSLoginManager::doLogout()
 {
     timerStop(kAllTimer);
+    m_loginTimes = 0;
 }
 
 UcsLoginState UCSLoginManager::state() const
@@ -407,4 +408,5 @@ void UCSLoginManager::setTcpConnected(bool bConnected)
 void UCSLoginManager::setImToken(const QString &imToken)
 {
     m_imToken = imToken;
+    m_loginTimes = 0;
 }

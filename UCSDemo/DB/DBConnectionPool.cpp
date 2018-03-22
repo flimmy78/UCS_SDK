@@ -89,7 +89,7 @@ QSqlDatabase DBConnectionPool::openConnection()
     else if (connectionCount < pool.m_maxConnectionCount)
     {
         ///< 没有已经回收的连接，但是没有达到最大连接数，则创建新的连接 >
-        connectionName = QString("UCSConnection-%1").arg(connectionCount + 1);
+        connectionName = QString("DBConnection-%1").arg(connectionCount + 1);
     }
     else
     {
@@ -147,16 +147,16 @@ QSqlDatabase DBConnectionPool::createConnection(const QString &connectionName)
         return db;
     }
 
-    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
-    if (userId.isEmpty())
-    {
-        return QSqlDatabase();
-    }
+//    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+//    if (userId.isEmpty())
+//    {
+//        return QSqlDatabase();
+//    }
     QSqlDatabase db = QSqlDatabase::addDatabase(m_databaseType, connectionName);
-    QString dataBaseName = CommonHelper::userDataPath() + "/" + m_databaseName;
+    QString dataBaseName = CommonHelper::dataDir() + "/" + m_databaseName;
     db.setDatabaseName(dataBaseName);
-    db.setUserName(userId);
-    db.setPassword(userId);
+    db.setUserName("ucpaas");
+    db.setPassword("123456");
 
     if (!db.open())
     {

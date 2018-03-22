@@ -182,6 +182,7 @@ private:
                       const QString msgId);
 private:
     QString m_createSql;
+    QString m_insertSql;
 };
 
 #endif // CHATDBMANAGER_H

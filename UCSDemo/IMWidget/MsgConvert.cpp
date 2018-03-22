@@ -8,6 +8,7 @@ MsgConvert::MsgConvert()
 ChatMsgModel MsgConvert::convert2Model(UCSMessage *message)
 {
     ChatMsgModel model;
+
     if (message->messageType == UCS_IM_TEXT)
     {
         UCSTextMsg *txtMsg = static_cast<UCSTextMsg*>(message->content);

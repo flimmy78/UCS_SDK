@@ -16,6 +16,8 @@ enum SettingKey
     kSettingLoginHeadUrl,
     kSettingLoginToken,
     kSettingLoginKeepPwd,
+
+    kSettingContactVersion = 100,
 };
 
 class CommonHelper
@@ -85,12 +87,11 @@ public:
     static QVariant readSetting(const SettingKey &key);
 
     /*!
-     * \brief saveUserPwd 用户密码需要加密，单独函数保存
-     * \param key 密码对应的key
+     * \brief encryptPwd 用户密码需要加密
      * \param pwd
      */
-//    static void saveUserPwd(QString key, QString pwd);
-//    static QString readUserPwd(QString key);
+    static QString encryptPwd(QString pwd);
+    static QString decryptPwd(QString encryptPwd);
 };
 
 #endif // COMMONHELPER_H

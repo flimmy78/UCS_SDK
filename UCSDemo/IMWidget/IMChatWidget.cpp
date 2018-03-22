@@ -10,11 +10,10 @@
 #include "Interface/UCSIMSDKPublic.h"
 #include "Interface/UCSLogger.h"
 #include "WebBridge.h"
+#include "CommonHelper.h"
 
 IMChatWidget::IMChatWidget(QWidget *parent)
     : BaseWidget(parent)
-    , m_txtSending(this)
-    , m_btnSend(this)
     , m_pWebChannel(Q_NULLPTR)
 {
     setMouseTracking(true);
@@ -25,9 +24,7 @@ IMChatWidget::IMChatWidget(QWidget *parent)
     m_msgIdList.clear();
 
     initLayout();
-    initTBtnMenu();
     initConnections();
-    readSetting();
 
     initMisc();
 }
@@ -78,88 +75,73 @@ void IMChatWidget::initMisc()
 
 void IMChatWidget::initLayout()
 {
-    QVBoxLayout *pMainLayout = new QVBoxLayout;
-    QHBoxLayout *pToolsLayout = new QHBoxLayout;
-
-    MyPushButton *emoji = new MyPushButton(this);
-    MyPushButton *shot = new MyPushButton(this);
-    MyPushButton *floder = new MyPushButton(this);
-    emoji->setFixedSize(25, 25);
-    shot->setFixedSize(25, 25);
-    floder->setFixedSize(25, 25);
-    emoji->setStyleSheet("QPushButton{border-image:url(:/images/midright/u4383.png)}");
-    shot->setStyleSheet("QPushButton{border-image:url(:/images/midright/u4379.png)}");
-    floder->setStyleSheet("QPushButton{border-image:url(:/images/midright/u4381.png)}");
-    pToolsLayout->addWidget(emoji);
-    pToolsLayout->addWidget(shot);
-    pToolsLayout->addWidget(floder);
-    pToolsLayout->addStretch();
-    pToolsLayout->setSpacing(8);
-    pToolsLayout->setContentsMargins(8, 4, 0, 4);
-
-    m_txtSending.setFixedHeight(100);
-    m_txtSending.setStyleSheet("QTextEdit{color: green; font-size:11pt; font-family: 微软雅黑;}");
-
-    m_btnSend.setText(QStringLiteral("发送"));
-    m_btnSend.setFixedSize(65, 30);
+    QVBoxLayout *pMainLayout = new QVBoxLayout(this);
+    QHBoxLayout *pToolBox = new QHBoxLayout;
+    QHBoxLayout *pSendBox = new QHBoxLayout;
 
     m_pStackedLayout = new QStackedLayout;
+    m_pBtnEmoji = new MyPushButton(this);
+    m_pBtnClear = new MyPushButton(this);
+    m_pBtnImage = new MyPushButton(this);
+    m_pBtnConf = new MyPushButton(this);
+    m_pBtnDirect = new MyPushButton(this);
+    m_pBtnAudio = new MyPushButton(this);
+    m_pBtnVideo = new MyPushButton(this);
+    m_pBtnSend = new MyPushButton(this);
+    m_pTxtSending = new MyChatTextEdit(this);
+
+    m_pBtnEmoji->setObjectName("btnChatEmoji");
+    m_pBtnImage->setObjectName("btnChatImage");
+    m_pBtnClear->setObjectName("btnChatClear");
+    m_pBtnConf->setObjectName("btnChatConf");
+    m_pBtnDirect->setObjectName("btnChatDirect");
+    m_pBtnAudio->setObjectName("btnChatAudio");
+    m_pBtnVideo->setObjectName("btnChatVideo");
+    m_pBtnSend->setObjectName("btnChatSend");
+    m_pTxtSending->setObjectName("txtChatSend");
+
+    m_pBtnEmoji->setToolTip(QStringLiteral("选择表情"));
+    m_pBtnImage->setToolTip(QStringLiteral("发送图片"));
+    m_pBtnClear->setToolTip(QStringLiteral("清空消息"));
+    m_pBtnConf->setToolTip(QStringLiteral("发起会议"));
+    m_pBtnDirect->setToolTip(QStringLiteral("高清电话"));
+    m_pBtnAudio->setToolTip(QStringLiteral("语音聊天"));
+    m_pBtnVideo->setToolTip(QStringLiteral("视频聊天"));
+
+    pToolBox->addWidget(m_pBtnEmoji);
+    pToolBox->addWidget(m_pBtnImage);
+    pToolBox->addWidget(m_pBtnClear);
+    pToolBox->addStretch();
+    pToolBox->addWidget(m_pBtnConf);
+    pToolBox->addWidget(m_pBtnDirect);
+    pToolBox->addWidget(m_pBtnAudio);
+    pToolBox->addWidget(m_pBtnVideo);
+    pToolBox->setSpacing(8);
+    pToolBox->setContentsMargins(8, 4, 8, 4);
+
+    m_pBtnSend->setText(QStringLiteral("发送"));
+    pSendBox->addWidget(m_pBtnSend, 0, Qt::AlignRight);
+    pSendBox->setContentsMargins(0, 0, 8, 0);
+
     pMainLayout->addLayout(m_pStackedLayout);
-
-    pMainLayout->addLayout(pToolsLayout);
-    pMainLayout->addWidget(&m_txtSending);
-    pMainLayout->addWidget(&m_btnSend, 0, Qt::AlignRight);
+    pMainLayout->addLayout(pToolBox);
+    pMainLayout->addWidget(m_pTxtSending);
+    pMainLayout->addLayout(pSendBox);
     pMainLayout->setSpacing(0);
-    pMainLayout->setContentsMargins(2, 2, 2, 2);
-
-    setLayout(pMainLayout);
+    pMainLayout->setContentsMargins(2, 2, 2, 8);
 }
 
 void IMChatWidget::initConnections()
 {
-    connect(&m_txtSending, SIGNAL(sig_msgSending()), this, SLOT(onSendingMsg()));
-    connect(&m_btnSend, SIGNAL(clicked()), this, SLOT(onSendingMsg()));
-}
-
-void IMChatWidget::initTBtnMenu()
-{
-    QMenu *pMenu = new QMenu(this);
-    QActionGroup *pActionGrp = new QActionGroup(this);
-    pActionGrp->setExclusive(true);
-
-    m_pAct[0] = new QAction(QStringLiteral("按Enter键发送消息"), pActionGrp);
-    m_pAct[0]->setCheckable(true);
-
-    m_pAct[1] = new QAction(QStringLiteral("按Ctrl+Enter键发送消息"), pActionGrp);
-    m_pAct[1]->setCheckable(true);
-    m_pAct[1]->setChecked(true);
-
-    pMenu->addAction(m_pAct[0]);
-    pMenu->addAction(m_pAct[1]);
-
-    connect(pActionGrp, SIGNAL(triggered(QAction*)), this, SLOT(onUpdateSendAction(QAction*)));
-
-    m_btnSend.setMenu(pMenu);
-    m_btnSend.setPopupMode(QToolButton::MenuButtonPopup);
-}
-
-void IMChatWidget::saveSetting()
-{
-    QSettings setting("config.ini", QSettings::IniFormat, 0);
-    setting.beginGroup("chatWid");
-    setting.setValue("sendMode", m_txtSending.sendingMode());
-    setting.endGroup();
-}
-
-void IMChatWidget::readSetting()
-{
-    QSettings setting("config.ini", QSettings::IniFormat, 0);
-    setting.beginGroup("chatWid");
-    int sendingMode = setting.value("sendMode", CTRL_ENTER_SEND).toInt();
-    setting.endGroup();
-
-    m_pAct[sendingMode]->setChecked(true);
-    m_txtSending.setSendingMode((CustomSendingMode)sendingMode);
+    connect(m_pBtnEmoji, SIGNAL(clicked(bool)), this, SLOT(onOpenEmojiPanel()));
+    connect(m_pBtnImage, SIGNAL(clicked(bool)), this, SLOT(onSendImage()));
+    connect(m_pBtnClear, SIGNAL(clicked(bool)), this, SLOT(onClearMessage()));
+    connect(m_pBtnConf, SIGNAL(clicked(bool)), this, SLOT(onStartConference()));
+    connect(m_pBtnDirect, SIGNAL(clicked(bool)), this, SLOT(onStartDirectCall()));
+    connect(m_pBtnAudio, SIGNAL(clicked(bool)), this, SLOT(onStartAudioCall()));
+    connect(m_pBtnVideo, SIGNAL(clicked(bool)), this, SLOT(onStartVideoCall()));
+    connect(m_pTxtSending, SIGNAL(sig_msgSending()), this, SLOT(onSendingMsg()));
+    connect(m_pBtnSend, SIGNAL(clicked()), this, SLOT(onSendingMsg()));
 }
 
 void IMChatWidget::createChat()
@@ -257,9 +239,6 @@ void IMChatWidget::onChangeConversation(ConversationItem conversation)
             QString("onChangeConversation conversationId: %1 type: %2")
             .arg(conversation.conversationId).arg(conversation.conversationType));
 
-//    m_conversationId = targetId;
-//    m_conversationType = type;
-
     m_conversation = conversation;
 
     if (m_conversation.conversationId.isEmpty())
@@ -283,14 +262,16 @@ void IMChatWidget::onConversationDeleted(ConversationItem conversation)
 
 void IMChatWidget::onSendingMsg()
 {
-    if (!m_txtSending.toPlainText().isEmpty())
+    if (!m_pTxtSending->toPlainText().isEmpty())
     {
         UCSMessage message;
-        UCSTextMsg *txtMsg = new UCSTextMsg(m_txtSending.toPlainText().trimmed());
+        UCSTextMsg *txtMsg = new UCSTextMsg(m_pTxtSending->toPlainText().trimmed());
         message.receivedId = m_conversation.conversationId;
         message.conversationType = (UCS_IM_ConversationType)(m_conversation.conversationType);
         message.messageType = UCS_IM_TEXT;
         message.content = txtMsg;
+        message.senderUserId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+        message.senderNickName = CommonHelper::readSetting(kSettingLoginUserName).toString();
 
         UCSIMClient::Instance()->sendMessage(&message);
         m_msgIdList.append(message.messageId);
@@ -299,24 +280,9 @@ void IMChatWidget::onSendingMsg()
         ChatWebView *webView = m_chatsMap[m_conversation.conversationId];
         webView->msgShow(msg);
 
-        m_txtSending.clear();
+        m_pTxtSending->clear();
         emit sigSendingMsg();
     }
-}
-
-void IMChatWidget::onUpdateSendAction(QAction *pAction)
-{
-
-    if (pAction == m_pAct[0])
-    {
-        m_txtSending.setSendingMode(ENTER_SEND);
-    }
-    else
-    {
-        m_txtSending.setSendingMode(CTRL_ENTER_SEND);
-    }
-
-    saveSetting();
 }
 
 void IMChatWidget::urlChanged(const QUrl &url)
@@ -330,4 +296,45 @@ void IMChatWidget::onLoadFinished()
     UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
             "onLoadFinished");
     showMessages();
+}
+
+void IMChatWidget::onOpenEmojiPanel()
+{
+
+}
+
+void IMChatWidget::onSendImage()
+{
+    QString filePath = QFileDialog::getOpenFileName(this,
+                                                    QStringLiteral("选择图片"),
+                                                    ".",
+                                                    "*.png *.jpg *.jpeg");
+
+    UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
+            QString("onSendImage: path = %1").arg(filePath));
+}
+
+void IMChatWidget::onClearMessage()
+{
+
+}
+
+void IMChatWidget::onStartConference()
+{
+
+}
+
+void IMChatWidget::onStartDirectCall()
+{
+
+}
+
+void IMChatWidget::onStartAudioCall()
+{
+
+}
+
+void IMChatWidget::onStartVideoCall()
+{
+
 }

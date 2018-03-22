@@ -32,8 +32,8 @@ private:
 
     // test begin
     void uploadHeaderImg();
-    static QString downloadHeadImg(const QString &headUrl);
     // test end
+    static QString downloadHeadImg(const QString &userId);
 
 private slots:
     void onBtnClosed();
@@ -50,7 +50,7 @@ private slots:
 private:
     MyTitleBar  *m_titleBar;
     QPushButton *m_pBtnLoginOn;
-    QLineEdit   *m_pLineUserName;
+    QLineEdit   *m_pLineUserId;
     QLineEdit   *m_pLinePassword;
     QLabel      *m_pLoginTip;
     QCheckBox   *m_pChkKeepPwd;

@@ -199,6 +199,7 @@ QTreeView::branch:closed:has-children {
 }
 /* common style end */
 
+/*************************** custom widget below **********************/
 /* left navigator bar begin */
 QWidget#NavigatorBar {
     background: rgb(32, 155, 152);
@@ -254,8 +255,7 @@ QToolButton#digitBtn {
     height: 60px;
 }
 
-QLabel#lblDialPanel
-{
+QLabel#lblDialPanel {
     font-size: 11pt;
     color: rgb(32, 155, 152);
 }
@@ -303,8 +303,7 @@ QLineEdit#loginUserName:hover, QLineEdit#loginPassword:hover {
     border-top-style: none; 
 }
 
-QPushButton#btnLogin
-{
+QPushButton#btnLogin {
 	background-color: rgb(33, 157, 201);
 	border-radius:15px;
     height: 40px;
@@ -313,19 +312,16 @@ QPushButton#btnLogin
     color: white;
 }
 
-QPushButton#btnLogin:hover
-{
+QPushButton#btnLogin:hover {
 	background-color: rgb(33, 157, 201);
 }
 
-QPushButton#btnLogin:pressed
-{
+QPushButton#btnLogin:pressed {
 	padding-left: 3px;
 	padding-top: 3px;
 }
 
-QLabel#lblLoginTip
-{
+QLabel#lblLoginTip {
     height: 30px;
 }
 /* login css end */
@@ -366,17 +362,77 @@ QToolButton#btnDirectAudio, QToolButton#btnFreeAudio, QToolButton#btnFreeVideo, 
 }
 /* contact info end */
 
-/*  */
-
-/*  */
-
-QTableView#ChatMsgTableView {
-/*    background: skyblue;*/
-}
-
-QTableView#ChatMsgTableView::item {
-    padding-left: 5px;
-    padding-right: 5px;
+/* chat control widget begin */
+QPushButton#btnChatEmoji {
+    width: 25px;
+    height: 25px;
+    border-image: url(:/images/midright/u4383.png);
     border: none;
-/*    background: green;*/
 }
+
+QPushButton#btnChatEmoji:hover {
+    border: 1px solid rgb(33, 157, 201);
+}
+
+QPushButton#btnChatImage {
+    width: 25px;
+    height: 25px;
+    border-image: url(:/images/midright/u4383.png);
+    border: none;
+}
+
+QPushButton#btnChatClear {
+    width: 25px;
+    height: 25px;
+    border-image: url(:/images/midright/u4383.png);
+    border: none;
+}
+
+QPushButton#btnChatConf {
+    width: 25px;
+    height: 25px;
+    border-image: url(:/images/midright/u4383.png);
+    border: none;
+}
+
+QPushButton#btnChatDirect {
+    width: 25px;
+    height: 25px;
+    border-image: url(:/images/midright/u4383.png);
+    border: none;
+}
+
+QPushButton#btnChatAudio {
+    width: 25px;
+    height: 25px;
+    border-image: url(:/images/midright/u4383.png);
+    border: none;
+}
+
+QPushButton#btnChatVideo {
+    width: 25px;
+    height: 25px;
+    border-image: url(:/images/midright/u4383.png);
+    border: none;
+}
+
+QPushButton#btnChatSend {
+    width: 65px;
+    height: 25px;
+    border: 1px solid lightgray;
+}
+
+QPushButton#btnChatSend:hover {
+    border: 1px solid rgb(33, 157, 201);
+}
+
+QPushButton#btnChatSend:pressed {
+    padding-left: 1px;
+    padding-top: 1px;
+}
+
+QTextEdit#txtChatSend {
+    max-height: 100px;
+    font-size: 11pt;
+}
+/* chat control widget end */

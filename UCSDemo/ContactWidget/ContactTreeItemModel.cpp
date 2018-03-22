@@ -245,6 +245,13 @@ void ContactTreeItemModel::importJSON(QString jsonFile)
 void ContactTreeItemModel::refreshModel()
 {
     beginResetModel();
+
+    delete m_pRootItem;
+    QList<QVariant> rootData;
+    rootData << "Contact";
+    m_pRootItem = new TreeItem(rootData);
+
+    setupModelData(m_pRootItem);
     endResetModel();
 }
 
@@ -324,6 +331,4 @@ TreeItem *ContactTreeItemModel::item(TreeItem *item, ContactItem contact)
 void ContactTreeItemModel::setOrganizationList(QList<ContactItem> *organizationList)
 {
     m_organizationList = organizationList;
-    setupModelData(m_pRootItem);
-    refreshModel();
 }

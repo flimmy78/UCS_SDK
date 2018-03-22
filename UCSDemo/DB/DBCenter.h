@@ -4,7 +4,8 @@
 #include <QObject>
 #include <qglobal.h>
 #include <QMutex>
-#include "UCSTcp/UCSTcpDefine.h"
+#include "LoginEntityManager.h"
+#include "ContactEntityManager.h"
 
 class DBCenter : public QObject
 {
@@ -12,8 +13,9 @@ class DBCenter : public QObject
 public:    
     static void release();
 
-protected:
-    void customEvent(QEvent *event) override;    
+    static LoginEntityManager *loginMgr();
+
+    static ContactEntityManager *contactMgr();
 
 private:
     static DBCenter *getInstance();
@@ -34,6 +36,9 @@ private:
 private:
     static DBCenter *m_pInstance;
     static QMutex m_Mutex;
+
+    LoginEntityManager *m_pLoginMgr;
+    ContactEntityManager *m_pContactMgr;
 };
 
 #endif // UCSDBCENTER_H

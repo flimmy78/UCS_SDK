@@ -19,17 +19,6 @@ DBCenter *DBCenter::getInstance()
     return m_pInstance;
 }
 
-DBCenter::DBCenter(QObject *parent)
-    : QObject(parent)
-{
-
-}
-
-DBCenter::~DBCenter()
-{
-    DBConnectionPool::release();
-}
-
 void DBCenter::release()
 {
     QMutexLocker locker(&m_Mutex);
@@ -40,9 +29,42 @@ void DBCenter::release()
     }
 }
 
-void DBCenter::customEvent(QEvent *event)
-{
 
+DBCenter::DBCenter(QObject *parent)
+    : QObject(parent)
+{
+    m_pLoginMgr = new LoginEntityManager;
+    m_pContactMgr = new ContactEntityManager;
 }
+
+DBCenter::~DBCenter()
+{
+    if (m_pLoginMgr != Q_NULLPTR)
+    {
+        delete m_pLoginMgr;
+        m_pLoginMgr = Q_NULLPTR;
+    }
+
+    if (m_pContactMgr != Q_NULLPTR)
+    {
+        delete m_pContactMgr;
+        m_pContactMgr = Q_NULLPTR;
+    }
+
+    DBConnectionPool::release();
+}
+
+ContactEntityManager *DBCenter::contactMgr()
+{
+    DBCenter *center = getInstance();
+    return center->m_pContactMgr;
+}
+
+LoginEntityManager *DBCenter::loginMgr()
+{
+    DBCenter *center = getInstance();
+    return center->m_pLoginMgr;
+}
+
 
 
