@@ -17,6 +17,29 @@ GroupDBManager::GroupDBManager()
                         "extra4     TEXT,"
                         "extra5     TEXT,"
                         "extra6     TEXT)";
+
+    m_insertSql = "INSERT OR REPLACE INTO UCS_IM_GROUP ("
+                              "groupId,"
+                              "groupName,"
+                              "categoryId,"
+                              "updateTime,"
+                              "extra1,"
+                              "extra2,"
+                              "extra3,"
+                              "extra4,"
+                              "extra5,"
+                              "extra6"
+                          ") VALUES ("
+                              ":groupId,"
+                              ":groupName,"
+                              ":categoryId,"
+                              ":updateTime,"
+                              ":extra1,"
+                              ":extra2,"
+                              ":extra3,"
+                              ":extra4,"
+                              ":extra5,"
+                              ":extra6)";
 }
 
 bool GroupDBManager::addGroup(GroupEntity *group)
@@ -26,18 +49,11 @@ bool GroupDBManager::addGroup(GroupEntity *group)
         return false;
     }
 
-    QString sql = "INSERT OR REPLACE INTO UCS_IM_GROUP "
-                        "(groupId, groupName, categoryId, updateTime, "
-                        "extra1, extra2, extra3, extra4, extra5, extra6) "
-                        "VALUES("
-                        ":groupId, :groupName, :categoryId, :updateTime, "
-                        ":extra1, :extra2, :extra3, :extra4, :extra5, :extra6)";
-
     UCSDBScoped scoped;
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    sqlQuery.prepare(sql);
+    sqlQuery.prepare(m_insertSql);
     sqlQuery.bindValue(":groupId", group->groupId);
     sqlQuery.bindValue(":groupName", group->groupName);
     sqlQuery.bindValue(":categoryId", group->categoryId);
@@ -63,6 +79,11 @@ bool GroupDBManager::addGroup(GroupEntity *group)
 
 bool GroupDBManager::addGroup(QList<GroupEntity> groupList)
 {
+    if (groupList.isEmpty())
+    {
+        return false;
+    }
+
     if (!UCSDBHelper::checkAndCreateTable(m_createSql, "UCS_IM_GROUP"))
     {
         return false;
@@ -70,16 +91,33 @@ bool GroupDBManager::addGroup(QList<GroupEntity> groupList)
 
     if (UCSDBHelper::transactionSupported())
     {
+        bool result = true;
         UCSDBScoped scoped;
         QSqlDatabase db = scoped.db();
+        QSqlQuery sqlQuery(db);
+
         db.transaction();
-        bool result = false;
-        for (qint32 i = 0; i < groupList.size(); ++i)
+        sqlQuery.prepare(m_insertSql);
+        foreach (GroupEntity group, groupList)
         {
-            result = addGroup((GroupEntity*)&groupList.at(i));
-            if (!result)
+            sqlQuery.bindValue(":groupId", group.groupId);
+            sqlQuery.bindValue(":groupName", group.groupName);
+            sqlQuery.bindValue(":categoryId", group.categoryId);
+            sqlQuery.bindValue(":updateTime", group.updateTime);
+            sqlQuery.bindValue(":extra1", group.extra1);
+            sqlQuery.bindValue(":extra2", group.extra2);
+            sqlQuery.bindValue(":extra3", group.extra3);
+            sqlQuery.bindValue(":extra4", group.extra4);
+            sqlQuery.bindValue(":extra5", group.extra5);
+            sqlQuery.bindValue(":extra6", group.extra6);
+
+            if (!sqlQuery.exec())
             {
-                break;
+                UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                        QString("failed insert group info with error(%1)")
+                                .arg(sqlQuery.lastError().text()));
+
+                result = false;
             }
         }
 

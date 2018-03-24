@@ -22,6 +22,33 @@ UserInfoDBManager::UserInfoDBManager()
                           "extra4       TEXT,"
                           "extra5       TEXT,"
                           "extra6       TEXT)";
+
+    m_insertSql = "INSERT OR REPLACE INTO UCS_IM_USERINFO ("
+                              "userId,"
+                              "userName,"
+                              "categoryId,"
+                              "portraitUrl,"
+                              "updateTime,"
+                              "userSettings,"
+                              "extra1,"
+                              "extra2,"
+                              "extra3,"
+                              "extra4,"
+                              "extra5,"
+                              "extra6"
+                          ") VALUES ("
+                              ":userId,"
+                              ":userName,"
+                              ":categoryId,"
+                              ":portraitUrl,"
+                              ":updateTime,"
+                              ":userSettings,"
+                              ":extra1,"
+                              ":extra2,"
+                              ":extra3,"
+                              ":extra4,"
+                              ":extra5,"
+                              ":extra6);";
 }
 
 bool UserInfoDBManager::addUserInfo(UserInfoEntity *userInfo)
@@ -31,20 +58,11 @@ bool UserInfoDBManager::addUserInfo(UserInfoEntity *userInfo)
         return false;
     }
 
-    QString sql = "INSERT OR REPLACE INTO UCS_IM_USERINFO "
-                        "(userId, userName, categoryId, portraitUrl, "
-                        "updateTime, userSettings, extra1, extra2, extra3,"
-                        " extra4, extra5, extra6) "
-                        "VALUES("
-                        ":userId, :userName, :categoryId, :portraitUrl, "
-                        ":updateTime, :userSettings, :extra1, :extra2, :extra3, "
-                        ":extra4, :extra5, :extra6);";
-
     UCSDBScoped scoped;
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    sqlQuery.prepare(sql);
+    sqlQuery.prepare(m_insertSql);
     sqlQuery.bindValue(":userId", userInfo->userId);
     sqlQuery.bindValue(":userName", userInfo->userName);
     sqlQuery.bindValue(":categoryId", userInfo->categoryId);
@@ -72,6 +90,11 @@ bool UserInfoDBManager::addUserInfo(UserInfoEntity *userInfo)
 
 bool UserInfoDBManager::addUserInfo(QList<UserInfoEntity> userList)
 {
+    if (userList.isEmpty())
+    {
+        return false;
+    }
+
     if (!UCSDBHelper::checkAndCreateTable(m_createSql, "UCS_IM_USERINFO"))
     {
         return false;
@@ -79,15 +102,36 @@ bool UserInfoDBManager::addUserInfo(QList<UserInfoEntity> userList)
 
     if (UCSDBHelper::transactionSupported())
     {
+        bool result = true;
         UCSDBScoped scoped;
         QSqlDatabase db = scoped.db();
+        QSqlQuery sqlQuery(db);
+
         db.transaction();
-        bool result = false;
-        for (qint32 i = 0; i < userList.size(); i++)
+        sqlQuery.prepare(m_insertSql);
+
+        foreach (UserInfoEntity userInfo, userList)
         {
-            result = addUserInfo((UserInfoEntity*)&userList.at(i));
-            if (result == false)
+            sqlQuery.bindValue(":userId", userInfo.userId);
+            sqlQuery.bindValue(":userName", userInfo.userName);
+            sqlQuery.bindValue(":categoryId", userInfo.categoryId);
+            sqlQuery.bindValue(":portraitUrl", userInfo.portraitUrl);
+            sqlQuery.bindValue(":udpateTime", userInfo.updateTime);
+            sqlQuery.bindValue(":userSettings", userInfo.userSettings);
+            sqlQuery.bindValue(":extra1", userInfo.extra1);
+            sqlQuery.bindValue(":extra2", userInfo.extra2);
+            sqlQuery.bindValue(":extra3", userInfo.extra3);
+            sqlQuery.bindValue(":extra4", userInfo.extra4);
+            sqlQuery.bindValue(":extra5", userInfo.extra5);
+            sqlQuery.bindValue(":extra6", userInfo.extra6);
+
+            if (!sqlQuery.exec())
             {
+                UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                        QString("failed insert user info with error(%1)")
+                                .arg(sqlQuery.lastError().text()));
+
+                result = false;
                 break;
             }
         }

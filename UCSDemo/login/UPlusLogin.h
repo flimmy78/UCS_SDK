@@ -40,6 +40,7 @@ private slots:
     void onBtnMin();
     void onBtnLogin();
     void onCheckedChanged();
+    void onLineUserIdTextChanged(QString userId);
 
     void onLoginReply(QByteArray replyData, int code);
     void onReLoginReply(QByteArray replyData, int code);

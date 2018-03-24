@@ -10,6 +10,14 @@
 #define UCS_LOGIN_TIME_KEY      "loginTime"
 #define UCS_LOGIN_USERID_KEY    "loginId"
 
+typedef enum UcsSettingsKey
+{
+    kUcsSettingsKeyLoginId,
+    kUcsSettingsKeyLoginTime,
+    kUcsSettingsKeyMsgSyncKey,
+    kUcsSettingsKeyContactSyncKey,
+} UcsSettingsKey;
+
 /*!
  * \brief The UCSIMHelper class 辅助类，函数为静态函数，无需实例化
  */
@@ -47,15 +55,14 @@ public:
      * \param key 键
      * \param value 值
      */
-    static void writeSettings(const QString &key, const QVariant &value);
+    static void saveSetting(const UcsSettingsKey &key, const QVariant &value);
 
     /*!
      * \brief readSettings 读取配置
      * \param key   键
-     * \param defaultVal 默认值
      * \return 若对应键存在，则返回键值，否则返回默认值
      */
-    static QVariant readSettings(const QString &key, const  QVariant &defaultVal = QVariant());
+    static QVariant readSettings(const UcsSettingsKey &key);
 
     /*!
      * \brief checkConversationType 检查会话类型是否正确

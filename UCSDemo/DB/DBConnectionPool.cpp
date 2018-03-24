@@ -4,6 +4,8 @@
 #include "UCSLogger.h"
 #include "CommonHelper.h"
 
+#define TAG "DBConnectionPool"
+
 QMutex DBConnectionPool::m_mutex;
 QWaitCondition DBConnectionPool::m_waitConnection;
 DBConnectionPool* DBConnectionPool::m_instance = Q_NULLPTR;
@@ -94,7 +96,7 @@ QSqlDatabase DBConnectionPool::openConnection()
     else
     {
         ///< 已经达到最大连接数 >
-        UCS_LOG(UCSLogger::kTraceWarning, UCSLogger::kIMDataBase,
+        UCS_LOG(UCSLogger::kTraceWarning, TAG,
                 QStringLiteral("暂无可用数据库连接"));
         return QSqlDatabase();
     }
@@ -139,7 +141,7 @@ QSqlDatabase DBConnectionPool::createConnection(const QString &connectionName)
             if ((query.lastError().type() != QSqlError::NoError) &&
                 !(db.open()))
             {
-                UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                UCS_LOG(UCSLogger::kTraceError, TAG,
                         QStringLiteral("错误: 打开数据库失败"));
                 return QSqlDatabase();
             }
@@ -160,12 +162,21 @@ QSqlDatabase DBConnectionPool::createConnection(const QString &connectionName)
 
     if (!db.open())
     {
-        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+        UCS_LOG(UCSLogger::kTraceError, TAG,
                 QString(QStringLiteral("错误: 打开数据库失败(%1)"))
                 .arg(db.lastError().text()));
         return QSqlDatabase();
     }
 
+    ///< 关闭写同步，提升数据库写入速度 >
+    QString sql = "PRAGMA synchronous = OFF;";
+    QSqlQuery sqlQuery(db);
+    sqlQuery.prepare(sql);
+    if (!sqlQuery.exec())
+    {
+        UCS_LOG(UCSLogger::kTraceError, TAG,
+                QStringLiteral("错误: 数据库写同步关闭失败"));
+    }
     return db;
 }
 

@@ -62,14 +62,14 @@ void UCSIMManager::updateLoginState(UcsLoginState state, QString userid)
             .arg(userid));
 
     m_userId = userid;
-    UCSIMHelper::writeSettings(UCS_LOGIN_USERID_KEY, userid);
+    UCSIMHelper::saveSetting(kUcsSettingsKeyLoginId, userid);
 
     UCSDBCenter::updateLoginState(state);
 
     if (state == LoginSuccessed || state == ReLoginSuccessed)
     {
         QString loginTime = QString::number(UCSClock::TimeInMicroseconds());
-        UCSIMHelper::writeSettings(UCS_LOGIN_TIME_KEY, loginTime);
+        UCSIMHelper::saveSetting(kUcsSettingsKeyLoginTime, loginTime);
 
         doInitSyncRequest();
     }
@@ -187,7 +187,7 @@ bool UCSIMManager::doSendMessage(UCSMessage *pMessage)
     chatEntity.msgId = msgId;
     chatEntity.targetId = pMessage->receivedId;
     chatEntity.senderId = userId();
-    chatEntity.senderNickName = userId();
+    chatEntity.senderNickName = pMessage->senderNickName;
     chatEntity.isFromMySelf = QStringUtil::fromBool(true);
     chatEntity.sendTime = QString::number(nowTime);
     chatEntity.receivedTime = "0";
@@ -206,7 +206,7 @@ bool UCSIMManager::doSendMessage(UCSMessage *pMessage)
             return false;
         }
 
-        UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kIMManager,
+        UCS_LOG(UCSLogger::kTraceDebug, UCSLogger::kIMManager,
                 QStringLiteral("发送一条文本消息"));
 
         chatEntity.content = txtMsg->content();
@@ -414,7 +414,7 @@ bool UCSIMManager::doSetDiscussionTopic(QString discussionId, QString newTopic)
     /* create current sync key */
     UCSIMKeyVal_t curContactKey;
     curContactKey.iKey = 3;   ///<1:userProfile 2:msg 3:contact>
-    curContactKey.iVal = UCSIMHelper::readSettings(UCS_IM_CONTACT_KEY, 0).toInt();
+    curContactKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyContactSyncKey).toInt();
     request.tSyncKey.ptKey.append(curContactKey);
 
     QByteArray packData = UCSPackage::PackModGroupTopicRequest(&request);
@@ -723,23 +723,23 @@ void UCSIMManager::doInitSyncRequest()
     /* create current sync key */
     UCSIMKeyVal_t curMsgKey;
     curMsgKey.iKey = 2;    ///<1:userProfile 2:msg 3:contact>
-    curMsgKey.iVal = UCSIMHelper::readSettings(UCS_IM_MSG_KEY, 0).toInt();
+    curMsgKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyMsgSyncKey).toInt();
     request.tCurrentSyncKey.ptKey.append(curMsgKey);
 
     UCSIMKeyVal_t curContactKey;
     curContactKey.iKey = 3;   ///<1:userProfile 2:msg 3:contact>
-    curContactKey.iVal = UCSIMHelper::readSettings(UCS_IM_CONTACT_KEY, 0).toInt();
+    curContactKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyContactSyncKey).toInt();
     request.tCurrentSyncKey.ptKey.append(curContactKey);
 
     /* create max sync key */
     UCSIMKeyVal_t maxMsgKey;
     maxMsgKey.iKey = 2;
-    maxMsgKey.iVal = UCSIMHelper::readSettings(UCS_IM_MSG_KEY, 0).toInt();
+    maxMsgKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyMsgSyncKey).toInt();
     request.tMaxSyncKey.ptKey.append(maxMsgKey);
 
     UCSIMKeyVal_t maxContactKey;
     maxContactKey.iKey = 3;
-    maxContactKey.iVal = UCSIMHelper::readSettings(UCS_IM_CONTACT_KEY, 0).toInt();
+    maxContactKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyContactSyncKey).toInt();
     request.tMaxSyncKey.ptKey.append(maxContactKey);
 
     QByteArray dataArray = UCSPackage::PackInitNewSyncRequest(&request);
@@ -756,12 +756,12 @@ void UCSIMManager::doNewSyncRequest(quint32 selector)
     /* create current sync key */
     UCSIMKeyVal_t curMsgKey;
     curMsgKey.iKey = 2;    ///<1:userProfile 2:msg 3:contact>
-    curMsgKey.iVal = UCSIMHelper::readSettings(UCS_IM_MSG_KEY, 0).toInt();
+    curMsgKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyMsgSyncKey).toInt();
     request.tCurrentSyncKey.ptKey.append(curMsgKey);
 
     UCSIMKeyVal_t curContactKey;
     curContactKey.iKey = 3;   ///<1:userProfile 2:msg 3:contact>
-    curContactKey.iVal = UCSIMHelper::readSettings(UCS_IM_CONTACT_KEY, 0).toInt();
+    curContactKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyContactSyncKey).toInt();
     request.tCurrentSyncKey.ptKey.append(curContactKey);
 
     QByteArray dataArray = UCSPackage::PackNewSyncRequest(&request);
@@ -776,12 +776,12 @@ void UCSIMManager::doNewSyncCheckRequest()
     /* create current sync key */
     UCSIMKeyVal_t curMsgKey;
     curMsgKey.iKey = 2;    ///<1:userProfile 2:msg 3:contact>
-    curMsgKey.iVal = UCSIMHelper::readSettings(UCS_IM_MSG_KEY, 0).toInt();
+    curMsgKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyMsgSyncKey).toInt();
     request.tSyncKeyBuf.ptKey.append(curMsgKey);
 
     UCSIMKeyVal_t curContactKey;
     curContactKey.iKey = 3;   ///<1:userProfile 2:msg 3:contact>
-    curContactKey.iVal = UCSIMHelper::readSettings(UCS_IM_CONTACT_KEY, 0).toInt();
+    curContactKey.iVal = UCSIMHelper::readSettings(kUcsSettingsKeyContactSyncKey).toInt();
     request.tSyncKeyBuf.ptKey.append(curContactKey);
 
     QByteArray dataArray = UCSPackage::PackNewSyncCheckRequest(&request);
@@ -859,11 +859,11 @@ void UCSIMManager::handleInitSyncResponse(QByteArray recvData)
         keyVal = response.tCurrentSyncKey.ptKey.at(i);
         if (keyVal.iKey == 2)
         {
-            UCSIMHelper::writeSettings(UCS_IM_MSG_KEY, keyVal.iVal);
+            UCSIMHelper::saveSetting(kUcsSettingsKeyMsgSyncKey, keyVal.iVal);
         }
         if (keyVal.iKey == 3)
         {
-            UCSIMHelper::writeSettings(UCS_IM_CONTACT_KEY, keyVal.iVal);
+            UCSIMHelper::saveSetting(kUcsSettingsKeyContactSyncKey, keyVal.iVal);
         }
     }
 
@@ -877,7 +877,13 @@ void UCSIMManager::handleInitSyncResponse(QByteArray recvData)
         UCSDBCenter::discussionMgr()->addDiscussioin(&discussion);
 
         ///< 更新会话 >
-        UCSDBCenter::conversationMgr()->updateConversation(discussion);
+        bool result = UCSDBCenter::conversationMgr()->updateConversation(discussion);
+
+        ///< 不存在会话，则新增 >
+        if (!result)
+        {
+            UCSDBCenter::conversationMgr()->addConversation(discussion);
+        }
     }
 
     ///< 处理被踢出讨论组 >
@@ -940,11 +946,11 @@ void UCSIMManager::handleNewSyncResponse(QByteArray recvData)
         keyVal = response.tCurrentSyncKey.ptKey.at(i);
         if (keyVal.iKey == 2)
         {
-            UCSIMHelper::writeSettings(UCS_IM_MSG_KEY, keyVal.iVal);
+            UCSIMHelper::saveSetting(kUcsSettingsKeyMsgSyncKey, keyVal.iVal);
         }
         if (keyVal.iKey == 3)
         {
-            UCSIMHelper::writeSettings(UCS_IM_CONTACT_KEY, keyVal.iVal);
+            UCSIMHelper::saveSetting(kUcsSettingsKeyContactSyncKey, keyVal.iVal);
         }
     }
 
@@ -959,6 +965,7 @@ void UCSIMManager::handleNewSyncResponse(QByteArray recvData)
 
         ///< 更新会话 >
         bool result = UCSDBCenter::conversationMgr()->updateConversation(discussion);
+
         ///< 不存在会话，则新增 >
         if (!result)
         {
@@ -1003,7 +1010,7 @@ void UCSIMManager::handleNewSyncResponse(QByteArray recvData)
         UCS_LOG(UCSLogger::kTraceDebug, UCSLogger::kIMManager,
                 QStringLiteral("待同步数据太多，分批同步"));
 
-//        doNewSyncRequest(response.iContinueFlag);
+        doNewSyncRequest(response.iContinueFlag);
     }
 }
 

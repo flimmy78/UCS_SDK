@@ -343,3 +343,132 @@ QString CommonHelper::decryptPwd(QString encryptPwd)
     return QString(QByteArray::fromBase64(encryptPwd.toLocal8Bit()));
 }
 
+bool CommonHelper::copyFileToPath(const QString &fromDir,
+                                  QString toDir,
+                                  bool coverIfExist)
+{
+    toDir.replace("\\", "/");
+    if (toDir == fromDir)
+    {
+        return true;
+    }
+
+    if (!QFile::exists(fromDir))
+    {
+        return false;
+    }
+
+    if (coverIfExist)
+    {
+        QDir createFile;
+        if (createFile.exists(toDir))
+        {
+           createFile.remove(toDir) ;
+        }
+    }
+
+    if (!QFile::copy(fromDir, toDir))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool CommonHelper::copyDirectorFiles(const QString &fromDir,
+                                     QString toDir,
+                                     bool coverIfExist)
+{
+    QDir sourceDir(fromDir);
+    QDir targetDir(toDir);
+
+    ///< 如果目标目录不存在，则创建 >
+    if (!targetDir.exists())
+    {
+        if (!targetDir.mkdir(targetDir.absolutePath()))
+        {
+            return false;
+        }
+    }
+
+    QFileInfoList fileInfoList = sourceDir.entryInfoList();
+    foreach (QFileInfo fileInfo, fileInfoList)
+    {
+        if (fileInfo.fileName() == "." || fileInfo.fileName() == "..")
+        {
+            continue;
+        }
+
+        if (fileInfo.isDir())
+        {
+            if (!copyDirectorFiles(fileInfo.filePath(),
+                                   targetDir.filePath(fileInfo.fileName()),
+                                    coverIfExist))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (coverIfExist && targetDir.exists(fileInfo.fileName()))
+            {
+                targetDir.remove(fileInfo.fileName());
+            }
+
+            if (!QFile::copy(fileInfo.filePath(),
+                             targetDir.filePath(fileInfo.fileName())))
+            {
+                return false;
+            }
+        }
+
+    }
+
+    return true;
+}
+
+QImage CommonHelper::compressImage(const QImage &sourceImage,
+                                   const int maxSizeInBytes,
+                                   const QSize &targetSize)
+{
+    if ((sourceImage.size().width() <= targetSize.width())
+      && (sourceImage.size().height() <= targetSize.height()))
+    {
+        return sourceImage;
+    }
+
+    QImage srcImage(sourceImage);
+    int width = 800;
+    int height = (srcImage.height() * width) / srcImage.width();
+    QImage result = srcImage.scaled(800, height, Qt::KeepAspectRatio, Qt::FastTransformation)
+                            .scaled(targetSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    QString tmpImgPath = userTempPath() + QString("/%1.jpg").arg(QDateTime::currentMSecsSinceEpoch());
+    result.save(tmpImgPath, "JPEG", 100);
+
+    QFile imgFile(tmpImgPath);
+    int fileSize = imgFile.size();
+
+    int quality = 100;
+    while (fileSize > maxSizeInBytes)
+    {
+        quality = quality - 5;
+        result.save(tmpImgPath, "JPEG", 100);
+        fileSize = imgFile.size();
+
+        if (quality <= 0)
+        {
+            break;
+        }
+    }
+
+    QImage targetImg(tmpImgPath);
+
+    QDir tmpDir;
+    if (tmpDir.exists(tmpImgPath))
+    {
+        tmpDir.remove(tmpImgPath);
+    }
+    return targetImg;
+}
+

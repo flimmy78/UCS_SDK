@@ -34,9 +34,18 @@ void ChatWebView::sendMsgShow(const ChatMsgModel &msg)
     QString name = QString("%1 <a href=\"javascript:void(0);\" onclick=\"nameClick(this);return false;\" userId=\"%2\">%3</a>")
                         .arg(time).arg(msg.userName).arg(msg.nickName);
 
+    QString content;
+    if (msg.type == MessageBodyType_Image)
+    {
+        content = QString("<img src=\"%1\" width=\"80px\" heigth=\"100px\"/>").arg(msg.thumbnailLocalPath);
+    }
+    else
+    {
+        content = msg.content;
+    }
     QString html = QString("appendMyMessage('%1', '%2');scrollBottom();")
                         .arg(name)
-                        .arg(msg.content);
+                        .arg(content);
 
 
     this->page()->runJavaScript(html);

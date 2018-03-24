@@ -99,7 +99,7 @@ void UCSLoginManager::doNoop()
                                          dataArray));
 
     ///< 启动心跳超时定时器 >
-    timerStart(kNoopTimerT1);
+//    timerStart(kNoopTimerT1);
 }
 
 void UCSLoginManager::doLogout()
@@ -297,7 +297,7 @@ void UCSLoginManager::initTimer()
     m_timers[kNoopTimer].name = "NoopTimer";
 
     m_timers[kNoopTimerT1].timerId = 0;
-    m_timers[kNoopTimerT1].timeout = 5 * 1000; // 5s
+    m_timers[kNoopTimerT1].timeout = 10 * 1000; // 10s
     m_timers[kNoopTimerT1].name = "NoopTimerT1";
 
     m_timers[kLoginTimer].timerId = 0;

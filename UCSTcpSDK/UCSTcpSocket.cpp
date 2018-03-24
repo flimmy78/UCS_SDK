@@ -21,6 +21,9 @@ UCSTcpSocket::UCSTcpSocket(QObject *parent)
     m_proxyList.clear();
 
     m_pSocket = new QTcpSocket();
+    m_pSocket->setSocketOption(QAbstractSocket::LowDelayOption, 0);
+    m_pSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 0);
+//    m_pSocket->setReadBufferSize(0x800);
 
     initConnections();
     initTimer();
@@ -199,8 +202,22 @@ void UCSTcpSocket::onSendData(QByteArray dataArray)
 {
     if (m_pSocket != Q_NULLPTR)
     {
-//        qDebug() << "send data";
-        m_pSocket->write(dataArray);
+        if (0 && dataArray.size() > 1400)
+        {
+            int idx = 0;
+            while(idx < dataArray.size())
+            {
+                QByteArray sendData = dataArray.mid(idx, 1400);
+                m_pSocket->write(sendData);
+                m_pSocket->waitForBytesWritten(-1);
+                idx += 1400;
+            }
+        }
+        else
+        {
+            m_pSocket->write(dataArray);
+            m_pSocket->waitForBytesWritten(-1);
+        }
     }
 }
 
@@ -251,9 +268,11 @@ void UCSTcpSocket::customEvent(QEvent *event)
 
         if (m_pSocket != Q_NULLPTR)
         {
-            qint64 bytes = m_pSocket->write(sendEvent->data());
+//            qint64 bytes = m_pSocket->write(sendEvent->data());
+            onSendData(sendEvent->data());
+
             UCS_LOG(UCSLogger::kTraceInfo, UCSLogger::kTcpSocket,
-                    QString("send data bytes(%1) ").arg(bytes));
+                    QString("send data bytes(%1) ").arg(sendEvent->data().size()));
         }
     }
 }

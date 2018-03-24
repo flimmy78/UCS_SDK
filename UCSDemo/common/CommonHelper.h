@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QObject>
 #include <qglobal.h>
+#include <QSize>
 
 enum SettingKey
 {
@@ -92,6 +93,35 @@ public:
      */
     static QString encryptPwd(QString pwd);
     static QString decryptPwd(QString encryptPwd);
+
+    /*!
+     * \brief copyFileToPath 拷贝文件
+     * \param fromDir
+     * \param toDir
+     * \param coverIfExist 是否覆盖
+     * \return
+     */
+    static bool copyFileToPath(const QString &fromDir, QString toDir, bool coverIfExist);
+
+    /*!
+     * \brief copyDirectorFiles 拷贝文件夹
+     * \param fromDir
+     * \param toDir
+     * \param coverIfExist 是否覆盖
+     * \return
+     */
+    static bool copyDirectorFiles(const QString &fromDir, QString toDir, bool coverIfExist);
+
+    /*!
+     * \brief compressImage 图片压缩
+     * \param sourceImage 原图像
+     * \param maxSizeInBytes 压缩后最大字节数
+     * \param targetSize 压缩后目标宽高
+     * \return 压缩后图像
+     */
+    static QImage compressImage(const QImage &sourceImage,
+                                 const int maxSizeInBytes,
+                                 const QSize &targetSize);
 };
 
 #endif // COMMONHELPER_H

@@ -56,7 +56,7 @@ typedef struct
     QString discussionName;     ///< 讨论组名称 >
     QString categoryId;
     QString ownerId;            ///< 群主 >
-    QString memberCount;
+    qint32  memberCount;
     QString members;
     QString sSettings;
     QString createTime;

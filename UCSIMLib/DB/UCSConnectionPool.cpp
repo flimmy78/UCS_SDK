@@ -145,7 +145,7 @@ QSqlDatabase UCSConnectionPool::createConnection(const QString &connectionName)
         return db;
     }
 
-    QString userId = UCSIMHelper::readSettings(UCS_LOGIN_USERID_KEY).toString();
+    QString userId = UCSIMHelper::readSettings(kUcsSettingsKeyLoginId).toString();
     if (userId.isEmpty())
     {
         return QSqlDatabase();
@@ -162,6 +162,16 @@ QSqlDatabase UCSConnectionPool::createConnection(const QString &connectionName)
                 QString(QStringLiteral("错误: 打开数据库失败(%1)"))
                 .arg(db.lastError().text()));
         return QSqlDatabase();
+    }
+
+    ///< 关闭写同步，提升数据库写入速度 >
+    QString sql = "PRAGMA synchronous = OFF;";
+    QSqlQuery sqlQuery(db);
+    sqlQuery.prepare(sql);
+    if (!sqlQuery.exec())
+    {
+        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                QStringLiteral("错误: 数据库写同步关闭失败"));
     }
 
     return db;

@@ -143,7 +143,7 @@ void ConversationListView::updateConversationList()
             }
                 break;
 
-            case UCS_IM_DiscussionNotification:
+            case UCS_IM_System:
             {
                 item.lastMsgContent = QStringLiteral("[通知]");
             }

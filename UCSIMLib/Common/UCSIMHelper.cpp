@@ -32,7 +32,7 @@ QString UCSIMHelper::tempDir()
 
 QString UCSIMHelper::userTempPath()
 {
-    QString userId = readSettings(UCS_LOGIN_USERID_KEY, "").toString();
+    QString userId = readSettings(kUcsSettingsKeyLoginId).toString();
     if (userId.isEmpty())
     {
         return QString();
@@ -67,7 +67,7 @@ QString UCSIMHelper::dataDir()
 
 QString UCSIMHelper::userDataPath()
 {
-    QString userId = readSettings(UCS_LOGIN_USERID_KEY, "").toString();
+    QString userId = readSettings(kUcsSettingsKeyLoginId).toString();
     if (userId.isEmpty())
     {
         return QString();
@@ -84,16 +84,119 @@ QString UCSIMHelper::userDataPath()
     return dataPath;
 }
 
-void UCSIMHelper::writeSettings(const QString &key, const QVariant &value)
+void UCSIMHelper::saveSetting(const UcsSettingsKey &key, const QVariant &value)
 {
-    QSettings settings(UCSIMHelper::dataDir() + "/ucscfg.ini", QSettings::IniFormat);
-    settings.setValue(key, value);
+    QSettings settings(UCSIMHelper::dataDir() + "/UCSCfg.ini", QSettings::IniFormat);
+
+    switch (key)
+    {
+    case kUcsSettingsKeyLoginId:
+        settings.beginGroup("Login");
+        settings.setValue("loginId", value);
+        settings.endGroup();
+        break;
+
+    case kUcsSettingsKeyLoginTime:
+    {
+        settings.beginGroup("Login");
+        settings.setValue("loginTime", value);
+        settings.endGroup();
+    }
+        break;
+
+    case kUcsSettingsKeyMsgSyncKey:
+    {
+        settings.beginGroup("Login");
+        QString userId = settings.value("loginId", "").toString();
+        settings.endGroup();
+
+        if (userId.size() > 0)
+        {
+            settings.beginGroup(userId);
+            settings.setValue("msgKey", value);
+            settings.endGroup();
+        }
+    }
+        break;
+
+    case kUcsSettingsKeyContactSyncKey:
+    {
+        settings.beginGroup("Login");
+        QString userId = settings.value("loginId", "").toString();
+        settings.endGroup();
+
+        if (userId.size() > 0)
+        {
+            settings.beginGroup(userId);
+            settings.setValue("contactKey", value);
+            settings.endGroup();
+        }
+    }
+        break;
+
+    default:
+        break;
+    }
 }
 
-QVariant UCSIMHelper::readSettings(const QString &key, const  QVariant &defaultVal)
+QVariant UCSIMHelper::readSettings(const UcsSettingsKey &key)
 {
     QSettings settings(UCSIMHelper::dataDir() + "/ucscfg.ini", QSettings::IniFormat);
-    return settings.value(key, defaultVal);
+    QVariant value;
+
+    switch (key)
+    {
+    case kUcsSettingsKeyLoginId:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("loginId", "");
+        settings.endGroup();
+    }
+        break;
+
+    case kUcsSettingsKeyLoginTime:
+    {
+        settings.beginGroup("Login");
+        value = settings.value("loginTime", "");
+        settings.endGroup();
+    }
+        break;
+
+    case kUcsSettingsKeyMsgSyncKey:
+    {
+        settings.beginGroup("Login");
+        QString userId = settings.value("loginId", "").toString();
+        settings.endGroup();
+
+        if (!userId.isEmpty())
+        {
+            settings.beginGroup(userId);
+            value = settings.value("msgKey", 0);
+            settings.endGroup();
+        }
+    }
+        break;
+
+    case kUcsSettingsKeyContactSyncKey:
+    {
+        settings.beginGroup("Login");
+        QString userId = settings.value("loginId", "").toString();
+        settings.endGroup();
+
+        if (!userId.isEmpty())
+        {
+            settings.beginGroup(userId);
+            value = settings.value("contactKey", 0);
+            settings.endGroup();
+        }
+    }
+        break;
+
+    default:
+        break;
+    }
+
+    return value;
 }
 
 bool UCSIMHelper::checkConversationType(UCS_IM_ConversationType conversationType)
@@ -127,7 +230,7 @@ bool UCSIMHelper::checkMsgType(UCS_IM_MsgType msgType)
 QString UCSIMHelper::messageId()
 {
     qint64 time = UCSClock::TimeInMicroseconds();
-    qint32 msgKey = readSettings(UCS_IM_MSG_KEY).toInt();
+    qint32 msgKey = readSettings(kUcsSettingsKeyMsgSyncKey).toInt();
     qint64 msgId = (time + msgKey);
 
     return QString::number(msgId);
@@ -136,7 +239,7 @@ QString UCSIMHelper::messageId()
 QString UCSIMHelper::recvMsgId(qint32 index)
 {
     qint64 time = UCSClock::TimeInMicroseconds();
-    qint32 msgKey = readSettings(UCS_IM_MSG_KEY).toInt();
+    qint32 msgKey = readSettings(kUcsSettingsKeyMsgSyncKey).toInt();
     qint64 msgId = (time + msgKey + index);
 
     return QString::number(msgId);

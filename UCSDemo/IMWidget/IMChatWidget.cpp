@@ -312,6 +312,59 @@ void IMChatWidget::onSendImage()
 
     UCS_LOG(UCSLogger::kTraceInfo, this->objectName(),
             QString("onSendImage: path = %1").arg(filePath));
+
+    if (filePath.isEmpty())
+    {
+        return;
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly) || file.size() == 0)
+    {
+        file.close();
+    }
+
+    ///< 缓存图片文件 >
+    QFileInfo fileInfo(filePath);
+    QString newFileName = QString("%1_%2.%3")
+                            .arg(m_conversation.conversationId)
+                            .arg(QDateTime::currentMSecsSinceEpoch())
+                            .arg(fileInfo.completeSuffix());
+    QString newFilePath = CommonHelper::userTempPath() + "/" + newFileName;
+    CommonHelper::copyFileToPath(filePath, newFilePath, false);
+
+    ///< 创建缩略图 >
+    QImage image(filePath);
+    QImage thumbnaiImage = CommonHelper::compressImage(image, 20 * 1024, QSize(80, 100));
+    QString thumbnaiName = QString("%1_%2_80_100.%3")
+                            .arg(m_conversation.conversationId)
+                            .arg(QDateTime::currentMSecsSinceEpoch())
+                            .arg(fileInfo.completeSuffix());
+    QString thumbnaiPath = CommonHelper::userTempPath() + "/" + thumbnaiName;
+    thumbnaiImage.save(thumbnaiPath);
+
+    UCSMessage message;
+    UCSImageMsg *imgMsg = new UCSImageMsg;
+
+    imgMsg->originalImage = file.readAll();
+    imgMsg->imageLocalPath = newFilePath;
+    imgMsg->thumbnailLocalPath = thumbnaiPath;
+    message.receivedId = m_conversation.conversationId;
+    message.conversationType = (UCS_IM_ConversationType)(m_conversation.conversationType);
+    message.messageType = UCS_IM_IMAGE;
+    message.content = imgMsg;
+    message.senderUserId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+    message.senderNickName = CommonHelper::readSetting(kSettingLoginUserName).toString();
+
+    UCSIMClient::Instance()->sendMessage(&message);
+    m_msgIdList.append(message.messageId);
+
+    ChatMsgModel msg = MsgConvert::convert2Model(&message);
+    ChatWebView *webView = m_chatsMap[m_conversation.conversationId];
+    webView->msgShow(msg);
+
+    m_pTxtSending->clear();
+    emit sigSendingMsg();
 }
 
 void IMChatWidget::onClearMessage()

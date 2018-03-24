@@ -57,6 +57,7 @@ public:
 
 private:
     QString m_createSql;
+    QString m_insertSql;
 };
 
 #endif // USERINFODBMANAGER_H

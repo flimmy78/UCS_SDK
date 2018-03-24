@@ -115,6 +115,11 @@ bool ContactEntityManager::addContact(const ContactEntity &contact)
 
 bool ContactEntityManager::addContacts(const ContactEntityList &contactList)
 {
+    if (contactList.isEmpty())
+    {
+        return false;
+    }
+
     if (!DBHelper::checkAndCreateTable(m_createSql, "CONTACT_TABLE"))
     {
         return false;
@@ -129,8 +134,8 @@ bool ContactEntityManager::addContacts(const ContactEntityList &contactList)
 
         db.transaction();
 
-//        QTime time;
-//        time.start();
+        QTime time;
+        time.start();
 
         sqlQuery.prepare(m_insertSql);
 
@@ -169,8 +174,7 @@ bool ContactEntityManager::addContacts(const ContactEntityList &contactList)
         {
             db.commit();
 
-//            int elapsed = time.elapsed();
-//            UCS_LOG(UCSLogger::kTraceInfo, TAG, QString("elapsed time: %1 ms").arg(elapsed));
+            UCS_LOG(UCSLogger::kTraceDebug, TAG, QString("insert CONTACT_TABLE elapsed time: %1 ms").arg(time.elapsed()));
             return true;
         }
 

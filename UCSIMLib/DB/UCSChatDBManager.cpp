@@ -154,6 +154,11 @@ bool ChatDBManager::addChat(const QString targetId,
                             const UCS_IM_ConversationType type,
                             const QList<ChatEntity> chatList)
 {
+    if (chatList.isEmpty())
+    {
+        return false;
+    }
+
     if (!checkAndCreateTable(targetId, type))
     {
         return false;
@@ -367,7 +372,7 @@ bool ChatDBManager::getChat(const QString targetId,
     {
         query2Entity(&sqlQuery, &chatEntity);
 
-        QString loginTime = UCSIMHelper::readSettings(UCS_LOGIN_TIME_KEY).toString();
+        QString loginTime = UCSIMHelper::readSettings(kUcsSettingsKeyLoginTime).toString();
         if (((UCSClock::TimeInMicroseconds() - chatEntity.sendTime.toLongLong() > 30) ||
             (chatEntity.sendTime.toLongLong() < loginTime.toLongLong()) ) &&
             (chatEntity.sendStatus.toInt() == SendStatus_sending))
@@ -443,7 +448,7 @@ bool ChatDBManager::getNewestChat(const QString targetId, const UCS_IM_Conversat
     {
         query2Entity(&sqlQuery, &chatEntity);
 
-        QString loginTime = UCSIMHelper::readSettings(UCS_LOGIN_TIME_KEY).toString();
+        QString loginTime = UCSIMHelper::readSettings(kUcsSettingsKeyLoginTime).toString();
         if (((UCSClock::TimeInMicroseconds() - chatEntity.sendTime.toLongLong() > 30) ||
             (chatEntity.sendTime.toLongLong() < loginTime.toLongLong()) ) &&
             (chatEntity.sendStatus.toInt() == SendStatus_sending))

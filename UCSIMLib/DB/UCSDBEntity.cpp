@@ -19,7 +19,7 @@ void UCSDBEntity::convertMessageFromChat(const ChatEntity &chatEntity, UCSMessag
     message->receivedStatus = (UCSReceivedStatus)chatEntity.readStatus.toInt();
 
     qint64 nowTime = UCSClock::TimeInMicroseconds();
-    qint64 loginTime = UCSIMHelper::readSettings(UCS_LOGIN_TIME_KEY).toLongLong();
+    qint64 loginTime = UCSIMHelper::readSettings(kUcsSettingsKeyLoginTime).toLongLong();
 
     bool isFromMySelf = QStringUtil::toBool(chatEntity.isFromMySelf);
     if (isFromMySelf)
@@ -52,7 +52,7 @@ void UCSDBEntity::convertMessageFromChat(const ChatEntity &chatEntity, UCSMessag
         message->time = chatEntity.sendTime.toLongLong();
 
         ///< 单聊情况下，接收的消息，receivedId应该是自己的Id >
-        QString userId = UCSIMHelper::readSettings(UCS_LOGIN_USERID_KEY).toString();
+        QString userId = UCSIMHelper::readSettings(kUcsSettingsKeyLoginId).toString();
         message->receivedId = userId;
 
         if (message->receivedStatus == ReceivedStatus_DOWNLOADING)
@@ -176,6 +176,7 @@ void UCSDBEntity::convertEntityFromContact(const UCSIMModContact_t contact, Disc
     }
 
     entity.members = QStringUtil::fromStringList(members);
+    entity.memberCount = members.size();
 
     UCSDBCenter::userInfoMgr()->addUserInfo(userList);
 }

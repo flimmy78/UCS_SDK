@@ -905,6 +905,7 @@ void UCSPackage::UnpackInitNewSyncResponse(const QByteArray dataArray, UCSInitNe
                 member.iSex = modContact.ptRoomMemberList[idx].iSex;
                 contact.ptRoomMemberList.append(member);
             }
+            pResponse->tContactList.append(contact);
         }
         else if (bodyData.ptCmdList[i].iCmdId == UCS_SYNCCMD_DELCONTACT)
         {
@@ -1205,7 +1206,7 @@ QByteArray UCSPackage::PackUploadMsgImgRequest(const UCSUploadMsgImgRequest_t *p
     QByteArray data = pRequest->tData.mid(pRequest->iStartPos, pRequest->iDataLen);
     bodyData.tData.pcBuff = strdup(data.data());
     bodyData.tData.iLen = pRequest->tData.size();
-    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Md5).toHex();
+    QByteArray hash = QCryptographicHash::hash(bodyData.tData.pcBuff, QCryptographicHash::Md5).toHex();
     bodyData.pcMD5 = strdup(hash.data());
 
 #define IMG_UPLOAD_SIZE (64 * 1024 + 1024)
@@ -1237,12 +1238,6 @@ void UCSPackage::UnpackUploadMsgImgResponse(const QByteArray dataArray, UCSUploa
 
     if (pResponse->tBaseResponse.iRet != 0)
     {
-        return;
-    }
-
-    if (bodyHeader.Ret != 0)
-    {
-        pResponse->tBaseResponse.iRet = kBodyHeader_t_errorcode;
         return;
     }
 

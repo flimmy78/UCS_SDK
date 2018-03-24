@@ -14,7 +14,7 @@ DiscussionDBManager::DiscussionDBManager()
                           "memberCount       INTEGER,"
                           "ownerId           TEXT,"
                           "members           TEXT,"
-                          "settings          TEXT"
+                          "settings          TEXT,"
                           "createTime        TEXT,"
                           "state             INTEGER,"
                           "extra1            INTEGER,"
@@ -23,6 +23,39 @@ DiscussionDBManager::DiscussionDBManager()
                           "extra4            TEXT,"
                           "extra5            TEXT,"
                           "extra6            TEXT)";
+
+    m_insertSql = "INSERT OR REPLACE INTO UCS_IM_DISCUSSION ("
+                              "extra6,"
+                              "extra5,"
+                              "extra4,"
+                              "extra3,"
+                              "extra2,"
+                              "extra1,"
+                              "state,"
+                              "createTime,"
+                              "settings,"
+                              "members,"
+                              "ownerId,"
+                              "memberCount,"
+                              "categoryId,"
+                              "discussionName,"
+                              "discussionId"
+                          ") VALUES ("
+                              ":extra6,"
+                              ":extra5,"
+                              ":extra4,"
+                              ":extra3,"
+                              ":extra2,"
+                              ":extra1,"
+                              ":state,"
+                              ":createTime,"
+                              ":settings,"
+                              ":members,"
+                              ":ownerId,"
+                              ":memberCount,"
+                              ":categoryId,"
+                              ":discussionName,"
+                              ":discussionId);";
 }
 
 bool DiscussionDBManager::addDiscussioin(const DiscussionEntity *discussion)
@@ -36,41 +69,7 @@ bool DiscussionDBManager::addDiscussioin(const DiscussionEntity *discussion)
     QSqlDatabase db = scoped.db();
     QSqlQuery sqlQuery(db);
 
-    QString sql = "INSERT OR REPLACE INTO UCS_IM_DISCUSSION ("
-                                    "extra6,"
-                                    "extra5,"
-                                    "extra4,"
-                                    "extra3,"
-                                    "extra2,"
-                                    "extra1,"
-                                    "state,"
-                                    "createTime,"
-                                    "settings,"
-                                    "members,"
-                                    "ownerId,"
-                                    "memberCount,"
-                                    "categoryId,"
-                                    "discussionName,"
-                                    "discussionId"
-                                ") VALUES ("
-                                    ":extra6,"
-                                    ":extra5,"
-                                    ":extra4,"
-                                    ":extra3,"
-                                    ":extra2,"
-                                    ":extra1,"
-                                    ":state,"
-                                    ":createTime,"
-                                    ":settings,"
-                                    ":members,"
-                                    ":ownerId,"
-                                    ":memberCount,"
-                                    ":categoryId,"
-                                    ":discussionName,"
-                                    ":discussionId"
-                                ");";
-
-    sqlQuery.prepare(sql);
+    sqlQuery.prepare(m_insertSql);
     sqlQuery.bindValue(":discussionId", discussion->discussionId);
     sqlQuery.bindValue(":discussionName", discussion->discussionName);
     sqlQuery.bindValue(":categoryId", discussion->categoryId);
@@ -101,6 +100,11 @@ bool DiscussionDBManager::addDiscussioin(const DiscussionEntity *discussion)
 
 bool DiscussionDBManager::addDiscussioin(const QList<DiscussionEntity> discussionList)
 {
+    if (discussionList.isEmpty())
+    {
+        return false;
+    }
+
     if (!UCSDBHelper::checkAndCreateTable(m_createSql, "UCS_IM_DISCUSSION"))
     {
         return false;
@@ -108,15 +112,39 @@ bool DiscussionDBManager::addDiscussioin(const QList<DiscussionEntity> discussio
 
     if (UCSDBHelper::transactionSupported())
     {
+        bool result = true;
         UCSDBScoped scoped;
         QSqlDatabase db = scoped.db();
+        QSqlQuery sqlQuery(db);
+
         db.transaction();
-        bool result = false;
-        for (qint32 i = 0; i < discussionList.size(); ++i)
+        sqlQuery.prepare(m_insertSql);
+
+        foreach (DiscussionEntity discussion, discussionList)
         {
-            result = addDiscussioin((DiscussionEntity*)&discussionList.at(i));
-            if (!result)
+            sqlQuery.bindValue(":discussionId", discussion.discussionId);
+            sqlQuery.bindValue(":discussionName", discussion.discussionName);
+            sqlQuery.bindValue(":categoryId", discussion.categoryId);
+            sqlQuery.bindValue(":memberCount", discussion.memberCount);
+            sqlQuery.bindValue(":ownerId", discussion.ownerId);
+            sqlQuery.bindValue(":members", discussion.members);
+            sqlQuery.bindValue(":settings", discussion.sSettings);
+            sqlQuery.bindValue(":createTime", discussion.createTime);
+            sqlQuery.bindValue(":state", discussion.state);
+            sqlQuery.bindValue(":extra1", discussion.extra1);
+            sqlQuery.bindValue(":extra2", discussion.extra2);
+            sqlQuery.bindValue(":extra3", discussion.extra3);
+            sqlQuery.bindValue(":extra4", discussion.extra4);
+            sqlQuery.bindValue(":extra5", discussion.extra5);
+            sqlQuery.bindValue(":extra6", discussion.extra6);
+
+            if (!sqlQuery.exec())
             {
+                UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMDataBase,
+                        QString("failed insert discussion info with error(%1)")
+                                .arg(sqlQuery.lastError().text()));
+
+                result = false;
                 break;
             }
         }
@@ -201,7 +229,7 @@ bool DiscussionDBManager::getDiscussion(const QString discussionId, DiscussionEn
         discussion.discussionName = sqlQuery.value("discussionName").toString();
         discussion.categoryId = sqlQuery.value("categoryId").toString();
         discussion.ownerId = sqlQuery.value("ownerId").toString();
-        discussion.memberCount = sqlQuery.value("memberCount").toString();
+        discussion.memberCount = sqlQuery.value("memberCount").toInt();
         discussion.members = sqlQuery.value("members").toString();
         discussion.sSettings = sqlQuery.value("settings").toString();
         discussion.createTime = sqlQuery.value("createTime").toString();
@@ -241,7 +269,7 @@ QList<DiscussionEntity> DiscussionDBManager::getAllDiscussions()
             discussion.discussionName = sqlQuery.value("discussionName").toString();
             discussion.categoryId = sqlQuery.value("categoryId").toString();
             discussion.ownerId = sqlQuery.value("ownerId").toString();
-            discussion.memberCount = sqlQuery.value("memberCount").toString();
+            discussion.memberCount = sqlQuery.value("memberCount").toInt();
             discussion.members = sqlQuery.value("members").toString();
             discussion.sSettings = sqlQuery.value("settings").toString();
             discussion.createTime = sqlQuery.value("createTime").toString();
