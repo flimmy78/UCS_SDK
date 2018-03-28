@@ -88,7 +88,7 @@ void IMChatWidget::initLayout()
     m_pBtnAudio = new MyPushButton(this);
     m_pBtnVideo = new MyPushButton(this);
     m_pBtnSend = new MyPushButton(this);
-    m_pTxtSending = new MyChatTextEdit(this);
+    m_pTxtSending = new ChatTextEdit(this);
 
     m_pBtnEmoji->setObjectName("btnChatEmoji");
     m_pBtnImage->setObjectName("btnChatImage");
@@ -140,7 +140,7 @@ void IMChatWidget::initConnections()
     connect(m_pBtnDirect, SIGNAL(clicked(bool)), this, SLOT(onStartDirectCall()));
     connect(m_pBtnAudio, SIGNAL(clicked(bool)), this, SLOT(onStartAudioCall()));
     connect(m_pBtnVideo, SIGNAL(clicked(bool)), this, SLOT(onStartVideoCall()));
-    connect(m_pTxtSending, SIGNAL(sig_msgSending()), this, SLOT(onSendingMsg()));
+    connect(m_pTxtSending, SIGNAL(sigSendMessage()), this, SLOT(onSendingMsg()));
     connect(m_pBtnSend, SIGNAL(clicked()), this, SLOT(onSendingMsg()));
 }
 

@@ -22,25 +22,27 @@ typedef struct ContactItem
 {
     ContactItem() {
         contactId = 0;
-        sectionName = "";
-        sectionId = "";
-        parentId = "";
+        sectionName.clear();
+        sectionId.clear();
+        parentId.clear();
         grade = 0;
         sortNum = 0;
         userNum = 0;
-        userId = "";
-        userName = "";
+        userId.clear();
+        userName.clear();
+        userPinyin.clear();
         userSex = 0;
-        headUrl = "";
-        headPath = ":/images/midright/u3901.png";
+        headUrl.clear();
+        headPath.clear();
     }
 
     QString toString() {
-        return QString("%1,%2,%3,%4")
+        return QString("%1,%2,%3,%4,%5")
                 .arg(sectionName)
                 .arg(parentName)
                 .arg(userId)
-                .arg(userName);
+                .arg(userName)
+                .arg(userPinyin.toLower());
     }
 
     int     contactId;      ///< 唯一标识 >
@@ -53,6 +55,7 @@ typedef struct ContactItem
     int     userNum;        ///< 本部门人员数 >
     QString userId;         ///< 人员Id >
     QString userName;       ///< 人员名称 >
+    QString userPinyin;     ///< 人员名拼音 >
     int     userSex;        ///< 人员性别 >
     QString headUrl;        ///< 头像地址 >
     QString headPath;       ///< 头像本地路径 >

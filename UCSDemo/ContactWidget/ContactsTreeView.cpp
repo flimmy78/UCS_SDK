@@ -11,6 +11,7 @@
 #include "UCSLogger.h"
 #include "HttpDownloadPicture.h"
 #include "DBCenter.h"
+#include "ChineseLetterHelper.h"
 
 ContactsTreeView::ContactsTreeView(QWidget *parent)
     : QTreeView(parent)
@@ -36,7 +37,8 @@ ContactsTreeView::ContactsTreeView(QWidget *parent)
     init();
     initConnection();
     initMenu();
-//    loadStyleSheet();
+
+    loadContactList();
 }
 
 ContactsTreeView::~ContactsTreeView()
@@ -97,6 +99,19 @@ ContactItem ContactsTreeView::downloadHeader(const ContactItem &contact)
 {
     if (contact.headUrl.isEmpty())
     {
+        if (!contact.userId.isEmpty())
+        {
+            QString FirstLetter = ChineseLetterHelper::GetFirstLetter(contact.userName);
+            QString pinyin = ChineseLetterHelper::GetPinyins(contact.userName);
+
+            QString headerPath = QString(":/Resources/Headers/header_%1.png").arg(FirstLetter);
+
+            ContactItem newContact = contact;
+            newContact.headPath = headerPath;
+            newContact.userPinyin = pinyin.replace("'", " ").trimmed();
+
+            return newContact;
+        }
         return contact;
     }
 
@@ -156,8 +171,6 @@ void ContactsTreeView::init()
 
     ContractTreeItemDelegate *delegate = new ContractTreeItemDelegate(this);
     this->setItemDelegate(delegate);
-
-    loadContactList();
 }
 
 void ContactsTreeView::initConnection()
@@ -168,6 +181,8 @@ void ContactsTreeView::initConnection()
             this, SLOT(onUpdateContactsReply(QByteArray,int)));
 
     connect(m_pContactWatcher, SIGNAL(finished()), this, SLOT(onParseContactFinish()));
+    connect(m_pContactSaveWatcher, SIGNAL(finished()), this, SLOT(onContactSaveFinish()));
+
     connect(m_pDownloadWatcher, SIGNAL(resultReadyAt(int)), this, SLOT(onHeaderReady(int)));
     connect(m_pDownloadWatcher, SIGNAL(finished()), this, SLOT(onDownLoadHeaderFinish()));
 }
@@ -424,6 +439,8 @@ void ContactsTreeView::loadContactList()
     }
 
     m_pContactModel->refreshModel();
+
+    startDownloadHeader();
 }
 
 void ContactsTreeView::onItemClicked(QModelIndex index)
@@ -618,14 +635,14 @@ void ContactsTreeView::onParseContactFinish()
 //    m_pContactModel->setOrganizationList(&m_contactList);
     m_pContactModel->refreshModel();
 
-    ///< 头像更新 >
-    startDownloadHeader();
+    ///< 保存到数据库 >
+    m_pContactSaveWatcher->setFuture(QtConcurrent::run(ContactsTreeView::saveContactToDB, m_contactList));
 }
 
 void ContactsTreeView::onHeaderReady(int index)
 {
     ContactItem contact = m_pDownloadWatcher->resultAt(index);
-    if ( contact.headUrl.isEmpty())
+    if ( contact.headUrl.isEmpty() && contact.headPath.isEmpty())
     {
         return;
     }
@@ -634,6 +651,7 @@ void ContactsTreeView::onHeaderReady(int index)
     MapValues values;
     conditions.insert("contactId", QString::number(contact.contactId));
     values.insert("headPath", contact.headPath);
+    values.insert("userPinyin", contact.userPinyin);
     DBCenter::contactMgr()->updateContact(conditions, values);
 
     m_contactList.replace(index, m_pDownloadWatcher->resultAt(index));
@@ -642,9 +660,12 @@ void ContactsTreeView::onHeaderReady(int index)
 void ContactsTreeView::onDownLoadHeaderFinish()
 {
     m_pContactModel->refreshModel();
+}
 
-    ///< 保存到数据库 >
-    m_pContactSaveWatcher->setFuture(QtConcurrent::run(ContactsTreeView::saveContactToDB, m_contactList));
+void ContactsTreeView::onContactSaveFinish()
+{
+    ///< 头像更新 >
+    startDownloadHeader();
 }
 
 ContactList ContactsTreeView::contactList() const

@@ -3,10 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QStackedLayout>
 #include "common/qtheaders.h"
-#include "absFiles/myPushButton.h"
-#include "KeypadWidget.h"
 #include "BaseWidget.h"
 
 
@@ -16,10 +13,6 @@ class DialWidget : public BaseWidget
 
 public:
     explicit DialWidget(QWidget *parent = 0);
-
-protected:
-    bool eventFilter(QObject *watched, QEvent *event) override;
-
 
 private:
     void initLayout();
@@ -31,8 +24,18 @@ signals:
 public slots:
     void onKeypadClicked(QString text);
 
+private slots:
+    void onBtnDigitClicked(bool);
+    void onBtnDelNumber(bool);
+    void onBtnDialOut(bool);
+
 private:
-    KeyPadWidget *m_pKeypadWid;
+    QLineEdit *m_pEdtNumber;
+
+    enum { NumDigitButtons = 12 };
+    QPushButton *m_pBtnDigits[NumDigitButtons];
+
+    QPushButton *m_pBtnDial;
 };
 
 #endif // PHONECALLSTACKWIDGET_H

@@ -5,8 +5,9 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QLabel>
-#include "absFiles/myPushButton.h"
-#include "absFiles/myLabel.h"
+#include <QToolButton>
+#include "myPushButton.h"
+#include "myLabel.h"
 #include "BaseWidget.h"
 
 class TopWidget : public BaseWidget
@@ -16,24 +17,42 @@ public:
     explicit TopWidget(QWidget *parent = 0);
 
     void setTitle(QString title);
+    void updateTopBar();
 
 private:
     void initLayout();
     void initConnection();
-    void updateMaximize();
 
 protected:
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+
 
 signals:
 
 public slots:
-    void slot_onClick();
+
+
+private slots:
+    void onBtnMinClicked();
+    void onBtnRestoreClicked();
+    void onBtnMaxClicked();
+    void onBtnCloseClicked();
+    void onBtnGroupClicked();
+    void onBtnConfClicked();
+    void onBtnHeaderClicked();
+    void onBtnDropDownClicked();
+    void onActionModPhone();
+    void onActionModPwd();
 
 private:
-    MyPushButton m_btnClose;
-    MyPushButton m_btnMin;
-    MyPushButton m_btnMax;
+    MyPushButton *m_pBtnClose;
+    MyPushButton *m_pBtnMin;
+    MyPushButton *m_pBtnMax;
+    MyPushButton *m_pBtnRestore;
+    MyPushButton *m_pBtnGroup;
+    MyPushButton *m_pBtnConf;
+    QPushButton *m_pBtnHeader;
+    MyPushButton *m_pBtnDropDown;
+
     MyLabel m_lblTitle;
 };
 

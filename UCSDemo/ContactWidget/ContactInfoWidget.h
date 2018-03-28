@@ -2,10 +2,11 @@
 #define ADDRESSDETAILSTACKWIDGET_H
 
 #include "common/qtheaders.h"
-#include "absFiles/myLabel.h"
+#include "myLabel.h"
 #include "BaseWidget.h"
 #include "ContactDefine.h"
 #include "MaskLabel.h"
+#include "ContactCard.h"
 
 class ContactInfoWidget : public BaseWidget
 {
@@ -14,6 +15,8 @@ public:
     explicit ContactInfoWidget(QWidget *parent = 0);
 
     void updateData();
+
+    ContactCard *contactCard() const;
 
 protected:
 
@@ -50,6 +53,8 @@ private:
     QToolButton *m_pBtnFreeVideo;
     QToolButton *m_pBtnConfCall;
     QToolButton *m_pBtnIM;
+
+    ContactCard *m_pContactCard;
 
     ContactItem m_contact;
 };

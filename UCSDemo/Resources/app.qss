@@ -15,18 +15,13 @@ QToolTip {
 }
 
 QMenu {
-/*    border: 1px solid rgb(111, 156, 207);*/
     border:none;
-    background: rgb(232, 241, 250);
-    width:150px;
-    margin: 2px 2px 2px 2px
+    background: white;
+    width: 150px;
 }
 
 QMenu::item {
-    height: 22px;
-/*    padding: 0px 30px 0px 20px;*/
-   /* padding-left: 20px;
-    padding-right: 20px;*/
+    height: 40px;
 }
 
 QMenu::item:enabled {
@@ -39,7 +34,7 @@ QMenu::item:!enabled {
 
 QMenu::item:enabled:selected {
     color: rgb(2, 65, 132);
-    background: rgba(255, 255, 255, 200);
+    background: rgb(241, 242, 243);
 }
 
 QMenu::separtor {
@@ -123,7 +118,7 @@ QScrollBar::add-page:horizontal,QScrollBar::sub-page:horizontal {
 
 QScrollBar:vertical {
     background: transparent;
-    width: 10px;
+    width: 8px;
     margin-left: 1px;
     margin-right: 1px;
 }
@@ -131,10 +126,10 @@ QScrollBar:vertical {
 QScrollBar::handle:vertical {
     width: 20px;
     min-height: 30px;
-    background: rgb(217, 217, 217);
+    background: rgb(215, 216, 217);
     margin-top: 1px;
     margin-bottom: 1px;
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
 QScrollBar::handle:vertical:hover {
@@ -191,21 +186,177 @@ QTreeView::item:selected, QTreeView::branch:selected {
 }
 
 QTreeView::branch:open:has-children {
-	image: url(:/Resources/TreeView/arrowBottom.png);
+	image: url(:/Resources/TreeView/arrow_unpack.png);
 }
 
 QTreeView::branch:closed:has-children {
-	image: url(:/Resources/TreeView/arrowRight.png);
+	image: url(:/Resources/TreeView/arrow_pack.png);
 }
 /* common style end */
 
 /*************************** custom widget below **********************/
-/* left navigator bar begin */
-QWidget#NavigatorBar {
-    background: rgb(32, 155, 152);
-    width: 94;
+/*********************** top bar begin **************************/
+QWidget#TopWidget {
+    background: white;
+    height: 48px;
 }
-/* left navigator bar end */
+
+QLabel#titleContent {
+	color: rgb(51, 51, 51);
+    font-size: 11pt;
+}
+
+QPushButton#btnMin {
+    width: 20px;
+    height: 20px;
+    border-image: url(:/Resources/TopBar/min_normal.png);
+}
+
+QPushButton#btnMin:hover {
+    border-image: url(:/Resources/TopBar/min_hover.png);
+}
+
+QPushButton#btnMin:pressed {
+    border-image: url(:/Resources/TopBar/min_normal.png);
+}
+
+QPushButton#btnRestore {
+    width: 20px;
+    height: 20px;
+    border-image: url(:/Resources/TopBar/restore_normal.png);
+}
+
+QPushButton#btnRestore:hover {
+    border-image: url(:/Resources/TopBar/restore_hover.png);
+}
+
+QPushButton#btnRestore:pressed {
+    border-image: url(:/Resources/TopBar/restore_normal.png);
+}
+
+QPushButton#btnMax {
+    width: 20px;
+    height: 20px;
+    border-image: url(:/Resources/TopBar/max_normal.png);
+}
+
+QPushButton#btnMax:hover {
+    border-image: url(:/Resources/TopBar/max_hover.png);
+}
+
+QPushButton#btnMax:pressed {
+    border-image: url(:/Resources/TopBar/max_normal.png);
+}
+
+QPushButton#btnClose {
+    width: 20px;
+    height: 20px;
+    border-image: url(:/Resources/TopBar/close_normal.png);
+/*	border-top-right-radius: 3;*/
+}
+
+QPushButton#btnClose:hover {
+    border-image: url(:/Resources/TopBar/close_hover.png);
+/*	border-top-right-radius: 3;*/
+}
+
+QPushButton#btnClose:pressed {
+    border-image: url(:/Resources/TopBar/close_normal.png);
+/*	border-top-right-radius: 3;*/
+}
+
+QPushButton#topBtnGroup {
+    width: 20px;
+    height: 20px;
+    border-image: url(:/Resources/TopBar/topbar_group.png);
+}
+
+QPushButton#topBtnGroup:hover {
+    border-image: url(:/Resources/TopBar/topbar_group_hover.png);
+}
+
+QPushButton#topBtnGroup:pressed
+{
+    border-image: url(:/Resources/TopBar/topbar_group_hover.png);
+}
+
+QPushButton#topBtnConf {
+    width: 20px;
+    height: 20px;
+    border-image: url(:/Resources/TopBar/topbar_conf.png);
+}
+
+QPushButton#topBtnConf:hover {
+    border-image: url(:/Resources/TopBar/topbar_conf_hover.png);
+}
+
+QPushButton#topBtnConf:pressed {
+    border-image: url(:/Resources/TopBar/topbar_conf_hover.png);
+}
+
+QPushButton#topBtnHeader {
+    width: 34px;
+    height: 34px;
+    border: none;
+}
+
+QPushButton#topBtnDrop {
+    width: 16px;
+    height: 16px;
+    border-image: url(:/Resources/TopBar/topbar_arrow.png);
+}
+
+QPushButton#topBtnDrop:hover {
+    border-image: url(:/Resources/TopBar/topbar_arrow_hover.png);
+}
+
+QMenu#topbarMenu {
+    width: 116px;
+    height: 80px;
+    font-size: 10pt;
+    border-radius: 2px;
+    border: 1px solid lightgray;
+}
+
+QMenu#topbarMenu::item {
+    height: 40px;
+    padding-left: 20px;
+    padding-right: 25px;
+}
+/************** top bar end *****************/
+
+/* **********************left navigator bar begin *********************/
+QWidget#NavigatorBar {
+    background: rgb(0, 160, 255);
+    max-width: 60px;
+    min-width: 60px;
+}
+
+QPushButton#btnAppSetting {
+    background: url(:/Resources/app_setting.png) center no-repeat;
+    border: none;
+}
+
+QPushButton#btnAppSetting:hover {
+    background-color: rgb(45, 177, 255);
+}
+
+QMenu#leftSettingMenu {
+    width: 115px;
+    height: 121px;
+    border: 1px solid lightgray;
+    border-radius: 2px;
+    margin: 0px;
+    background-color: white;
+    font-size: 10pt;
+}
+
+QMenu#leftSettingMenu::item {
+    height: 40px;
+    padding-left: 30px;
+    padding-right: 25px;
+}
+/****************************** left navigator bar end *******************/
 
 /*  */
 QWidget#CallWidget, QWidget#ContactWidget, QWidget#IMWidget {
@@ -234,10 +385,11 @@ QLineEdit#SearchLineEdit {
     background:rgb(221, 231, 231);
 }
 
-/* key pad begin */
-QLineEdit#dialNumber {
-    font-size: 12pt;
-    font-weight: bold;
+/******************* call begin ********************/
+QLineEdit#callEditNumber {
+    width: 300px;
+    font-size: 18pt;
+    color: rgb(51, 51, 51);
     border: 1px solid lightgray;
     border-left-style: none;
     border-right-style: none;
@@ -247,45 +399,70 @@ QLineEdit#dialNumber {
     padding-bottom: 8px;
 }
 
-QToolButton#digitBtn {
-    font-size: 14pt;
-    font-weight: bold;
-    border: 1px solid lightgray;
+QPushButton#callBtnDelNum {
+    width: 40px;
+    height: 40px;
+    border-image: url(:/Resources/Call/call_del_num.png);
+}
+
+QPushButton#callBtnDelNum:hover {
+    border-image: url(:/Resources/Call/call_del_num_hover.png);
+}
+
+QPushButton#callBtnDigits {
+    font-size: 18pt;
+    border: none;
+    border-radius: 30px;
     width: 60px;
     height: 60px;
+    background-color: white;
+    color: rgb(51, 51, 51);
+}
+
+QPushButton#callBtnDigits:hover {
+    background-color: rgb(241, 242, 243);
+}
+
+QPushButton#digitBtn:pressed {
+    background-color: rgb(241, 242, 243);
+}
+
+QPushButton#callBtnDialOut {
+    width: 60px;
+    height: 60px;
+    border-image: url(:/Resources/Call/call_dial.png);
+}
+
+QPushButton#callBtnDialOut:hover  {
+    border-image: url(:/Resources/Call/call_dial_hover.png);
 }
 
 QLabel#lblDialPanel {
-    font-size: 11pt;
-    color: rgb(32, 155, 152);
+    font-size: 18pt;
+    color: rgb(51, 51, 51);
 }
-/* key pad end*/ 
-
-QWidget#TopWidget {
-    background: white;
-    height: 48px;
-}
+/*********************** call end *****************/ 
 
 QWidget#EmptyWidget {
     background-color: white;
-/*    background: url(:/Resources/emptyBG.jpg) center no-repeat;*/
 }
 
 QLabel#emptyBG {
     width: 100px;
     height: 100px;
-    background: url(:/Resources/emptyBG.jpg) center no-repeat;
+    background: url(:/Resources/emptyBG.png) center no-repeat;
 }
 
 /* login css begin */
 QDialog#UPlusLogin {
     background: white;
     border: 1px solid lightgray;
+    border-radius: 2px;
 }
 
 QLineEdit#loginUserName, QLineEdit#loginPassword {
-    width: 200px;
-    height: 30px;
+    width: 240px;
+    height: 40px;
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 5px;
@@ -297,23 +474,23 @@ QLineEdit#loginUserName, QLineEdit#loginPassword {
 }
 
 QLineEdit#loginUserName:hover, QLineEdit#loginPassword:hover {
-    border: 1px solid rgb(33, 157, 201);
+    border: 1px solid rgb(0, 160, 255);
     border-left-style: none;
     border-right-style: none;
     border-top-style: none; 
 }
 
 QPushButton#btnLogin {
-	background-color: rgb(33, 157, 201);
-	border-radius:15px;
+	background-color: rgb(0, 160, 255);
+	border-radius: 2px;
     height: 40px;
-    width: 100px;
+    width: 240px;
     font-size: 11pt;
     color: white;
 }
 
 QPushButton#btnLogin:hover {
-	background-color: rgb(33, 157, 201);
+	background-color: rgb(45, 177, 255);
 }
 
 QPushButton#btnLogin:pressed {
@@ -324,12 +501,19 @@ QPushButton#btnLogin:pressed {
 QLabel#lblLoginTip {
     height: 30px;
 }
+
+QLabel#lblLoginLogo {
+    width: 94px;
+    height: 94px;
+    border-image: url(:/Resources/LoginWindow/login_icon.png);
+}
 /* login css end */
 
 /* tray menu begin */
 QMenu#TrayIconMenu {
-    width: 200px;
+    width: 115px;
     margin: 2px;
+    font-size: 10pt;
 }
 
 QMenu#TrayIconMenu::item {
@@ -359,6 +543,98 @@ QToolButton#btnDirectAudio, QToolButton#btnFreeAudio, QToolButton#btnFreeVideo, 
     height: 80px;
     border-image: url(:/images/midright/u3921.png);
     border: none;
+}
+
+QWidget#ContactCard {
+    max-width: 418px;
+    max-height: 242px;
+    background-color: white;
+    border: 1px solid lightgray;
+/*    border-radius: 6px;*/
+/*    padding: 1px;*/
+}
+
+QLabel#lblCardImage {
+    /*max-width: 152px;
+    max-height: 242px;*/
+    min-width: 152px;
+    min-height: 242px;
+/*    border: 1px solid rgb(241, 242, 243);*/
+/*    border-radius: 6px;*/
+/*    border-right-style: none;*/
+/*    border-top-style: none; */
+}
+
+QLabel#lblCardName {
+    max-width: 80px;
+    font-weight: bold;
+    font-size: 12pt;
+    color: rgb(51, 51, 51);
+}
+
+QLabel#lblCardPhone {
+    font-size: 10pt;
+    color: rgb(102, 102, 102);
+}
+
+QLabel#lblCardSection {
+    font-size: 9pt;
+    color: rgb(153, 153, 153);
+}
+
+QPushButton#btnCardDirect {
+    min-width: 30px;
+    min-height: 30px;
+    border:none;
+    border-image: url(:/Resources/Contact/card_direct.png);
+}
+
+QPushButton#btnCardDirect:hover {
+    border-image: url(:/Resources/Contact/card_direct_hover.png);
+}
+
+QPushButton#btnCardAudio {
+    min-width: 30px;
+    min-height: 30px;
+    border:none;
+    border-image: url(:/Resources/Contact/card_audio.png);
+}
+
+QPushButton#btnCardAudio:hover {
+    border-image: url(:/Resources/Contact/card_audio_hover.png);
+}
+
+QPushButton#btnCardVideo {
+    min-width: 30px;
+    min-height: 30px;
+    border:none;
+    border-image: url(:/Resources/Contact/card_video.png);
+}
+
+QPushButton#btnCardVideo:hover {
+    border-image: url(:/Resources/Contact/card_video_hover.png);
+}
+
+QPushButton#btnCardConf {
+    min-width: 30px;
+    min-height: 30px;
+    border:none;
+    border-image: url(:/Resources/Contact/card_conf.png);
+}
+
+QPushButton#btnCardConf:hover {
+    border-image: url(:/Resources/Contact/card_conf_hover.png);
+}
+
+QPushButton#btnCardIM {
+    min-width: 30px;
+    min-height: 30px;
+    border:none;
+    border-image: url(:/Resources/Contact/card_im.png);
+}
+
+QPushButton#btnCardIM:hover {
+    border-image: url(:/Resources/Contact/card_im_hover.png);
 }
 /* contact info end */
 

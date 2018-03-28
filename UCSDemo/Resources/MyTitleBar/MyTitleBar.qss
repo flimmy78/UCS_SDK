@@ -10,69 +10,69 @@ QToolTip {
 
 QLabel#TitleContent
 {
-	color:white;
-    font-size: 16pt;
+	color: rgb(51, 51, 51);
+    font-size: 11pt;
 }
 
 QPushButton#BtnMin
 {
-        border-image: url(:/Resources/MyTitleBar/min.png) 0 60 0 0;
+    border-image: url(:/Resources/MyTitleBar/min_normal.png);
 }
 
 QPushButton#BtnMin:hover
 {
-        border-image: url(:/Resources/MyTitleBar/min.png) 0 30 0 30;
+    border-image: url(:/Resources/MyTitleBar/min_hover.png);
 }
 
 QPushButton#BtnMin:pressed
 {
-        border-image: url(:/Resources/MyTitleBar/min.png) 0 0 0 60;
+    border-image: url(:/Resources/MyTitleBar/min_normal.png);
 }
 
 QPushButton#BtnRestore
 {
-        border-image: url(:/Resources/MyTitleBar/restore.png) 0 81 0 0;
+    border-image: url(:/Resources/MyTitleBar/restore_normal.png);
 }
 
 QPushButton#BtnRestore:hover
 {
-        border-image: url(:/Resources/MyTitleBar/restore.png) 0 54 0 27;
+    border-image: url(:/Resources/MyTitleBar/restore_hover.png);
 }
 
 QPushButton#BtnRestore:pressed
 {
-        border-image: url(:/Resources/MyTitleBar/restore.png) 0 27 0 54;
+    border-image: url(:/Resources/MyTitleBar/restore_normal.png);
 }
 
 QPushButton#BtnMax
 {
-        border-image: url(:/Resources/MyTitleBar/max.png) 0 81 0 0;
+    border-image: url(:/Resources/MyTitleBar/max_normal.png);
 }
 
 QPushButton#BtnMax:hover
 {
-        border-image: url(:/Resources/MyTitleBar/max.png) 0 54 0 27;
+    border-image: url(:/Resources/MyTitleBar/max_hover.png);
 }
 
 QPushButton#BtnMax:pressed
 {
-        border-image: url(:/Resources/MyTitleBar/max.png) 0 27 0 54;
+    border-image: url(:/Resources/MyTitleBar/max_normal.png);
 }
 
 QPushButton#BtnClose
 {
-        border-image: url(:/Resources/MyTitleBar/close.png) 0 60 0 0;
+    border-image: url(:/Resources/MyTitleBar/close_normal.png);
 	border-top-right-radius: 3;
 }
 
 QPushButton#BtnClose:hover
 {
-        border-image: url(:/Resources/MyTitleBar/close.png) 0 30 0 30;
+    border-image: url(:/Resources/MyTitleBar/close_hover.png);
 	border-top-right-radius: 3;
 }
 
 QPushButton#BtnClose:pressed
 {
-        border-image: url(:/Resources/MyTitleBar/close.png) 0 0 0 60;
+    border-image: url(:/Resources/MyTitleBar/close_normal.png);
 	border-top-right-radius: 3;
 }

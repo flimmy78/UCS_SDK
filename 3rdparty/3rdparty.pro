@@ -1,2 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS += zlib
+SUBDIRS += zlib \
+    pinyin

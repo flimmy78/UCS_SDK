@@ -6,6 +6,8 @@
 #include <QStandardPaths>
 #include <QSettings>
 #include <QDir>
+#include <QPainter>
+#include <QBitmap>
 
 CommonHelper::CommonHelper()
 {
@@ -470,5 +472,31 @@ QImage CommonHelper::compressImage(const QImage &sourceImage,
         tmpDir.remove(tmpImgPath);
     }
     return targetImg;
+}
+
+QPixmap CommonHelper::PixmapToRound(QPixmap &src, QSize size)
+{
+    if (src.isNull())
+    {
+        return QPixmap();
+    }
+
+    QImage resultImage(size, QImage::Format_ARGB32_Premultiplied);
+    QPixmap head_mask(":/Resources/Headers/mask.png");
+
+    QPainter painter(&resultImage);
+
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.fillRect(resultImage.rect(), Qt::transparent);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawPixmap(0, 0, head_mask.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOut);
+    painter.drawPixmap(0, 0, src.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    painter.end();
+
+    src = QPixmap::fromImage(resultImage);
+
+    return src;
 }
 

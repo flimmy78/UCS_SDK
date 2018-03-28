@@ -13,7 +13,11 @@ public:
     TrayIconMenu(QWidget *parent = 0);
 
 signals:
-    void sig_close();
+    void sigSetting();
+    void sigFeedBack();
+    void sigAbout();
+    void sigHelp();
+    void sigClose();
 };
 
 #endif // TRAYICONMENU_H

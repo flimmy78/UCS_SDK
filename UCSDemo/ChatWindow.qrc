@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>Resources/Chat/messageBox.html</file>
         <file>Resources/Chat/qwebchannel.js</file>
+        <file>Resources/Chat/chat_group.png</file>
     </qresource>
 </RCC>

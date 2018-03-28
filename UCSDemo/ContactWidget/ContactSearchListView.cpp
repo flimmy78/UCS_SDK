@@ -60,7 +60,7 @@ void ContactSearchListView::initData()
     ContactItem contact;
     contact.userName = QStringLiteral("搜索通讯录");
     contact.parentName = QStringLiteral("查找本地通讯录");
-    contact.headPath = ":/Resources/emptyBG.jpg";
+    contact.headPath = ":/Resources/app_icon.png";
 
     m_contactList.clear();
     m_contactList.append(contact);

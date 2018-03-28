@@ -10,7 +10,7 @@
 //#include <QDialog>
 #include "BaseDialog.h"
 #include "UCSRestApi.h"
-#include "absFiles/MyTitleBar.h"
+#include "MyTitleBar.h"
 
 class UCSLogin : public BaseDialog
 {

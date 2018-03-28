@@ -14,6 +14,7 @@
 #include "searchLineEdit.h"
 #include "ContactSearchListView.h"
 
+
 class ContactWidget : public BaseWidget
 {
     Q_OBJECT

@@ -802,6 +802,21 @@ void UCSIMManager::handleSendMessageResponse(QByteArray recvData)
 
     UCSPackage::UnpackSendMsgResponse(recvData, &response);
 
+    if (response.tBaseResponse.iRet != 0)
+    {
+        UCS_LOG(UCSLogger::kTraceError, UCSLogger::kIMManager,
+                QString("handleSendMessageResponse error(%1).")
+                        .arg(response.tBaseResponse.iRet));
+        return;
+    }
+
+    if (response.pList.isEmpty())
+    {
+        UCS_LOG(UCSLogger::kTraceWarning, UCSLogger::kIMManager,
+                QString("handleSendMessageResponse response list empty."));
+        return;
+    }
+
     UCSMicroMsgResponse_t msgResp = response.pList.at(0);
 
     if (!msgResp.pcClientMsgId.isEmpty())
@@ -1112,6 +1127,8 @@ void UCSIMManager::handleUploadImgResponse(QByteArray recvData)
             QByteArray packData = UCSPackage::PackUploadMsgImgRequest(&request);
 
             sendData(REQ_UPLOAD_MSGIMG, packData);
+
+            return;
         }
     }
 

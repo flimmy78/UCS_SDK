@@ -5,23 +5,24 @@ TrayIconMenu::TrayIconMenu(QWidget *parent)
 {
     setObjectName("TrayIconMenu");
 
-    QAction* act_level4 = new QAction(QIcon(":/images/yzx_logo.ico"), tr("Exit"), this);
-    addAction(act_level4);
+    QAction* pActSetting = new QAction(QStringLiteral("设置"), this);
+    addAction(pActSetting);
 
-    QAction* act_level3 = new QAction(QIcon(":/images/yzx_logo.ico"), tr("Exit"), this);
-    addAction(act_level3);
+    QAction* pActFeedBack = new QAction(QStringLiteral("意见反馈"), this);
+    addAction(pActFeedBack);
 
-    addSeparator();
+    QAction* pActHelp = new QAction(QStringLiteral("帮助"), this);
+    addAction(pActHelp);
 
-    QAction* act_level2 = new QAction(QIcon(":/images/yzx_logo.ico"), QStringLiteral("选项设置"), this);
-    addAction(act_level2);
+    QAction* pActAbout = new QAction(QStringLiteral("关于U+"), this);
+    addAction(pActAbout);
 
-    QAction* act_level1 = new QAction(QIcon(":/images/yzx_logo.ico"), tr("Settings"), this);
-    addAction(act_level1);
+    QAction* pActClose = new QAction(QStringLiteral("退出"), this);
+    addAction(pActClose);
 
-    addSeparator();
-
-    QAction* act_close = new QAction(QIcon(":/images/yzx_logo.ico"), QStringLiteral("退出"), this);
-    addAction(act_close);
-    connect(act_close, SIGNAL(triggered()), this, SIGNAL(sig_close()));
+    connect(pActSetting, SIGNAL(triggered(bool)), this, SIGNAL(sigSetting()));
+    connect(pActFeedBack, SIGNAL(triggered(bool)), this, SIGNAL(sigFeedBack()));
+    connect(pActHelp, SIGNAL(triggered(bool)), this, SIGNAL(sigHelp()));
+    connect(pActAbout, SIGNAL(triggered(bool)), this, SIGNAL(sigAbout()));
+    connect(pActClose, SIGNAL(triggered()), this, SIGNAL(sigClose()));
 }

@@ -14,6 +14,7 @@ class CallWidget : public BaseWidget
     Q_OBJECT
 public:
     explicit CallWidget(QWidget *parent = 0);
+    void updateLogin();
 
 signals:
 

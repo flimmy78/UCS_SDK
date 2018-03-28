@@ -59,6 +59,7 @@ typedef struct ContactEntity
         userNum = 0;
         userId.clear();
         userName.clear();
+        userName.clear();
         userSex = 0;
         headUrl.clear();
         headPath.clear();
@@ -74,6 +75,7 @@ typedef struct ContactEntity
     int     userNum;        ///< 本部门人员数 >
     QString userId;         ///< 人员Id >
     QString userName;       ///< 人员名称 >
+    QString userPinyin;     ///< 人员名拼音 >
     int     userSex;        ///< 人员性别 >
     QString headUrl;        ///< 头像地址 >
     QString headPath;       ///< 头像本地路径 >

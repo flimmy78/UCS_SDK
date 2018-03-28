@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Resources/app.qss</file>
-        <file>Resources/emptyBG.jpg</file>
-    </qresource>
-</RCC>

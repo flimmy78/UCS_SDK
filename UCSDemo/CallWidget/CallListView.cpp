@@ -48,7 +48,7 @@ void CallListView::updateListData()
         }
         else
         {
-            item.headerPath = ":/images/u29.png";
+            item.headerPath = ":/Resources/Headers/header_conf.png";
             item.nickName = QStringLiteral("全球云通讯能力提供商");
             item.callTime = "17:50";
             item.callType = QStringLiteral("电话会议");

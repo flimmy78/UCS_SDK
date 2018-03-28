@@ -122,6 +122,8 @@ public:
     static QImage compressImage(const QImage &sourceImage,
                                  const int maxSizeInBytes,
                                  const QSize &targetSize);
+
+    static QPixmap PixmapToRound(QPixmap &src, QSize size);
 };
 
 #endif // COMMONHELPER_H

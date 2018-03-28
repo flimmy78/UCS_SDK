@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/Headers/header_A.png</file>
+        <file>Resources/Headers/header_B.png</file>
+        <file>Resources/Headers/header_C.png</file>
+        <file>Resources/Headers/header_D.png</file>
+        <file>Resources/Headers/header_E.png</file>
+        <file>Resources/Headers/header_F.png</file>
+        <file>Resources/Headers/header_G.png</file>
+        <file>Resources/Headers/header_H.png</file>
+        <file>Resources/Headers/header_I.png</file>
+        <file>Resources/Headers/header_J.png</file>
+        <file>Resources/Headers/header_K.png</file>
+        <file>Resources/Headers/header_L.png</file>
+        <file>Resources/Headers/header_M.png</file>
+        <file>Resources/Headers/header_N.png</file>
+        <file>Resources/Headers/header_O.png</file>
+        <file>Resources/Headers/header_P.png</file>
+        <file>Resources/Headers/header_Q.png</file>
+        <file>Resources/Headers/header_R.png</file>
+        <file>Resources/Headers/header_S.png</file>
+        <file>Resources/Headers/header_T.png</file>
+        <file>Resources/Headers/header_U.png</file>
+        <file>Resources/Headers/header_V.png</file>
+        <file>Resources/Headers/header_W.png</file>
+        <file>Resources/Headers/header_X.png</file>
+        <file>Resources/Headers/header_Y.png</file>
+        <file>Resources/Headers/header_Z.png</file>
+        <file>Resources/Headers/header_Pound.png</file>
+        <file>Resources/Headers/mask.png</file>
+        <file>Resources/Headers/header_conf.png</file>
+        <file>Resources/Headers/header_group.png</file>
+        <file>Resources/Headers/header_other.png</file>
+    </qresource>
+</RCC>

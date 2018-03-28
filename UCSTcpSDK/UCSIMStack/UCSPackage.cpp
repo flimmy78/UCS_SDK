@@ -722,6 +722,10 @@ void UCSPackage::UnpackSendMsgResponse(const QByteArray dataArray, UCSSendMsgRes
             pResponse->pList.append(resp);
         }
     }
+    else
+    {
+        pResponse->tBaseResponse.iRet = kBodyHeader_t_errorcode;
+    }
 }
 
 QByteArray UCSPackage::PackInitNewSyncRequest(const UCSInitNewSyncRequest_t *pRequest)
@@ -1193,19 +1197,18 @@ QByteArray UCSPackage::PackUploadMsgImgRequest(const UCSUploadMsgImgRequest_t *p
     /* base request */
     PackBaseRequest(&bodyData.tBaseRequest);
 
-    bodyData.iDataLen = pRequest->iDataLen;
+//    bodyData.iDataLen = pRequest->iDataLen;
     bodyData.iStartPos = pRequest->iStartPos;
     bodyData.iTotalLen = pRequest->iTotalLen;
     bodyData.iMsgType = UCS_DATA_IMG;
     bodyData.iCompressType = UCS_MSGIMG_WITH_COMPRESS;
-
     bodyData.pcClientMsgId = strdup(pRequest->pcClientMsgId.toLocal8Bit().data());
     bodyData.pcFromUserName = strdup(pRequest->pcFromUserName.toLocal8Bit().data());
     bodyData.pcToUserName = strdup(pRequest->pcToUserName.toLocal8Bit().data());
 
     QByteArray data = pRequest->tData.mid(pRequest->iStartPos, pRequest->iDataLen);
     bodyData.tData.pcBuff = strdup(data.data());
-    bodyData.tData.iLen = pRequest->tData.size();
+    bodyData.tData.iLen = data.size();
     QByteArray hash = QCryptographicHash::hash(bodyData.tData.pcBuff, QCryptographicHash::Md5).toHex();
     bodyData.pcMD5 = strdup(hash.data());
 
@@ -1215,7 +1218,6 @@ QByteArray UCSPackage::PackUploadMsgImgRequest(const UCSUploadMsgImgRequest_t *p
 
     pack(ProxyProtocol::REQ_UPLOAD_MSGIMG, &bodyHeader, (void*)&bodyData,
          (char*)&packBuf, packSize);
-
 
     return QByteArray(packBuf, packSize);
 }

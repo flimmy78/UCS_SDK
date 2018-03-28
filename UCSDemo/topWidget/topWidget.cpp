@@ -3,6 +3,10 @@
 #include <QRegExpValidator>
 #include <QString>
 #include <QDebug>
+#include <QMenu>
+#include "Interface/UCSLogger.h"
+#include "DBCenter.h"
+#include "CommonHelper.h"
 
 TopWidget::TopWidget(QWidget *parent)
     : BaseWidget(parent)
@@ -11,11 +15,6 @@ TopWidget::TopWidget(QWidget *parent)
     setMouseTracking(true);
 
     setObjectName("TopWidget");
-
-//    QPalette palette;
-//    palette.setColor(QPalette::Background, QColor(255, 255, 255));
-//    setPalette(palette);
-//    setAutoFillBackground(true);
 
     installEventFilter(this);
 
@@ -28,10 +27,22 @@ void TopWidget::setTitle(QString title)
     m_lblTitle.setText(title);
 }
 
+void TopWidget::updateTopBar()
+{
+    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
+    ContactEntity contact;
+    DBCenter::contactMgr()->getContact(userId, contact);
+    if (!contact.headPath.isEmpty())
+    {
+        QSize size = m_pBtnHeader->iconSize();
+        QPixmap pixmap = QPixmap(contact.headPath).scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        m_pBtnHeader->setIcon(QIcon(pixmap));
+    }
+}
+
 void TopWidget::initLayout()
 {
-    QVBoxLayout *pMainLayout = new QVBoxLayout;
-    QHBoxLayout *pCaptionLayout = new QHBoxLayout;
+    QHBoxLayout *pMainLayout = new QHBoxLayout(this);
 
     /////////////////////////////////////////////////////////
     /* Title */
@@ -41,134 +52,148 @@ void TopWidget::initLayout()
 
     ////////////////////////////////////////////////////////
     /* minimun, maximun, close */
-    m_btnClose.setObjectName("btnClose");
-    m_btnMax.setObjectName("btnMax");
-    m_btnMin.setObjectName("btnMin");
+    m_pBtnMin = new MyPushButton(this);
+    m_pBtnRestore = new MyPushButton(this);
+    m_pBtnMax = new MyPushButton(this);
+    m_pBtnClose = new MyPushButton(this);
+    m_pBtnGroup = new MyPushButton(this);
+    m_pBtnConf = new MyPushButton(this);
+    m_pBtnHeader = new QPushButton(this);
+    m_pBtnDropDown = new MyPushButton(this);
 
-    m_btnClose.setFixedSize(48, 48);
-    m_btnMax.setFixedSize(48, 48);
-    m_btnMin.setFixedSize(48, 48);
+    m_pBtnClose->setObjectName("btnClose");
+    m_pBtnMax->setObjectName("btnMax");
+    m_pBtnMin->setObjectName("btnMin");
+    m_pBtnRestore->setObjectName("btnRestore");
+    m_pBtnGroup->setObjectName("topBtnGroup");
+    m_pBtnConf->setObjectName("topBtnConf");
+    m_pBtnHeader->setObjectName("topBtnHeader");
+    m_pBtnDropDown->setObjectName("topBtnDrop");
 
-    m_btnClose.setStyleSheet("QPushButton{border-image:url(:/images/top/CloseNormal.png);}"
-                             "QPushButton::hover{border-image:url(:/images/top/CloseFocus.png);}"
-                             "QPushButton::pressed{border-image:url(:/images/top/CloseFocus.png);}");
-    m_btnMax.setStyleSheet("QPushButton{border-image:url(:/images/top/MaxNormal.png);}"
-                           "QPushButton::hover{border-image:url(:/images/top/MaxFocus.png);}"
-                           "QPushButton::pressed{border-image:url(:/images/top/MaxFocus.png);}");
-    m_btnMin.setStyleSheet("QPushButton{border-image:url(:/images/top/MinNormal.png);}"
-                           "QPushButton::hover{border-image:url(:/images/top/MinFocus.png);}"
-                           "QPushButton::pressed{border-image:url(:/images/top/MinFocus.png);}");
+    m_pBtnClose->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnMax->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnMin->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnRestore->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnGroup->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnConf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnHeader->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pBtnDropDown->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    m_btnClose.setToolTip(QStringLiteral("关闭"));
-    m_btnMax.setToolTip(QStringLiteral("最大化"));
-    m_btnMin.setToolTip(QStringLiteral("最小化"));
+    m_pBtnClose->setToolTip(QStringLiteral("关闭"));
+    m_pBtnMax->setToolTip(QStringLiteral("最大化"));
+    m_pBtnMin->setToolTip(QStringLiteral("最小化"));
+    m_pBtnRestore->setToolTip(QStringLiteral("还原"));
+    m_pBtnGroup->setToolTip(QStringLiteral("发起群聊"));
+    m_pBtnConf->setToolTip(QStringLiteral("发起会议"));
 
-    QFrame* pVLine = new QFrame();
-    pVLine->setFrameShape(QFrame::VLine);
-    pVLine->setFrameShadow(QFrame::Plain);
-    pVLine->setFixedSize(1, 48);
-    pVLine->setStyleSheet("QFrame{background-color: lightgray; border:none}");
+    m_pBtnHeader->setIconSize(QSize(34, 34));
+    m_pBtnRestore->setVisible(false);
 
-    pCaptionLayout->addWidget(&m_lblTitle);
-    pCaptionLayout->addSpacerItem(new QSpacerItem(20, this->height(), QSizePolicy::Expanding, QSizePolicy::Fixed));
-    pCaptionLayout->addWidget(pVLine);
-    pCaptionLayout->setSpacing(4);
-    pCaptionLayout->addWidget(&m_btnMin);
-    pCaptionLayout->addWidget(&m_btnMax);
-    pCaptionLayout->addWidget(&m_btnClose);
-    pCaptionLayout->setSpacing(0);
-    pCaptionLayout->setContentsMargins(16, 0, 0, 0);
-
-    QFrame* pHLine = new QFrame();
-    pHLine->setFrameShape(QFrame::HLine);
-    pHLine->setFrameShadow(QFrame::Plain);
-    pHLine->setFixedHeight(1);
-    pHLine->setMinimumWidth(this->width());
-    pHLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    pHLine->setStyleSheet("QFrame{background-color: lightgray; border:none}");
-
-    pMainLayout->addLayout(pCaptionLayout);
-    pMainLayout->addWidget(pHLine);
-    pMainLayout->setSpacing(0);
-    pMainLayout->setContentsMargins(0, 0, 0, 0);
-
-    setLayout(pMainLayout);
+    pMainLayout->addStretch();
+    pMainLayout->addWidget(m_pBtnGroup, 0, Qt::AlignVCenter);
+    pMainLayout->addSpacing(8);
+    pMainLayout->addWidget(m_pBtnConf, 0, Qt::AlignVCenter);
+    pMainLayout->addSpacing(8);
+    pMainLayout->addWidget(m_pBtnHeader, 0, Qt::AlignVCenter);
+    pMainLayout->addWidget(m_pBtnDropDown, 0, Qt::AlignVCenter);
+    pMainLayout->addSpacing(34);
+    pMainLayout->addWidget(m_pBtnMin, 0, Qt::AlignVCenter);
+    pMainLayout->addWidget(m_pBtnRestore, 0, Qt::AlignVCenter);
+    pMainLayout->addWidget(m_pBtnMax, 0, Qt::AlignVCenter);
+    pMainLayout->addWidget(m_pBtnClose, 0, Qt::AlignVCenter);
+    pMainLayout->setSpacing(1);
+    pMainLayout->setContentsMargins(0, 8, 8, 8);
 }
 
 void TopWidget::initConnection()
 {
-    connect(&m_btnClose, SIGNAL(clicked(bool)), this, SLOT(slot_onClick()));
-    connect(&m_btnMax, SIGNAL(clicked(bool)), this, SLOT(slot_onClick()));
-    connect(&m_btnMin, SIGNAL(clicked(bool)), this, SLOT(slot_onClick()));
+    connect(m_pBtnMin, SIGNAL(clicked()), this, SLOT(onBtnMinClicked()));
+    connect(m_pBtnRestore, SIGNAL(clicked()), this, SLOT(onBtnRestoreClicked()));
+    connect(m_pBtnMax, SIGNAL(clicked()), this, SLOT(onBtnMaxClicked()));
+    connect(m_pBtnClose, SIGNAL(clicked()), this, SLOT(onBtnCloseClicked()));
+    connect(m_pBtnGroup, SIGNAL(clicked(bool)), this, SLOT(onBtnGroupClicked()));
+    connect(m_pBtnConf, SIGNAL(clicked(bool)), this, SLOT(onBtnConfClicked()));
+    connect(m_pBtnHeader, SIGNAL(clicked(bool)), this,SLOT(onBtnHeaderClicked()));
+    connect(m_pBtnDropDown, SIGNAL(clicked(bool)), this, SLOT(onBtnDropDownClicked()));
 }
 
-bool TopWidget::eventFilter(QObject *watched, QEvent *event)
-{
-    Q_UNUSED(watched);
-//    qDebug() << "event type: " << event->type();
-    switch (event->type()) {
-    case QEvent::WindowStateChange:
-    case QEvent::Resize:
-    {
-        updateMaximize();
-        return true;
-    }
-    default:
-        break;
-    }
-
-    return QWidget::eventFilter(watched, event);
-}
-
-void TopWidget::slot_onClick()
-{
-    QPushButton *pButton = qobject_cast<QPushButton*>(this->sender());
-    QWidget* pWindow = this->window();
-    if (pWindow->isTopLevel())
-    {
-        if (pButton->objectName() == "btnClose")
-        {
-//            pWindow->close();
-            pWindow->hide();
-        }
-        else if (pButton->objectName() == "btnMax")
-        {
-            if (pWindow->isMaximized())
-            {
-                pWindow->showNormal();
-            }
-            else
-            {
-                pWindow->showMaximized();
-                pWindow->setGeometry(-4, -4, pWindow->width() + 8, pWindow->height() + 8);
-            }
-        }
-        else if (pButton->objectName() == "btnMin")
-        {
-            pWindow->showMinimized();
-        }
-    }
-}
-
-void TopWidget::updateMaximize()
+void TopWidget::onBtnMinClicked()
 {
     QWidget* pWindow = this->window();
-    if (pWindow->isTopLevel())
-    {
-        bool bMaximize = pWindow->isMaximized();
-        if (bMaximize)
-        {
-            m_btnMax.setToolTip(QStringLiteral("还原"));
-            m_btnMax.setStyleSheet("QPushButton{border-image:url(:/images/top/StoreNormal.png);}"
-                                   "QPushButton::hover{border-image:url(:/images/top/StoreFouce.png);}"
-                                   "QPushButton::pressed{border-image:url(:/images/top/StoreFouce.png);}");
-        }
-        else
-        {
-            m_btnMax.setToolTip(QStringLiteral("最大化"));
-            m_btnMax.setStyleSheet("QPushButton{border-image:url(:/images/top/MaxNormal.png);}"
-                                   "QPushButton::hover{border-image:url(:/images/top/MaxFocus.png);}"
-                                   "QPushButton::pressed{border-image:url(:/images/top/MaxFocus.png);}");
-        }
-    }
+    pWindow->showMinimized();
+}
+
+void TopWidget::onBtnRestoreClicked()
+{
+    m_pBtnRestore->setVisible(false);
+    m_pBtnMax->setVisible(true);
+
+    QWidget* pWindow = this->window();
+    pWindow->showNormal();
+}
+
+void TopWidget::onBtnMaxClicked()
+{
+    m_pBtnMax->setVisible(false);
+    m_pBtnRestore->setVisible(true);
+
+    QWidget* pWindow = this->window();
+    pWindow->showMaximized();
+    pWindow->setGeometry(-4, -4, pWindow->width() + 8, pWindow->height() + 8);
+}
+
+void TopWidget::onBtnCloseClicked()
+{
+    QWidget* pWindow = this->window();
+    pWindow->hide();
+}
+
+void TopWidget::onBtnGroupClicked()
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onBtnGroupClicked"));
+}
+
+void TopWidget::onBtnConfClicked()
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onBtnConfClicked"));
+}
+
+void TopWidget::onBtnHeaderClicked()
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onBtnHeaderClicked"));
+}
+
+void TopWidget::onBtnDropDownClicked()
+{
+    QMenu *pDropMenu = new QMenu(this);
+    pDropMenu->setObjectName("topbarMenu");
+
+    QAction *pActModPhone = new QAction(QStringLiteral("修改手机号码"));
+    QAction *pActModPwd = new QAction(QStringLiteral("修改密码"));
+
+    connect(pActModPhone, SIGNAL(triggered(bool)), this, SLOT(onActionModPhone()));
+    connect(pActModPwd, SIGNAL(triggered(bool)), this, SLOT(onActionModPwd()));
+
+    pDropMenu->addAction(pActModPhone);
+    pDropMenu->addAction(pActModPwd);
+
+    QPoint btnPos = mapToGlobal(m_pBtnDropDown->pos());
+    int x = btnPos.x() - 116; ///< 116 is menu width >
+    int y = btnPos.y() + m_pBtnDropDown->height() + 8;
+    pDropMenu->exec(QPoint(x,y));
+}
+
+void TopWidget::onActionModPhone()
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onActionModPhone"));
+}
+
+void TopWidget::onActionModPwd()
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onActionModPwd"));
 }

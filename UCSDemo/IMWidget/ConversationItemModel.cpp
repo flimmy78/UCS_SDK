@@ -3,6 +3,7 @@
 #include <QPixmap>
 #include "Interface/UCSIMSDKPublic.h"
 #include "Interface/UCSLogger.h"
+#include "CommonHelper.h"
 
 ConversationItemModel::ConversationItemModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -58,7 +59,7 @@ QVariant ConversationItemModel::data(const QModelIndex &index, int role) const
     {
         QPixmap pixmap;
         pixmap.load(item.headerPath);
-        return pixmap.scaled(44, 44, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+        return CommonHelper::PixmapToRound(pixmap, QSize(44, 44));
     }
     else if (role == Qt::UserRole + 2)
     {

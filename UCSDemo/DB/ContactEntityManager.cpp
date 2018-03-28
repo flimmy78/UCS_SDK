@@ -18,6 +18,7 @@ ContactEntityManager::ContactEntityManager()
                         "userNum     INTEGER,"
                         "userId      TEXT,"
                         "userName    TEXT,"
+                        "userPinyin  TEXT,"
                         "userSex     INTEGER,"
                         "headUrl     TEXT,"
                         "headPath    TEXT,"
@@ -39,6 +40,7 @@ ContactEntityManager::ContactEntityManager()
                           "userNum,"
                           "userId,"
                           "userName,"
+                          "userPinyin,"
                           "userSex,"
                           "headUrl,"
                           "headPath,"
@@ -59,6 +61,7 @@ ContactEntityManager::ContactEntityManager()
                           ":userNum,"
                           ":userId,"
                           ":userName,"
+                          ":userPinyin,"
                           ":userSex,"
                           ":headUrl,"
                           ":headPath,"
@@ -92,6 +95,7 @@ bool ContactEntityManager::addContact(const ContactEntity &contact)
     sqlQuery.bindValue(":userNum", contact.userNum);
     sqlQuery.bindValue(":userId", contact.userId);
     sqlQuery.bindValue(":userName", contact.userName);
+    sqlQuery.bindValue(":userPinyin", contact.userPinyin);
     sqlQuery.bindValue(":userSex", contact.userSex);
     sqlQuery.bindValue(":headUrl", contact.headUrl);
     sqlQuery.bindValue(":headPath", contact.headPath);
@@ -151,6 +155,7 @@ bool ContactEntityManager::addContacts(const ContactEntityList &contactList)
             sqlQuery.bindValue(":userNum", contact.userNum);
             sqlQuery.bindValue(":userId", contact.userId);
             sqlQuery.bindValue(":userName", contact.userName);
+            sqlQuery.bindValue(":userPinyin", contact.userPinyin);
             sqlQuery.bindValue(":userSex", contact.userSex);
             sqlQuery.bindValue(":headUrl", contact.headUrl);
             sqlQuery.bindValue(":headPath", contact.headPath);
@@ -232,6 +237,7 @@ bool ContactEntityManager::getContact(const int &contactId, ContactEntity &conta
         contact.userNum = sqlQuery.value("userNum").toInt();
         contact.userId = sqlQuery.value("userId").toString();
         contact.userName = sqlQuery.value("userName").toString();
+        contact.userPinyin = sqlQuery.value("userPinyin").toString();
         contact.userSex = sqlQuery.value("userSex").toInt();
         contact.headUrl = sqlQuery.value("headUrl").toString();
         contact.headPath = sqlQuery.value("headPath").toString();
@@ -282,6 +288,7 @@ bool ContactEntityManager::getContact(const QString userId, ContactEntity &conta
         contact.userNum = sqlQuery.value("userNum").toInt();
         contact.userId = sqlQuery.value("userId").toString();
         contact.userName = sqlQuery.value("userName").toString();
+        contact.userPinyin = sqlQuery.value("userPinyin").toString();
         contact.userSex = sqlQuery.value("userSex").toInt();
         contact.headUrl = sqlQuery.value("headUrl").toString();
         contact.headPath = sqlQuery.value("headPath").toString();
@@ -331,6 +338,7 @@ bool ContactEntityManager::getAllContacts(ContactEntityList &contactList)
         contact.userNum = sqlQuery.value("userNum").toInt();
         contact.userId = sqlQuery.value("userId").toString();
         contact.userName = sqlQuery.value("userName").toString();
+        contact.userPinyin = sqlQuery.value("userPinyin").toString();
         contact.userSex = sqlQuery.value("userSex").toInt();
         contact.headUrl = sqlQuery.value("headUrl").toString();
         contact.headPath = sqlQuery.value("headPath").toString();

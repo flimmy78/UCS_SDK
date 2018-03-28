@@ -5,6 +5,7 @@
 #include <QIcon>
 #include <QString>
 #include <QDebug>
+#include "CommonHelper.h"
 
 ContactTreeItemModel::ContactTreeItemModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -141,13 +142,11 @@ QVariant ContactTreeItemModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::DecorationRole && index.column() == 0)
     {
-        if (contact.userSex == 1)
+        if (!contact.userId.isEmpty())
         {
-            return QIcon(":/images/u1185.png");
-        }
-        else if (contact.userSex == 2)
-        {
-            return QIcon(":/images/u1183.png");
+            QPixmap pixmap(contact.headPath);
+            pixmap = CommonHelper::PixmapToRound(pixmap, QSize(25, 25));
+            return QIcon(pixmap);
         }
     }
     else if (role == ContactIdRole)

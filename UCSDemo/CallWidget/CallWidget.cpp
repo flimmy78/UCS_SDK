@@ -15,6 +15,11 @@ CallWidget::CallWidget(QWidget *parent)
     initConnections();
 }
 
+void CallWidget::updateLogin()
+{
+    m_pTitleBar->updateTopBar();
+}
+
 void CallWidget::initLayout()
 {
     m_pTitleBar = new TopWidget(this);

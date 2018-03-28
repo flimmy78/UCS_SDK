@@ -13,6 +13,7 @@ void DBEntity::convertContact2Entity(const ContactItem &contact, ContactEntity &
     entity.userNum = contact.userNum;
     entity.userId = contact.userId;
     entity.userName = contact.userName;
+    entity.userPinyin = contact.userPinyin;
     entity.headUrl = contact.headUrl;
     entity.headPath = contact.headPath;
     entity.userSex = contact.userSex;
@@ -30,6 +31,7 @@ void DBEntity::convertEntity2Contact(const ContactEntity &entity, ContactItem &c
     contact.userNum = entity.userNum;
     contact.userId = entity.userId;
     contact.userName = entity.userName;
+    contact.userPinyin = entity.userPinyin;
     contact.headUrl = entity.headUrl;
     contact.headPath = entity.headPath;
     contact.userSex = entity.userSex;

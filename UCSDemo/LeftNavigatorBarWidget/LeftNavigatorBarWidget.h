@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include "absFiles/myPushButton.h"
+#include "myPushButton.h"
 #include "BaseWidget.h"
 
 class LeftNavigatorBarWidget : public BaseWidget
@@ -24,15 +24,20 @@ signals:
 
 public slots:
     void onChangeButtonSelected(int index);
-    void slot_personInfoButtonClick();
-    void slot_settingButtonClick();
+//    void slot_personInfoButtonClick();
+    void onBtnSettingClicked();
+
+private slots:
+    void onActionFeedBack();
+    void onActionVerUpdate();
+    void onActionCommSetting();
 
 public:
     StackButton *m_pBtn[3];
 
 private:
-    MyPushButton *m_pBtnInfo;    
-    MyPushButton *m_pBtnSetting;
+//    MyPushButton *m_pBtnInfo;
+    QPushButton *m_pBtnSetting;
 };
 
 #endif // LEFTWIDGET_H

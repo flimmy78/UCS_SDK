@@ -1,6 +1,7 @@
 ﻿#include "ContactSearchListModel.h"
 
 #include <QPixmap>
+#include "CommonHelper.h"
 
 ContactSearchListModel::ContactSearchListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -72,7 +73,7 @@ QVariant ContactSearchListModel::data(const QModelIndex &index, int role) const
     {
         QPixmap pixmap;
         pixmap.load(contact.headPath);
-        return pixmap.scaled(44, 44, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        return CommonHelper::PixmapToRound(pixmap, QSize(44, 44));
     }
 
     return QVariant();

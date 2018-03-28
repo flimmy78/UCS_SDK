@@ -1,4 +1,5 @@
 ﻿#include "CallListItemModel.h"
+#include "CommonHelper.h"
 
 CallListItemModel::CallListItemModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -33,7 +34,7 @@ QVariant CallListItemModel::data(const QModelIndex &index, int role) const
     {
         QPixmap pixmap;
         pixmap.load(item.headerPath);
-        return pixmap.scaled(44, 44, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        return CommonHelper::PixmapToRound(pixmap, QSize(44, 44));
     }
     else if (role == Qt::UserRole + 1)
     {

@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>Resources/LoginWindow/LoginWindow.qss</file>
         <file>Resources/LoginWindow/headImage/u6.png</file>
+        <file>Resources/LoginWindow/login_icon.png</file>
     </qresource>
 </RCC>

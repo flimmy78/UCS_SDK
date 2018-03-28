@@ -142,6 +142,7 @@ typedef enum {
 
 ///< 最大发送消息长度 >
 #define UCS_MAX_TXT_MSG_LENGTH  (1500)
+
 ///< 最大分片上传图片大小 >
 #define UCS_MAX_IMG_SECTION_SIZE (64 * 1024)  // 64K
 

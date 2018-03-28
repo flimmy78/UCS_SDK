@@ -69,13 +69,18 @@ void ContactWidget::initLayout()
 
 void ContactWidget::initConnections()
 {
-    connect(m_pContactTreeView, SIGNAL(sigItemClicked(ContactItem)),
-            m_pContactInfoWidget, SLOT(onContactItemClicked(ContactItem)));
+//    connect(m_pContactTreeView, SIGNAL(sigItemClicked(ContactItem)),
+//            m_pContactInfoWidget, SLOT(onContactItemClicked(ContactItem)));
     connect(m_pContactTreeView, SIGNAL(sigItemClicked(ContactItem)),
             this, SLOT(onContactViewClicked(ContactItem)));
+    connect(m_pContactTreeView, SIGNAL(sigItemClicked(ContactItem)),
+            m_pContactInfoWidget->contactCard(), SLOT(onShowContact(ContactItem)));
 
     connect(m_pSearchListView, SIGNAL(sigItemClicked(ContactItem)),
-            m_pContactInfoWidget, SLOT(onContactItemClicked(ContactItem)));
+            m_pContactInfoWidget->contactCard(), SLOT(onShowContact(ContactItem)));
+
+//    connect(m_pSearchListView, SIGNAL(sigItemClicked(ContactItem)),
+//            m_pContactInfoWidget, SLOT(onContactItemClicked(ContactItem)));
     connect(m_pSearchListView, SIGNAL(sigItemClicked(ContactItem)),
             this, SLOT(onContactViewClicked(ContactItem)));
 

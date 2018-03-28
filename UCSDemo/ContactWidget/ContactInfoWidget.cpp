@@ -18,6 +18,7 @@ ContactInfoWidget::ContactInfoWidget(QWidget *parent)
 void ContactInfoWidget::initLayout()
 {
     QVBoxLayout *pMainLayout = new QVBoxLayout(this);
+#if 0
     QHBoxLayout *pDetailLayout = new QHBoxLayout;
     QHBoxLayout *pBtnLayout = new QHBoxLayout;
 
@@ -127,15 +128,27 @@ void ContactInfoWidget::initLayout()
     pMainLayout->addLayout(pBtnLayout);
     pMainLayout->addStretch();
     pMainLayout->setContentsMargins(20, 0, 20, 0);
+#else
+    QHBoxLayout *pCardLayout = new QHBoxLayout;
+    m_pContactCard = new ContactCard(this);
+    pCardLayout->addWidget(m_pContactCard, 0, Qt::AlignHCenter);
+
+    pMainLayout->addStretch();
+    pMainLayout->addLayout(pCardLayout);
+    pMainLayout->addStretch();
+    pMainLayout->setContentsMargins(0, 0, 0, 0);
+#endif
 }
 
 void ContactInfoWidget::initConnection()
 {
+#if 0
     connect(m_pBtnDirectAudio, SIGNAL(clicked(bool)), this, SLOT(onDirectAudioClick(bool)));
     connect(m_pBtnFreeAudio, SIGNAL(clicked(bool)), this, SLOT(onFreeAudioClick(bool)));
     connect(m_pBtnFreeVideo, SIGNAL(clicked(bool)), this, SLOT(onFreeVideoClick(bool)));
     connect(m_pBtnConfCall, SIGNAL(clicked(bool)), this, SLOT(onConfCallClick(bool)));
     connect(m_pBtnIM, SIGNAL(clicked(bool)), this, SLOT(onImClick(bool)));
+#endif
 }
 
 void ContactInfoWidget::contactShow()
@@ -189,4 +202,9 @@ void ContactInfoWidget::onConfCallClick(bool)
 void ContactInfoWidget::onImClick(bool)
 {
     emit sigOpenIMPage(m_contact);
+}
+
+ContactCard *ContactInfoWidget::contactCard() const
+{
+    return m_pContactCard;
 }

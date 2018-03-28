@@ -12,8 +12,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 INCLUDEPATH += $$PWD Common
 include(Common/Common.pri)
 
-INCLUDEPATH += $$PWD AbsFiles
-include(AbsFiles/AbsFiles.pri)
+INCLUDEPATH += $$PWD CustomWidgets
+include(CustomWidgets/CustomWidgets.pri)
 
 INCLUDEPATH += $$PWD SingleApplication
 include(SingleApplication/SingleApplication.pri)
@@ -82,13 +82,10 @@ RESOURCES += \
     qm.qrc \
     res_midright.qrc \
     LoginWindow.qrc \
-    TreeView.qrc \
-    MyTitleBar.qrc \
-    main_skin.qrc \
-    ChatWindow.qrc
+    AppRes.qrc
 
 VERSION = 1.0.0.0
-RC_ICONS = images/yzx_logo.ico
+RC_ICONS = Resources/app_icon.ico
 QMAKE_TARGET_COMPANY = "UCPAAS"
 QMAKE_TARGET_PRODUCT = "YZX Demo"
 
@@ -105,3 +102,9 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$DESTDIR/ -lUCSIMLib_d
 
 INCLUDEPATH += $$PWD/../UCSIMLib
 DEPENDPATH += $$PWD/../UCSIMLib
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../3rdparty/pinyin/ -lpinyin
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../3rdparty/pinyin/ -lpinyin_d
+
+INCLUDEPATH += $$PWD/../3rdparty/pinyin
+DEPENDPATH += $$PWD/../3rdparty/pinyin

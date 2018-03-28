@@ -3,9 +3,9 @@
 
 #include "common/qtheaders.h"
 #include <QStackedLayout>
-#include "absFiles/myPushButton.h"
-#include "absFiles/myChatTextEdit.h"
-#include "absFiles/myToolButton.h"
+#include "myPushButton.h"
+#include "ChatTextEdit.h"
+#include "myToolButton.h"
 #include "BaseWidget.h"
 #include "ChatWebView.h"
 #include "IMCommonDefine.h"
@@ -62,7 +62,7 @@ private:
     QStackedLayout *m_pStackedLayout;
     QList<qint64> m_msgIdList;
 
-    MyChatTextEdit *m_pTxtSending;
+    ChatTextEdit *m_pTxtSending;
     MyPushButton *m_pBtnSend;
     MyPushButton *m_pBtnEmoji;
     MyPushButton *m_pBtnClear;

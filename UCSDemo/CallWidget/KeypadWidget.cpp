@@ -8,34 +8,12 @@
 
 KeyPadWidget::KeyPadWidget(QWidget *parent)
     : QWidget(parent)
-    , m_customBtn(this)
 {
     setMouseTracking(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     initLayout();
     initConnection();
-}
-
-void KeyPadWidget::setBtnStyle(QString style)
-{
-    m_customBtn.setStyleSheet(style);
-}
-
-void KeyPadWidget::setBtnIcon(QIcon icon, QSize iconSize)
-{
-    m_customBtn.setIcon(icon);
-    m_customBtn.setIconSize(iconSize);
-}
-
-void KeyPadWidget::setBtnText(QString text)
-{
-    m_customBtn.setText(text);
-}
-
-void KeyPadWidget::setBtnSize(QSize size)
-{
-    m_customBtn.setMinimumSize(size);
 }
 
 void KeyPadWidget::initLayout()
@@ -59,7 +37,7 @@ void KeyPadWidget::initLayout()
     MyToolButton *pTBtnBackSpace = new MyToolButton(this);
     pTBtnBackSpace->setObjectName("backspaceBtn");
     pTBtnBackSpace->setFixedSize(25, 25);
-    pTBtnBackSpace->setIcon(QIcon(":/images/midright/u139.png"));
+    pTBtnBackSpace->setIcon(QIcon(":/Resources/Call/call_del.png"));
     pTBtnBackSpace->setIconSize(pTBtnBackSpace->size());
     pTBtnBackSpace->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     pTBtnBackSpace->setToolTip(QStringLiteral("删除"));
@@ -79,36 +57,32 @@ void KeyPadWidget::initLayout()
 
     for (int i = 0; i < NumDigitButtons; i++)
     {
-        m_pDigitBtn[i] = new MyToolButton(QString::number(i));
+        m_pDigitBtn[i] = new QPushButton(QString::number(i), this);
         m_pDigitBtn[i]->setObjectName("digitBtn");
     }
-    m_pStarBtn = new MyToolButton("*");
-    m_pPoundBtn = new MyToolButton("#");
-    m_pStarBtn->setObjectName("digitBtn");
-    m_pPoundBtn->setObjectName("digitBtn");
+    m_pDigitBtn[10]->setText("*");
+    m_pDigitBtn[11]->setText("#");
 
-    for (int i = 1; i < NumDigitButtons; i++)
+    for (int i = 1; i < 10; i++)
     {
         int row = (i - 1) / 3;
         int column = (i - 1) % 3;
         pGridLayout->addWidget(m_pDigitBtn[i], row, column);
     }
 
-    pGridLayout->addWidget(m_pStarBtn, 3, 0);
+    pGridLayout->addWidget(m_pDigitBtn[10], 3, 0);
     pGridLayout->addWidget(m_pDigitBtn[0], 3, 1);
-    pGridLayout->addWidget(m_pPoundBtn, 3, 2);
+    pGridLayout->addWidget(m_pDigitBtn[11], 3, 2);
 //    pGridLayout->setSizeConstraint(QLayout::SetFixedSize);
-    pGridLayout->setHorizontalSpacing(16);
-    pGridLayout->setVerticalSpacing(8);
+    pGridLayout->setHorizontalSpacing(60);
+    pGridLayout->setVerticalSpacing(10);
 
-    pVLayout->addStretch();
+//    pVLayout->addStretch();
     pVLayout->addWidget(m_pDisplayLine);
     pVLayout->addSpacing(16);
     pVLayout->addLayout(pGridLayout);
-    pVLayout->addSpacing(32);
-    pVLayout->addWidget(&m_customBtn, 0, Qt::AlignHCenter);
     pVLayout->setSpacing(8);
-    pVLayout->addStretch();
+//    pVLayout->addStretch();
     pVLayout->setContentsMargins(0, 0, 0, 0);
 
 //    pMainLayout->addStretch(0.1);
@@ -122,17 +96,11 @@ void KeyPadWidget::initConnection()
     {
         connect(m_pDigitBtn[i], SIGNAL(clicked()), this, SLOT(onBtnDigitClicked()));
     }
-
-    connect(m_pStarBtn, SIGNAL(clicked()), this, SLOT(onBtnDigitClicked()));
-    connect(m_pPoundBtn, SIGNAL(clicked()), this, SLOT(onBtnDigitClicked()));
-
-//    connect(pTBtnBackSpace, SIGNAL(clicked()), this, SLOT(onBtnBackspaceClicked()));
-    connect(&m_customBtn, SIGNAL(clicked()), this, SLOT(onBtnClicked()));
 }
 
 void KeyPadWidget::onBtnDigitClicked()
 {
-    MyToolButton *clickedButton = qobject_cast<MyToolButton*>(sender());
+    QPushButton *clickedButton = qobject_cast<QPushButton*>(sender());
     m_pDisplayLine->setText(m_pDisplayLine->text() + clickedButton->text());
 }
 
@@ -143,7 +111,3 @@ void KeyPadWidget::onBtnBackspaceClicked()
     m_pDisplayLine->setText(text);
 }
 
-void KeyPadWidget::onBtnClicked()
-{
-    emit sigBtnClicked(m_pDisplayLine->text().simplified());
-}

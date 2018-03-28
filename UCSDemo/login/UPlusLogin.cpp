@@ -15,10 +15,11 @@
 UPlusLogin::UPlusLogin(QWidget *parent)
     : QDialog(parent)
     , m_doReLogin(false)
+    , m_bPwdShowing(false)
 {
     setMouseTracking(true);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
-    setFixedSize(270, 440);
+    setFixedSize(300, 440);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setObjectName("UPlusLogin");
 
@@ -83,9 +84,9 @@ void UPlusLogin::initLayout()
     m_titleBar = new MyTitleBar(this);
     m_titleBar->setButtonType(MIN_BUTTON);
     m_titleBar->setMoveParentWindowFlag(true);
-    m_titleBar->setBackgroundColor(33, 157, 201, false);
-    m_titleBar->setTitleContentFontSize(11);
-    m_titleBar->setTitleContent("U+");
+    m_titleBar->setBackgroundColor(33, 157, 201, true);
+//    m_titleBar->setTitleContentFontSize(10);
+    m_titleBar->setTitleContent(QStringLiteral("登录"));
 //    m_titleBar->setTitleContentFontSize(12);
 
     m_pLineUserId = new QLineEdit(this);
@@ -106,10 +107,24 @@ void UPlusLogin::initLayout()
     m_pLinePassword->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_pLinePassword->setMaxLength(20);
 
-    QRegExp pwdReg("[a-zA-Z0-9]+$");
-    QRegExpValidator *pPwdValidator = new QRegExpValidator(this);
-    pPwdValidator->setRegExp(pwdReg);
-    m_pLinePassword->setValidator(pPwdValidator);
+//    QRegExp pwdReg("[a-zA-Z0-9]+$");
+//    QRegExpValidator *pPwdValidator = new QRegExpValidator(this);
+//    pPwdValidator->setRegExp(pwdReg);
+//    m_pLinePassword->setValidator(pPwdValidator);
+
+    m_pBtnPwdShow = new PwdShowButton(this);
+    QHBoxLayout *pTxtLayout = new QHBoxLayout;
+    QMargins margins = m_pLinePassword->textMargins();
+    m_pLinePassword->setTextMargins(margins.left() + 5,
+                   margins.top(),
+                   m_pBtnPwdShow->width() + 5,
+                   margins.bottom());
+
+    pTxtLayout->addStretch();
+    pTxtLayout->addWidget(m_pBtnPwdShow);
+    pTxtLayout->setSpacing(0);
+    pTxtLayout->setContentsMargins(0, 0, 5, 0);
+    m_pLinePassword->setLayout(pTxtLayout);
 
     m_pChkKeepPwd = new QCheckBox(QStringLiteral("记住密码"), this);
     m_pChkOnLine = new QCheckBox(QStringLiteral("测试环境"), this);
@@ -130,18 +145,24 @@ void UPlusLogin::initLayout()
     m_pLoginTip->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 //    m_pLoginTip->setText("test");
 
+    QLabel *pLogo = new QLabel;
+    pLogo->setFixedSize(94, 94);
+    pLogo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    pLogo->setObjectName("lblLoginLogo");
+
     pMainLayout->addWidget(m_titleBar);
-    pMainLayout->addStretch(0.2);
+    pMainLayout->addStretch();
+    pMainLayout->addWidget(pLogo, 0, Qt::AlignHCenter);
+    pMainLayout->addStretch();
     pMainLayout->addWidget(m_pLineUserId, 0, Qt::AlignHCenter);
-    pMainLayout->addSpacing(8);
     pMainLayout->addWidget(m_pLinePassword, 0, Qt::AlignHCenter);
-    pMainLayout->addSpacing(8);
+    pMainLayout->addSpacing(22);
     pMainLayout->addLayout(pChkLayout);
-    pMainLayout->addStretch(0.3);
+    pMainLayout->addSpacing(22);
     pMainLayout->addWidget(m_pBtnLoginOn, 0, Qt::AlignHCenter);
-    pMainLayout->addStretch(0.2);
+    pMainLayout->addSpacing(8);
     pMainLayout->addWidget(m_pLoginTip, 0, Qt::AlignHCenter);
-    pMainLayout->addStretch(0.2);
+    pMainLayout->addSpacing(10);
     pMainLayout->setSpacing(0);
     pMainLayout->setContentsMargins(0, 0, 0, 0);
 }
@@ -154,9 +175,10 @@ void UPlusLogin::initConnections()
     connect(m_pChkOnLine, SIGNAL(clicked()), this, SLOT(onCheckedChanged()));
     connect(m_pBtnLoginOn, SIGNAL(clicked()), this, SLOT(onBtnLogin()));
     connect(m_pLineUserId, SIGNAL(textChanged(QString)), this, SLOT(onLineUserIdTextChanged(QString)));
+    connect(m_pBtnPwdShow, SIGNAL(clicked(bool)), this, SLOT(onBtnPwdShow()));
+
     connect(m_pRestApi, SIGNAL(sigOnLoginReply(QByteArray,int)), this, SLOT(onLoginReply(QByteArray,int)));
     connect(m_pRestApi, SIGNAL(sigOnReLoginReply(QByteArray,int)), this, SLOT(onReLoginReply(QByteArray,int)));
-
     // test
     connect(m_pRestApi, SIGNAL(sigOnUploadHeaderImgReply(QByteArray,int)), this, SLOT(onUploadHeaderImgReply(QByteArray,int)));
 }
@@ -299,6 +321,21 @@ void UPlusLogin::onBtnLogin()
 //        CommonHelper::saveSetting(kSettingLoginPwd, pwd);
 //        CommonHelper::saveSetting(kSettingLoginKeepPwd, m_pChkKeepPwd->isChecked());
         CommonHelper::saveSetting(kSettingLoginEnv, m_pChkOnLine->isChecked());
+    }
+}
+
+void UPlusLogin::onBtnPwdShow()
+{
+    m_bPwdShowing = !m_bPwdShowing;
+    m_pBtnPwdShow->setShow(m_bPwdShowing);
+
+    if (m_bPwdShowing)
+    {
+        m_pLinePassword->setEchoMode(QLineEdit::Normal);
+    }
+    else
+    {
+        m_pLinePassword->setEchoMode(QLineEdit::Password);
     }
 }
 

@@ -8,6 +8,7 @@
 #include <QCheckBox>
 #include "BaseDialog.h"
 #include "MyTitleBar.h"
+#include "myPushButton.h"
 #include "UPlusRestApi.h"
 #include "HttpDownloadPicture.h"
 
@@ -39,11 +40,12 @@ private slots:
     void onBtnClosed();
     void onBtnMin();
     void onBtnLogin();
+    void onBtnPwdShow();
     void onCheckedChanged();
     void onLineUserIdTextChanged(QString userId);
 
     void onLoginReply(QByteArray replyData, int code);
-    void onReLoginReply(QByteArray replyData, int code);
+    void onReLoginReply(QByteArray replyData, int code);    
 
     // test
     void onUploadHeaderImgReply(QByteArray replyData, int code);
@@ -56,9 +58,11 @@ private:
     QLabel      *m_pLoginTip;
     QCheckBox   *m_pChkKeepPwd;
     QCheckBox   *m_pChkOnLine;
+    PwdShowButton *m_pBtnPwdShow;
 
     UPlusRestApi *m_pRestApi;
     bool m_doReLogin;
+    bool m_bPwdShowing;
 };
 
 #endif // UPLUSLOGIN_H

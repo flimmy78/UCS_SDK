@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     s_pMainWnd = this;
     setWindowFlags(Qt::FramelessWindowHint | windowFlags());
-    setMinimumSize(964, 648);
+    setMinimumSize(908, 658);
     installEventFilter(this);
 
     this->setObjectName("MainWindow");
@@ -123,6 +123,7 @@ void MainWindow::customEvent(QEvent *event)
             UCS_LOG(UCSLogger::kTraceInfo, "MainWindow",
                     QString("login success. userId = ").append(loginEvt->userId()));
 
+            m_pCallWidget->updateLogin();
             m_pImWidget->conversationListView()->updateConversationList();
             m_pContactWidget->contactListView()->doUpdateContacts();
         }
@@ -212,8 +213,8 @@ void MainWindow::initLayout()
 void MainWindow::initTrayMenu()
 {
     m_system_tray.setContextMenu(&m_traymenu);
-    m_system_tray.setToolTip(QString("test"));
-    m_system_tray.setIcon(QIcon(":/images/yzx_logo.ico"));
+//    m_system_tray.setToolTip(QString("test"));
+    m_system_tray.setIcon(QIcon(":/Resources/app_icon.png"));
     m_system_tray.show();
 
     connect(&m_system_tray,
@@ -222,7 +223,7 @@ void MainWindow::initTrayMenu()
             SLOT(onTrayIconActived(QSystemTrayIcon::ActivationReason)));
 
     connect(&m_traymenu,
-            SIGNAL(sig_close()),
+            SIGNAL(sigClose()),
             this,
             SLOT(onQuitClient()));
 }

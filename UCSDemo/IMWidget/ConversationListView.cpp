@@ -5,6 +5,7 @@
 #include "ConversationItemDelegate.h"
 #include "Interface/UCSIMSDKPublic.h"
 #include "CommonHelper.h"
+#include "DBCenter.h"
 
 ConversationListView::ConversationListView(QWidget *parent)
     : QListView(parent)
@@ -90,20 +91,25 @@ void ConversationListView::updateConversationList()
         }
         item.unReadCount = conversation->unreadMessageCount();
         item.isTop = conversation->isTop();
-        item.headerPath = ":/images/u29.png";
 
         if (conversation->conversationType() == UCS_IM_SOLOCHAT)
         {
+            ContactEntity contact;
+            DBCenter::contactMgr()->getContact(conversation->targetId(), contact);
+
+            item.headerPath = contact.headPath;
             item.itemType = SoloTypeConversation;
         }
         else if (conversation->conversationType() == UCS_IM_GROUPCHAT ||
                  conversation->conversationType() == UCS_IM_DISCUSSIONCHAT)
         {
             item.itemType = GroupTypeConversation;
+            item.headerPath = ":/Resources/Headers/header_group.png";
         }
         else
         {
             item.itemType = OtherTypeConversation;
+            item.headerPath = ":/Resources/Headers/header_other.png";
         }
 
         UCSMessage *message = conversation->lastestMessage();

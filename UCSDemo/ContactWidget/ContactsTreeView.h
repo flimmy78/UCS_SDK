@@ -63,6 +63,9 @@ public slots:
     void onHeaderReady(int index);
     void onDownLoadHeaderFinish();
 
+    ///< contact save db finish >
+    void onContactSaveFinish();
+
 private:
     ContactTreeItemModel *m_pContactModel;
     QMenu *m_pGroupMenu;

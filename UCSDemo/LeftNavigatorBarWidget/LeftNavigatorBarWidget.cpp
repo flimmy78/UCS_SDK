@@ -3,8 +3,10 @@
 #include <QString>
 #include <QMessageBox>
 #include <QPainter>
+#include <QMenu>
 #include "Interface/UCSTcpClient.h"
 #include "Interface/UCSIMClient.h"
+#include "Interface/UCSLogger.h"
 #include "CommonHelper.h"
 
 LeftNavigatorBarWidget::LeftNavigatorBarWidget(QWidget *parent)
@@ -29,67 +31,61 @@ LeftNavigatorBarWidget::~LeftNavigatorBarWidget()
 
 void LeftNavigatorBarWidget::initLayout()
 {
-    QVBoxLayout *vlayout = new QVBoxLayout;
-
-    m_pBtnInfo = new MyPushButton(this);
-    m_pBtnInfo->setFixedHeight(60);
-    m_pBtnInfo->setStyleSheet("QPushButton{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}"
-                               "QPushButton::hover{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}"
-                               "QPushButton::pressed{background-image:url(:/images/mainleft/u6.png);background-repeat:no-repeat;background-position:center;border:none;}");
-
+    QVBoxLayout *pMainLayout = new QVBoxLayout(this);
 
 //    QString userId = CommonHelper::readSetting(kSettingLoginUserId).toString();
 //    m_pBtnInfo->setToolTip(userId);
 
     m_pBtn[0] = new StackButton(0,
-                                ":/images/mainleft/u80.png",
-                                ":/images/mainleft/u80.png",
-                                ":/images/mainleft/u80.png",
+                                ":/Resources/call_history_normal.png",
+                                ":/Resources/call_history_hover.png",
+                                ":/Resources/call_history_hover.png",
                                 this);
     m_pBtn[1] = new StackButton(1,
-                                ":/images/mainleft/u8.png",
-                                ":/images/mainleft/u8.png",
-                                ":/images/mainleft/u8.png",
+                                ":/Resources/contact_normal.png",
+                                ":/Resources/contact_hover.png",
+                                ":/Resources/contact_hover.png",
                                 this);
     m_pBtn[2] = new StackButton(2,
-                                ":/images/mainleft/u78.png",
-                                ":/images/mainleft/u78.png",
-                                ":/images/mainleft/u78.png",
+                                ":/Resources/message_normal.png",
+                                ":/Resources/message_hover.png",
+                                ":/Resources/message_hover.png",
                                 this);
     m_pBtn[1]->setToolTip(QStringLiteral("通讯录"));
     m_pBtn[0]->setToolTip(QStringLiteral("通话记录"));
     m_pBtn[2]->setToolTip(QStringLiteral("消息"));
     for (int i = 0; i < 3; i++)
     {
-        m_pBtn[i]->setObjectName(QString::number(i));
+        QString objName = QString("leftStackBtn");
+        m_pBtn[i]->setObjectName(objName);
         m_pBtn[i]->setFixedHeight(60);
+        m_pBtn[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     }
     m_pBtn[0]->setSelected(true);
 
-    m_pBtnSetting = new MyPushButton(this);
+    m_pBtnSetting = new QPushButton(this);
+    m_pBtnSetting->setFlat(true);
+    m_pBtnSetting->setCursor(Qt::ArrowCursor);
+    m_pBtnSetting->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_pBtnSetting->setFixedHeight(60);
-    m_pBtnSetting->setStyleSheet("QPushButton{background-image:url(:/images/mainleft/u68.png);background-repeat:no-repeat;background-position:center;border:none;}"
-                                 "QPushButton::hover{background-image:url(:/images/mainleft/u68.png);background-repeat:no-repeat;background-position:center;border:none;}"
-                                 "QPushButton::pressed{background-image:url(:/images/mainleft/u68.png);background-repeat:no-repeat;background-position:center;border:none;}");
+//    m_pBtnSetting->setStyleSheet("QPushButton{background-image:url(:/Resources/app_setting.png);background-repeat:no-repeat;background-position:center;border:none;}"
+//                                 "QPushButton::hover {}"
+//                                 "QPushButton::pressed{}");
     m_pBtnSetting->setToolTip(QStringLiteral("设置"));
+    m_pBtnSetting->setObjectName("btnAppSetting");
 
-    vlayout->addSpacerItem(new QSpacerItem(this->width(), 20, QSizePolicy::Fixed, QSizePolicy::Fixed));
-    vlayout->addWidget(m_pBtnInfo);
-    vlayout->addSpacerItem(new QSpacerItem(this->width(), 10, QSizePolicy::Fixed, QSizePolicy::Fixed));
-    vlayout->addWidget(m_pBtn[0]);
-    vlayout->addWidget(m_pBtn[1]);
-    vlayout->addWidget(m_pBtn[2]);
-    vlayout->addSpacerItem(new QSpacerItem(this->width(), 60, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    vlayout->addWidget(m_pBtnSetting);
-    vlayout->setSpacing(0);
-    vlayout->setContentsMargins(0, 0, 0, 0);
-    setLayout(vlayout);
+    pMainLayout->addWidget(m_pBtn[0]);
+    pMainLayout->addWidget(m_pBtn[1]);
+    pMainLayout->addWidget(m_pBtn[2]);
+    pMainLayout->addStretch();
+    pMainLayout->addWidget(m_pBtnSetting);
+    pMainLayout->setSpacing(0);
+    pMainLayout->setContentsMargins(0, 1, 0, 0);
 }
 
 void LeftNavigatorBarWidget::initConnection()
 {
-    connect(m_pBtnInfo, SIGNAL(pressed()), this, SLOT(slot_personInfoButtonClick()));
-    connect(m_pBtnSetting, SIGNAL(pressed()), this, SLOT(slot_settingButtonClick()));
+    connect(m_pBtnSetting, SIGNAL(pressed()), this, SLOT(onBtnSettingClicked()));
 }
 
 void LeftNavigatorBarWidget::onChangeButtonSelected(int index)
@@ -112,12 +108,44 @@ void LeftNavigatorBarWidget::onChangeButtonSelected(int index)
     }
 }
 
-void LeftNavigatorBarWidget::slot_personInfoButtonClick()
+void LeftNavigatorBarWidget::onBtnSettingClicked()
 {
+    QMenu *pSettingMenu = new QMenu(this);
+    pSettingMenu->setObjectName("leftSettingMenu");
 
+    QAction *pActFeedBack = new QAction(QStringLiteral("意见反馈"));
+    QAction *pActVerUpdate = new QAction(QStringLiteral("版本更新"));
+    QAction *pActCommSetting = new QAction(QStringLiteral("通用设置"));
+
+    connect(pActFeedBack, SIGNAL(triggered(bool)), this, SLOT(onActionFeedBack()));
+    connect(pActVerUpdate, SIGNAL(triggered(bool)), this, SLOT(onActionVerUpdate()));
+    connect(pActCommSetting, SIGNAL(triggered(bool)), this, SLOT(onActionCommSetting()));
+
+    pSettingMenu->addAction(pActFeedBack);
+    pSettingMenu->addAction(pActVerUpdate);
+    pSettingMenu->addAction(pActCommSetting);
+
+    QPoint settingPos = mapToGlobal(m_pBtnSetting->pos());
+    int x = settingPos.x() + m_pBtnSetting->width();
+    int y = settingPos.y() + (m_pBtnSetting->height() / 2) - 120; ///< 120 is menu height >
+    QPoint pos = QPoint(x, y);
+    pSettingMenu->exec(pos);
 }
 
-void LeftNavigatorBarWidget::slot_settingButtonClick()
+void LeftNavigatorBarWidget::onActionFeedBack()
 {
-//    QMessageBox::information(this, QStringLiteral("设置"), "user setting", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);    
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onActionFeedBack"));
+}
+
+void LeftNavigatorBarWidget::onActionVerUpdate()
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onActionVerUpdate"));
+}
+
+void LeftNavigatorBarWidget::onActionCommSetting()
+{
+    UCS_LOG(UCSLogger::kTraceApiCall, this->objectName(),
+            QString("onActionCommSetting"));
 }
