@@ -41,7 +41,6 @@ private slots:
     void onBtnClosed();
     void onBtnMin();
     void onBtnLogin();
-    void onBtnPwdShow();
     void onCheckedChanged();
     void onLineUserIdTextChanged(QString userId);
 
@@ -55,7 +54,6 @@ private:
     MyTitleBar  *m_titleBar;
     QPushButton *m_pBtnLoginOn;
     QLineEdit   *m_pLineUserId;
-//    QLineEdit   *m_pLinePassword;
     QLabel      *m_pLoginTip;
     QCheckBox   *m_pChkKeepPwd;
     QCheckBox   *m_pChkOnLine;

@@ -181,7 +181,6 @@ void UPlusLogin::initConnections()
     connect(m_pChkOnLine, SIGNAL(clicked()), this, SLOT(onCheckedChanged()));
     connect(m_pBtnLoginOn, SIGNAL(clicked()), this, SLOT(onBtnLogin()));
     connect(m_pLineUserId, SIGNAL(textChanged(QString)), this, SLOT(onLineUserIdTextChanged(QString)));
-//    connect(m_pBtnPwdShow, SIGNAL(clicked(bool)), this, SLOT(onBtnPwdShow()));
 
     connect(m_pRestApi, SIGNAL(sigOnLoginReply(QByteArray,int)), this, SLOT(onLoginReply(QByteArray,int)));
     connect(m_pRestApi, SIGNAL(sigOnReLoginReply(QByteArray,int)), this, SLOT(onReLoginReply(QByteArray,int)));
@@ -330,20 +329,6 @@ void UPlusLogin::onBtnLogin()
     }
 }
 
-void UPlusLogin::onBtnPwdShow()
-{
-//    m_bPwdShowing = !m_bPwdShowing;
-//    m_pBtnPwdShow->setShow(m_bPwdShowing);
-
-//    if (m_bPwdShowing)
-//    {
-//        m_pLinePassword->setEchoMode(QLineEdit::Normal);
-//    }
-//    else
-//    {
-//        m_pLinePassword->setEchoMode(QLineEdit::Password);
-//    }
-}
 
 void UPlusLogin::onCheckedChanged()
 {
