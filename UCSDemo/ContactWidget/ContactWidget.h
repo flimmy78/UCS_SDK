@@ -10,7 +10,7 @@
 #include "BaseWidget.h"
 #include "ContactsTreeView.h"
 #include "ContactInfoWidget.h"
-#include "topWidget.h"
+#include "TopBarWidget.h"
 #include "searchLineEdit.h"
 #include "ContactSearchListView.h"
 
@@ -42,7 +42,7 @@ public slots:
     void onSearchFinished();
 
 private:
-    TopWidget *m_pTitleBar;
+    TopBarWidget *m_pTitleBar;
     SearchLineEdit *m_pSearchEdit;
     ContactsTreeView *m_pContactTreeView;
     ContactInfoWidget *m_pContactInfoWidget;

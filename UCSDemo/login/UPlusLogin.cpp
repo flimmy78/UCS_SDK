@@ -85,9 +85,7 @@ void UPlusLogin::initLayout()
     m_titleBar->setButtonType(MIN_BUTTON);
     m_titleBar->setMoveParentWindowFlag(true);
     m_titleBar->setBackgroundColor(33, 157, 201, true);
-//    m_titleBar->setTitleContentFontSize(10);
     m_titleBar->setTitleContent(QStringLiteral("登录"));
-//    m_titleBar->setTitleContentFontSize(12);
 
     m_pLineUserId = new QLineEdit(this);
     m_pLineUserId->setObjectName("loginUserName");
@@ -100,6 +98,7 @@ void UPlusLogin::initLayout()
     pValidator->setRegExp(reg);
     m_pLineUserId->setValidator(pValidator);
 
+#if 0
     m_pLinePassword = new QLineEdit(this);
     m_pLinePassword->setObjectName("loginPassword");
     m_pLinePassword->setEchoMode(QLineEdit::Password);
@@ -125,6 +124,13 @@ void UPlusLogin::initLayout()
     pTxtLayout->setSpacing(0);
     pTxtLayout->setContentsMargins(0, 0, 5, 0);
     m_pLinePassword->setLayout(pTxtLayout);
+#else
+    m_pLinePassword = new PwdLineEdit(this);
+    m_pLinePassword->setObjectName("loginPassword");
+    m_pLinePassword->setPlaceholderText(QStringLiteral("请输入密码"));
+    m_pLinePassword->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_pLinePassword->setMaxLength(20);
+#endif
 
     m_pChkKeepPwd = new QCheckBox(QStringLiteral("记住密码"), this);
     m_pChkOnLine = new QCheckBox(QStringLiteral("测试环境"), this);
@@ -175,7 +181,7 @@ void UPlusLogin::initConnections()
     connect(m_pChkOnLine, SIGNAL(clicked()), this, SLOT(onCheckedChanged()));
     connect(m_pBtnLoginOn, SIGNAL(clicked()), this, SLOT(onBtnLogin()));
     connect(m_pLineUserId, SIGNAL(textChanged(QString)), this, SLOT(onLineUserIdTextChanged(QString)));
-    connect(m_pBtnPwdShow, SIGNAL(clicked(bool)), this, SLOT(onBtnPwdShow()));
+//    connect(m_pBtnPwdShow, SIGNAL(clicked(bool)), this, SLOT(onBtnPwdShow()));
 
     connect(m_pRestApi, SIGNAL(sigOnLoginReply(QByteArray,int)), this, SLOT(onLoginReply(QByteArray,int)));
     connect(m_pRestApi, SIGNAL(sigOnReLoginReply(QByteArray,int)), this, SLOT(onReLoginReply(QByteArray,int)));
@@ -326,17 +332,17 @@ void UPlusLogin::onBtnLogin()
 
 void UPlusLogin::onBtnPwdShow()
 {
-    m_bPwdShowing = !m_bPwdShowing;
-    m_pBtnPwdShow->setShow(m_bPwdShowing);
+//    m_bPwdShowing = !m_bPwdShowing;
+//    m_pBtnPwdShow->setShow(m_bPwdShowing);
 
-    if (m_bPwdShowing)
-    {
-        m_pLinePassword->setEchoMode(QLineEdit::Normal);
-    }
-    else
-    {
-        m_pLinePassword->setEchoMode(QLineEdit::Password);
-    }
+//    if (m_bPwdShowing)
+//    {
+//        m_pLinePassword->setEchoMode(QLineEdit::Normal);
+//    }
+//    else
+//    {
+//        m_pLinePassword->setEchoMode(QLineEdit::Password);
+//    }
 }
 
 void UPlusLogin::onCheckedChanged()

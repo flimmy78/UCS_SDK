@@ -78,10 +78,8 @@ CONFIG(debug, debug|release) {
 RESOURCES += \
     res_mainleft.qrc \
     res_icon.qrc \
-    res_top.qrc \
     qm.qrc \
     res_midright.qrc \
-    LoginWindow.qrc \
     AppRes.qrc
 
 VERSION = 1.0.0.0

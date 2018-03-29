@@ -86,5 +86,8 @@
         <file>Resources/Call/call_video_fail.png</file>
         <file>Resources/Call/call_video_in.png</file>
         <file>Resources/Call/call_video_out.png</file>
+        <file>Resources/LoginWindow/login_icon.png</file>
+        <file>Resources/delete.png</file>
+        <file>Resources/search.png</file>
     </qresource>
 </RCC>

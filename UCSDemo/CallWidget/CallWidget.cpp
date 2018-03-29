@@ -22,7 +22,7 @@ void CallWidget::updateLogin()
 
 void CallWidget::initLayout()
 {
-    m_pTitleBar = new TopWidget(this);
+    m_pTitleBar = new TopBarWidget(this);
     m_pSearchEdit = new SearchLineEdit(this);
     m_pDialWidget = new DialWidget(this);
     m_pCallListView = new CallListView(this);

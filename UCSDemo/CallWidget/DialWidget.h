@@ -22,7 +22,6 @@ private:
 signals:
 
 public slots:
-    void onKeypadClicked(QString text);
 
 private slots:
     void onBtnDigitClicked(bool);

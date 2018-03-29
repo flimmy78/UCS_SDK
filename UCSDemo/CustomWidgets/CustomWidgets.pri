@@ -12,7 +12,8 @@ HEADERS += \
     $$PWD/BaseDialog.h \
     $$PWD/EmptyWidget.h \
     $$PWD/ToggleButton.h \
-    $$PWD/MaskLabel.h
+    $$PWD/MaskLabel.h \
+    $$PWD/PwdLineEdit.h
 
 SOURCES += \
     $$PWD/absFramelessAutoSize.cpp \
@@ -28,4 +29,5 @@ SOURCES += \
     $$PWD/BaseDialog.cpp \
     $$PWD/EmptyWidget.cpp \
     $$PWD/ToggleButton.cpp \
-    $$PWD/MaskLabel.cpp
+    $$PWD/MaskLabel.cpp \
+    $$PWD/PwdLineEdit.cpp

@@ -27,7 +27,7 @@ ContactWidget::~ContactWidget()
 
 void ContactWidget::initLayout()
 {
-    m_pTitleBar = new TopWidget(this);
+    m_pTitleBar = new TopBarWidget(this);
     m_pSearchEdit = new SearchLineEdit(this);
     m_pContactTreeView = new ContactsTreeView(this);
     m_pContactInfoWidget = new ContactInfoWidget(this);

@@ -11,6 +11,7 @@
 #include "myPushButton.h"
 #include "UPlusRestApi.h"
 #include "HttpDownloadPicture.h"
+#include "PwdLineEdit.h"
 
 class UPlusLogin : public QDialog
 {
@@ -54,11 +55,13 @@ private:
     MyTitleBar  *m_titleBar;
     QPushButton *m_pBtnLoginOn;
     QLineEdit   *m_pLineUserId;
-    QLineEdit   *m_pLinePassword;
+//    QLineEdit   *m_pLinePassword;
     QLabel      *m_pLoginTip;
     QCheckBox   *m_pChkKeepPwd;
     QCheckBox   *m_pChkOnLine;
     PwdShowButton *m_pBtnPwdShow;
+
+    PwdLineEdit *m_pLinePassword;
 
     UPlusRestApi *m_pRestApi;
     bool m_doReLogin;

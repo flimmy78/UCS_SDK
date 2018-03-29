@@ -16,7 +16,7 @@ IMWidget::IMWidget(QWidget *parent)
 
 void IMWidget::initLayout()
 {
-    m_pTitleBar = new TopWidget(this);
+    m_pTitleBar = new TopBarWidget(this);
     m_pSearchEdit = new SearchLineEdit(this);
     m_pConversationListView = new ConversationListView(this);
     m_pMsgChatWidget = new IMChatWidget(this);

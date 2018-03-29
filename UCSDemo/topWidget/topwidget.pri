@@ -1,7 +1,9 @@
 HEADERS += \
-    $$PWD/topWidget.h
+    $$PWD/TopBarWidget.h \
+    $$PWD/ModifyPwdDialog.h
 
 SOURCES += \
-    $$PWD/topWidget.cpp
+    $$PWD/TopBarWidget.cpp \
+    $$PWD/ModifyPwdDialog.cpp
 
 FORMS +=

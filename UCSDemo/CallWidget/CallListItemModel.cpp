@@ -52,7 +52,7 @@ QVariant CallListItemModel::data(const QModelIndex &index, int role) const
     {
         QPixmap pixmap;
         pixmap.load(item.typeIconPath);
-        return pixmap.scaled(20, 20, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+        return pixmap.scaled(20, 20, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
     return QVariant();

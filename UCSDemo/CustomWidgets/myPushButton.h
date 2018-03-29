@@ -49,20 +49,5 @@ private:
     bool m_pressed;
 };
 
-class PwdShowButton : public QPushButton
-{
-    Q_OBJECT
-public:
-    explicit PwdShowButton(QWidget* parent = Q_NULLPTR);
-    void setShow(bool isShow);
 
-protected:
-    void enterEvent(QEvent *event) override;
-    void leaveEvent(QEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
-
-private:
-    bool m_enter;
-    bool m_isShow;
-};
 #endif // MYPUSHBUTTON_H

@@ -7,7 +7,7 @@
 #include "BaseWidget.h"
 #include "ConversationListView.h"
 #include "IMChatWidget.h"
-#include "topWidget.h"
+#include "TopBarWidget.h"
 #include "searchLineEdit.h"
 #include "ContactDefine.h"
 
@@ -37,7 +37,7 @@ private slots:
     void onConversationItemClicked(ConversationItem conversation);
 
 private:
-    TopWidget *m_pTitleBar;
+    TopBarWidget *m_pTitleBar;
     SearchLineEdit *m_pSearchEdit;
     ConversationListView *m_pConversationListView;
     IMChatWidget *m_pMsgChatWidget;

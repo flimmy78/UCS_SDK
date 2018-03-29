@@ -5,7 +5,7 @@
 #include <qglobal.h>
 #include "BaseWidget.h"
 #include "searchLineEdit.h"
-#include "topWidget.h"
+#include "TopBarWidget.h"
 #include "CallListView.h"
 #include "DialWidget.h"
 
@@ -25,7 +25,7 @@ private:
     void initConnections();
 
 private:
-    TopWidget *m_pTitleBar;
+    TopBarWidget *m_pTitleBar;
     SearchLineEdit *m_pSearchEdit;
     DialWidget *m_pDialWidget;
     CallListView *m_pCallListView;

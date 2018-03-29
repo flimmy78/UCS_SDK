@@ -24,7 +24,7 @@ bool SearchLineEdit::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::FocusIn)
     {
-        m_pBtn->setIcon(QIcon(":/images/btn_del.png"));
+        m_pBtn->setIcon(QIcon(":/Resources/delete.png"));
         m_bFocusIn = true;
         emit sigFocusChanged(true);
     }
@@ -39,7 +39,7 @@ void SearchLineEdit::onClearText()
         this->clear();
     }
     m_bFocusIn = false;
-    m_pBtn->setIcon(QIcon(":/images/btn_search_normal.png"));
+    m_pBtn->setIcon(QIcon(":/Resources/search.png"));
     emit sigFocusChanged(false);
 }
 
@@ -48,8 +48,8 @@ void SearchLineEdit::initLayout()
     QHBoxLayout* pLayout = new QHBoxLayout;
 
     m_pBtn = new QPushButton(this);
-    m_pBtn->setFixedSize(30, this->height());
-    m_pBtn->setIcon(QIcon(":/images/btn_search_normal.png"));
+    m_pBtn->setFixedSize(20, 20);
+    m_pBtn->setIcon(QIcon(":/Resources/search.png"));
     m_pBtn->setCursor(Qt::ArrowCursor);
     m_pBtn->setFlat(true);
     m_pBtn->setStyleSheet("QPushButton{border:none;}");
@@ -62,7 +62,7 @@ void SearchLineEdit::initLayout()
                    margins.bottom());
 
     pLayout->addStretch();
-    pLayout->addWidget(m_pBtn);
+    pLayout->addWidget(m_pBtn, 0, Qt::AlignVCenter);
     pLayout->setSpacing(0);
     pLayout->setContentsMargins(0, 0, 5, 0);
 

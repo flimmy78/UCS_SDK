@@ -25,6 +25,7 @@ CallListView::CallListView(QWidget *parent)
     CallListItemDelegate *delegate = new CallListItemDelegate(this);
     setItemDelegate(delegate);
 
+//    initMenu();
     initConnections();
 
     // test
@@ -38,21 +39,61 @@ void CallListView::updateListData()
         CallListItem item;
         item.callId = i;
 
-        if (i % 2)
+        if (i % 7 == 1)
         {
             item.headerPath = ":/images/u57.png";
             item.nickName = QStringLiteral("小美");
             item.callTime = "2018/01/06";
-            item.callType = QStringLiteral("电话");
-            item.typeIconPath = ":/images/u73.png";
+            item.callType = QStringLiteral("网络电话");
+            item.typeIconPath = ":/Resources/Call/call_audio_in.png";
+        }
+        else if (i % 7 == 2)
+        {
+            item.headerPath = ":/images/u57.png";
+            item.nickName = QStringLiteral("小美");
+            item.callTime = "2018/01/06";
+            item.callType = QStringLiteral("网络电话");
+            item.typeIconPath = ":/Resources/Call/call_audio_fail.png";
+        }
+        else if (i % 7 == 3)
+        {
+            item.headerPath = ":/images/u57.png";
+            item.nickName = QStringLiteral("小美");
+            item.callTime = "2018/01/06";
+            item.callType = QStringLiteral("高清电话");
+            item.typeIconPath = ":/Resources/Call/call_audio_in.png";
+        }
+        else if (i % 7 == 4)
+        {
+            item.headerPath = ":/images/u57.png";
+            item.nickName = QStringLiteral("小美");
+            item.callTime = "2018/01/06";
+            item.callType = QStringLiteral("高清电话");
+            item.typeIconPath = ":/Resources/Call/call_audio_fail.png";
+        }
+        else if (i % 7 == 5)
+        {
+            item.headerPath = ":/images/u57.png";
+            item.nickName = QStringLiteral("小美");
+            item.callTime = "2018/01/06";
+            item.callType = QStringLiteral("视频");
+            item.typeIconPath = ":/Resources/Call/call_video_in.png";
+        }
+        else if (i % 7 == 6)
+        {
+            item.headerPath = ":/images/u57.png";
+            item.nickName = QStringLiteral("小美");
+            item.callTime = "2018/01/06";
+            item.callType = QStringLiteral("视频");
+            item.typeIconPath = ":/Resources/Call/call_video_fail.png";
         }
         else
         {
             item.headerPath = ":/Resources/Headers/header_conf.png";
-            item.nickName = QStringLiteral("全球云通讯能力提供商");
+            item.nickName = QStringLiteral("张修路,冯海波...");
             item.callTime = "17:50";
             item.callType = QStringLiteral("电话会议");
-            item.typeIconPath = ":/images/u73.png";
+            item.typeIconPath = ":/Resources/Call/call_conf.png";
         }
         m_callList.append(item);
     }
@@ -68,27 +109,29 @@ void CallListView::contextMenuEvent(QContextMenuEvent *event)
         m_eventPos = event->pos();
 
         QMenu * pMenu = new QMenu(this);
+        pMenu->setObjectName("CallListMenu");
 
-        QAction *pDelAct = new QAction(QStringLiteral("删除"), pMenu);
-        QAction *pAudioCallAct = new QAction(QStringLiteral("网络电话"), pMenu);
-        QAction *pVideoCallAct = new QAction(QStringLiteral("视频"), pMenu);
-        QAction *pDirectCallAct = new QAction(QStringLiteral("高清电话"), pMenu);
-        QAction *pIMAct = new QAction(QStringLiteral("消息"), pMenu);
-        QAction *pMeetingAct = new QAction(QStringLiteral("电话会议"), pMenu);
+        QAction *pActDel = new QAction(QStringLiteral("删除"));
+        QAction *pActAudio = new QAction(QStringLiteral("网络电话"));
+        QAction *pActVideo = new QAction(QStringLiteral("视频"));
+        QAction *pActDirect = new QAction(QStringLiteral("高清电话"));
+        QAction *pActIM = new QAction(QStringLiteral("消息"));
+        QAction *pActConf = new QAction(QStringLiteral("电话会议"));
 
-        connect(pDelAct, SIGNAL(triggered()), this, SLOT(onDeleteItemAction()));
-        connect(pAudioCallAct, SIGNAL(triggered()), this, SLOT(onAudioCallItemAction()));
-        connect(pVideoCallAct, SIGNAL(triggered()), this, SLOT(onVideoCallItemAction()));
-        connect(pDirectCallAct, SIGNAL(triggered()), this, SLOT(onDirectCallItemAction()));
-        connect(pIMAct, SIGNAL(triggered()), this, SLOT(onIMMsgItemAction()));
-        connect(pMeetingAct, SIGNAL(triggered()), SLOT(onMeetingItemAction()));
+        connect(pActDel, SIGNAL(triggered()), this, SLOT(onDeleteItemAction()));
+        connect(pActAudio, SIGNAL(triggered()), this, SLOT(onAudioCallItemAction()));
+        connect(pActVideo, SIGNAL(triggered()), this, SLOT(onVideoCallItemAction()));
+        connect(pActDirect, SIGNAL(triggered()), this, SLOT(onDirectCallItemAction()));
+        connect(pActIM, SIGNAL(triggered()), this, SLOT(onIMMsgItemAction()));
+        connect(pActConf, SIGNAL(triggered()), SLOT(onMeetingItemAction()));
 
-        pMenu->addAction(pAudioCallAct);
-        pMenu->addAction(pVideoCallAct);
-        pMenu->addAction(pDirectCallAct);
-        pMenu->addAction(pIMAct);
-        pMenu->addAction(pMeetingAct);
-        pMenu->addAction(pDelAct);
+        pMenu->addAction(pActAudio);
+        pMenu->addAction(pActVideo);
+        pMenu->addAction(pActDirect);
+        pMenu->addAction(pActIM);
+        pMenu->addAction(pActConf);
+        pMenu->addAction(pActDel);
+
         pMenu->exec(QCursor::pos());
     }
 }

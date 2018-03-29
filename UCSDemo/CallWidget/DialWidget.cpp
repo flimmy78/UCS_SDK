@@ -112,12 +112,6 @@ void DialWidget::initMisc()
 
 }
 
-void DialWidget::onKeypadClicked(QString text)
-{
-    QString txt = QStringLiteral("正在呼叫 ") + text;
-    QMessageBox::information(NULL, QStringLiteral("发起呼叫"), txt, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-}
-
 void DialWidget::onBtnDigitClicked(bool)
 {
     QPushButton *pBtnDigit = qobject_cast<QPushButton*>(sender());

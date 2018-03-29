@@ -15,13 +15,19 @@ QToolTip {
 }
 
 QMenu {
-    border:none;
     background: white;
-    width: 150px;
+    font-size: 10pt;
+    border-radius: 2px;
+    border: 1px solid lightgray;
+/*    width: 150px;*/
 }
 
 QMenu::item {
     height: 40px;
+    /*padding-left: 25px;
+    padding-right: 30px;*/
+    margin: 1px;
+    padding: 0px 40px 0px 25px;  /* top, right, bottom, left */
 }
 
 QMenu::item:enabled {
@@ -312,17 +318,15 @@ QPushButton#topBtnDrop:hover {
 
 QMenu#topbarMenu {
     width: 116px;
-    height: 80px;
-    font-size: 10pt;
+/*    height: 80px;*/
+    /*font-size: 10pt;
     border-radius: 2px;
-    border: 1px solid lightgray;
+    border: 1px solid lightgray;*/
 }
 
-QMenu#topbarMenu::item {
+/*QMenu#topbarMenu::item {
     height: 40px;
-    padding-left: 20px;
-    padding-right: 25px;
-}
+}*/
 /************** top bar end *****************/
 
 /* **********************left navigator bar begin *********************/
@@ -343,22 +347,17 @@ QPushButton#btnAppSetting:hover {
 
 QMenu#leftSettingMenu {
     width: 115px;
-    height: 121px;
-    border: 1px solid lightgray;
-    border-radius: 2px;
-    margin: 0px;
-    background-color: white;
-    font-size: 10pt;
+/*    height: 121px;*/
 }
 
-QMenu#leftSettingMenu::item {
+/*QMenu#leftSettingMenu::item {
     height: 40px;
     padding-left: 30px;
     padding-right: 25px;
-}
+}*/
 /****************************** left navigator bar end *******************/
 
-/*  */
+/********************** MISC ********************/
 QWidget#CallWidget, QWidget#ContactWidget, QWidget#IMWidget {
     background: rgb(242, 242, 242);
 }
@@ -370,7 +369,7 @@ QWidget#DialWidget, QWidget#ContactInfoWidget, QWidget#IMChatWidget {
 QListView#ConversationListView, QListView#CallListView, QListView#SearchListView {
 /*    width: 250px;*/
     max-width: 250px;
-    background: rgb(242, 242, 242);    
+    background: rgb(242, 242, 242);
 }
 
 QTreeView#ContractsTreeView {
@@ -382,8 +381,9 @@ QTreeView#ContractsTreeView {
 QLineEdit#SearchLineEdit {
     border-radius:5px;
     border: 1px solid lightgray;
-    background:rgb(221, 231, 231);
+    background: white;
 }
+/********************** MISC END ********************/
 
 /******************* call begin ********************/
 QLineEdit#callEditNumber {
@@ -440,6 +440,15 @@ QPushButton#callBtnDialOut:hover  {
 QLabel#lblDialPanel {
     font-size: 18pt;
     color: rgb(51, 51, 51);
+}
+
+QMenu#CallListMenu {
+    width: 116px;
+    font-size: 10pt;
+}
+
+QMenu#CallListMenu::item {
+    height: 40px;
 }
 /*********************** call end *****************/ 
 
@@ -512,39 +521,17 @@ QLabel#lblLoginLogo {
 /* tray menu begin */
 QMenu#TrayIconMenu {
     width: 115px;
-    margin: 2px;
-    font-size: 10pt;
+    /*margin: 2px;
+    font-size: 10pt;*/
 }
 
-QMenu#TrayIconMenu::item {
+/*QMenu#TrayIconMenu::item {
     padding-left: 30px;
     padding-right: 25px;
-}
+}*/
 /* tray menu end */
 
 /* contact info begin */
-QLabel#contactHead {
-    /*width: 100px;
-    height: 100px;*/
-}
-
-QLabel#contactUser {
-    font-size: 13pt;
-    height: 30px;
-}
-
-QLabel#contactPhoneTitle, QLabel#contactSectionTitle {
-    height: 30px;
-    color: gray;
-}
-
-QToolButton#btnDirectAudio, QToolButton#btnFreeAudio, QToolButton#btnFreeVideo, QToolButton#btnConfCall, QToolButton#btnIM {
-    width: 80px;
-    height: 80px;
-    border-image: url(:/images/midright/u3921.png);
-    border: none;
-}
-
 QWidget#ContactCard {
     max-width: 418px;
     max-height: 242px;
