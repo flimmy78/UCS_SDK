@@ -134,6 +134,11 @@ ContactInfoWidget *ContactWidget::contactInfoWidget() const
     return m_pContactInfoWidget;
 }
 
+void ContactWidget::updateLogin()
+{
+    m_pTitleBar->updateTopBar();
+}
+
 ContactList ContactWidget::searchContact(ContactWidget *pObj, QString strSearch)
 {
     UCS_LOG(UCSLogger::kTraceApiCall, pObj->objectName(),

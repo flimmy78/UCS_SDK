@@ -24,6 +24,7 @@ public:
 
     ContactsTreeView *contactListView() const;
     ContactInfoWidget *contactInfoWidget() const;
+    void updateLogin();
 
     static ContactList searchContact(ContactWidget *pObj, QString strSearch);
 

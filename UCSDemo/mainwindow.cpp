@@ -124,6 +124,9 @@ void MainWindow::customEvent(QEvent *event)
                     QString("login success. userId = ").append(loginEvt->userId()));
 
             m_pCallWidget->updateLogin();
+            m_pContactWidget->updateLogin();
+            m_pImWidget->updateLogin();
+
             m_pImWidget->conversationListView()->updateConversationList();
             m_pContactWidget->contactListView()->doUpdateContacts();
         }
@@ -235,9 +238,9 @@ void MainWindow::initConnections()
         connect(m_pLeftNavBar->m_pBtn[i], SIGNAL(pressed()), this, SLOT(onSwitchPage()));
     }
 
-    connect(m_pContactWidget->contactInfoWidget(), SIGNAL(sigOpenIMPage(ContactItem)),
+    connect(m_pContactWidget->contactInfoWidget()->contactCard(), SIGNAL(sigOpenImPage(ContactItem)),
             this, SLOT(onSwitchIMPage(ContactItem)));
-    connect(m_pContactWidget->contactInfoWidget(), SIGNAL(sigOpenIMPage(ContactItem)),
+    connect(m_pContactWidget->contactInfoWidget()->contactCard(), SIGNAL(sigOpenImPage(ContactItem)),
             m_pImWidget, SLOT(onOpenConversation(ContactItem)));
 }
 

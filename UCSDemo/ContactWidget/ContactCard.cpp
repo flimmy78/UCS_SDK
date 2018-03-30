@@ -112,6 +112,8 @@ void ContactCard::onShowContact(ContactItem contact)
     m_pLblName->setText(contact.userName);
     m_pLblPhone->setText(contact.userId);
     m_pLblSection->setText(contact.parentName);
+
+    m_contact = contact;
 }
 
 void ContactCard::onBtnDirectClicked(bool)

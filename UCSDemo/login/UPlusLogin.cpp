@@ -177,7 +177,7 @@ void UPlusLogin::initConnections()
 {
     connect(m_titleBar, SIGNAL(signalBtnCloseClicked()), this, SLOT(onBtnClosed()));
     connect(m_titleBar, SIGNAL(signalBtnMinClicked()), this, SLOT(onBtnMin()));
-    connect(m_pChkKeepPwd, SIGNAL(clicked()), this, SLOT(onCheckedChanged()));
+    connect(m_pChkKeepPwd, SIGNAL(clicked()), this,  SLOT(onCheckedChanged()));
     connect(m_pChkOnLine, SIGNAL(clicked()), this, SLOT(onCheckedChanged()));
     connect(m_pBtnLoginOn, SIGNAL(clicked()), this, SLOT(onBtnLogin()));
     connect(m_pLineUserId, SIGNAL(textChanged(QString)), this, SLOT(onLineUserIdTextChanged(QString)));

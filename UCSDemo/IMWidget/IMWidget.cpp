@@ -100,6 +100,11 @@ void IMWidget::receivedMessages(QMap<QString, qint32> messageCount)
     m_pMsgChatWidget->doSyncMessages(messageCount);
 }
 
+void IMWidget::updateLogin()
+{
+    m_pTitleBar->updateTopBar();
+}
+
 ConversationListView *IMWidget::conversationListView() const
 {
     return m_pConversationListView;
